@@ -1,0 +1,31 @@
+﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using PropertyDAL.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace PropertyRentalDAL.Models
+{
+    public class Booking
+    {
+        // Composite primary key (Foreign keys)
+        public string UserId { get; set; }
+        public int PropertyId { get; set; }
+
+        //
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
+        public int FeePerMonth { get; set; }
+        public bool IsActive { get; set; }
+
+        //Foreign Key
+        public virtual int RatingId { get; set; }
+
+        // Navigation Properties
+        public virtual User User { get; set; } //
+        public virtual Property Property { get; set; } //
+        public virtual Rating Rating { get; set; } //
+    }
+}

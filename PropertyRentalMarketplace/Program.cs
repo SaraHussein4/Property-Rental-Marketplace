@@ -14,7 +14,7 @@ namespace PropertyRentalMarketplace
             builder.Services.AddDbContext<PropertyDbContext>(
                   optionBuilder =>
                   {
-                      optionBuilder.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+                      optionBuilder.UseLazyLoadingProxies().UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
                   });
 
             var app = builder.Build();
