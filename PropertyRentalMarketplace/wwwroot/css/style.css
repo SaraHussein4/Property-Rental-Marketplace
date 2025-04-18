@@ -71,6 +71,25 @@
     }
 }
 
+@media (max-width: 991px) {
+    .navbar {
+        margin: 10px 0;
+        border-radius: 0;
+    }
+
+
+    .user-login {
+        padding: 6px 15px;
+    }
+
+    .navbar-collapse {
+        background-color: #fff;
+        padding: 15px;
+        margin-top: 10px;
+        border-radius: 8px;
+    }
+}
+
 
 .hero-section {
     background-size: cover;
@@ -96,6 +115,7 @@
 
     .hero-section h1 {
         font-size: 1.5em;
+        text-align: center;
     }
 
 .user-login {
@@ -140,7 +160,7 @@
         margin: 0 40px;
     }
 
-.service-section, .discover-section {
+.service-section, .discover-section, .latest-section {
     margin-top: 100px;
     position: relative;
 }
@@ -156,7 +176,7 @@
 
 .discover-card {
     overflow: hidden;
-    margin-top:10px;
+    margin-top: 10px;
 }
 
 .discover-card img {
@@ -164,4 +184,51 @@
 }
 .discover-card img:hover {
             transform: scale(1.1,1.1);
+}
+.latest-heading {
+    font-family: 'Times New Roman', Times, serif;
+    margin-bottom: 50px;
+}
+
+.top-img {
+    overflow: hidden;
+}
+
+
+.latest-card img {
+    height: 276px;
+    transition: 1s all;
+}
+
+.latest-card{
+    margin-bottom:15px;
+}
+.card-text, .card-title {
+    text-align: left;
+}
+
+.card-text1 {
+    height: 40px;
+    font-size: 17px;
+    transition: 1s all;
+}
+
+.card-body{
+    height:145px;
+}
+
+.latest-card:hover {
+    img
+
+{
+    transform: scale(1.1,1.1);
+}
+
+p {
+    color: rgb(91, 67, 39);
+}
+}
+
+footer a {
+    text-decoration: none;
 }
