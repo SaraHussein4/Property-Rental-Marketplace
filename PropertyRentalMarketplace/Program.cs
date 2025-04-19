@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using PropertyDAL.Contexts;
+using PropertyRentalBL.Interfaces;
+using PropertyRentalBL.Repositories;
 
 namespace PropertyRentalMarketplace
 {
@@ -10,6 +12,12 @@ namespace PropertyRentalMarketplace
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+            builder.Services.AddScoped<IPropertyTypeRepository, PropertyTypeRepository>();
+            builder.Services.AddScoped<IAmenityRepository, AmenityRepository>();
+            builder.Services.AddScoped<ICountryRepository, CountryRepository>();
+
+
+
             builder.Services.AddControllersWithViews();
             builder.Services.AddDbContext<PropertyDbContext>(
                   optionBuilder =>

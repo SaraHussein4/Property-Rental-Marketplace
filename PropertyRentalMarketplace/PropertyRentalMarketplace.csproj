@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\PropertyRentalBL\PropertyRentalBL.csproj" />
+    <ProjectReference Include="..\PropertyRentalDAL\PropertyRentalDAL.csproj" />
   </ItemGroup>
 
 </Project>
