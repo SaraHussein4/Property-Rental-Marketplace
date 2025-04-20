@@ -20,12 +20,12 @@ namespace PropertyRentalMarketplace.Controllers
             return View();
         }
         public IActionResult Test(int id=1) {
-            //var test = new Property
-            //{
-            //    Id = id,
-            //    Name = "vila",
+            var test = new Property
+            {
+                Id = id,
+                Name = "vila",
 
-            //};
+            };
             return View();
         }
     }
