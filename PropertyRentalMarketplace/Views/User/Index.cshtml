@@ -1,7 +1,29 @@
 ﻿
 @{
     ViewData["Title"] = "Index";
+    Layout = "_UserLayout";
 }
 
-<h1>Index</h1>
+<div class="hero-section" style=" background:url('@Url.Content("~/images/hero_bg_2.jpg")') no-repeat center;">
+
+    <div class="container d-flex align-items-center justify-content-center fs-1 text-white flex-column">
+        <h1>Home</h1>
+    </div>
+</div>
+
+@foreach (var item in Model) {
+<h1>@item.Id</h1>
+<h1>@item.Name</h1>
+    @if (item.Images != null )
+    {
+        <div>
+            @foreach (var image in item.Images)
+            {
+                <img src="@image.Path" alt="Property Image" width="200" style="margin: 5px;" />
+            }
+        </div>
+    }
+}
+
+
 
