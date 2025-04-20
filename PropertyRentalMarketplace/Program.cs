@@ -1,4 +1,6 @@
 using Microsoft.EntityFrameworkCore;
+using PropertyBL.Interfaces;
+using PropertyBL.Repositories;
 using PropertyDAL.Contexts;
 using PropertyRentalBL.Interfaces;
 using PropertyRentalBL.Repositories;
@@ -15,7 +17,7 @@ namespace PropertyRentalMarketplace
             builder.Services.AddScoped<IPropertyTypeRepository, PropertyTypeRepository>();
             builder.Services.AddScoped<IAmenityRepository, AmenityRepository>();
             builder.Services.AddScoped<ICountryRepository, CountryRepository>();
-
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 
             builder.Services.AddControllersWithViews();
