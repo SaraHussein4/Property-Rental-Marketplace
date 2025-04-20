@@ -75,6 +75,18 @@ namespace PropertyDAL.Contexts
                 .OnDelete(DeleteBehavior.Restrict);
             #endregion
 
+            #region Country
+            // Primary Key
+            builder.Entity<Country>().HasKey(c => c.Id);
+
+            // Properties 
+            builder.Entity<Country>().Property(p => p.Name).HasMaxLength(100);
+            builder.Entity<Country>().Property(p => p.Code).HasMaxLength(100);
+            builder.Entity<Country>().Property(p => p.latitude).HasColumnType("decimal(9,6)");
+            builder.Entity<Country>().Property(p => p.longitude).HasColumnType("decimal(9,6)");
+
+            #endregion
+
             #region Favourite
             builder.Entity<Favourite>().HasKey(f => new { f.UserId, f.PropertyId });
 

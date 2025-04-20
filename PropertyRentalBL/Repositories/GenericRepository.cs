@@ -1,4 +1,5 @@
-﻿using PropertyBL.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using PropertyBL.Interfaces;
 using PropertyDAL.Contexts;
 using System;
 using System.Collections.Generic;
@@ -15,32 +16,32 @@ namespace PropertyBL.Repositories
         {
             context = _context;
         }
-        public void Add(T item)
+        public async Task Add(T item)
         {
-            context.Add(item);
+            await context.AddAsync(item);
         }
 
-        public void Delete(T item)
+        public async Task Delete(T item)
         {
             context.Remove(item);        
         }
 
-        public IEnumerable<T> GetAll()
+        public async Task<IEnumerable<T>> GetAll()
         {
-            return context.Set<T>().ToList();
+            return await context.Set<T>().ToListAsync();
         }
 
-        public T GetById(int id)
+        public async Task<T> GetById(int id)
         {
-            return context.Set<T>().Find(id);
+            return await context.Set<T>().FindAsync(id);
         }
 
-        public int Save()
+        public async Task<int> Save()
         {
-            return context.SaveChanges();
+            return await context.SaveChangesAsync();
         }
 
-        public void Update(T item)
+        public async Task Update(T item)
         {
             context.Update(item);
         }

@@ -8,11 +8,11 @@ namespace PropertyBL.Interfaces
 {
     public interface IGenericRepository<T>
     {
-        IEnumerable<T> GetAll();
-        void Add(T item);
-        void Update(T item);
-        void Delete(T item);
-        int Save();
-        T GetById(int id);
+        Task<IEnumerable<T>> GetAll();
+        Task Add(T item);
+        Task Update(T item);
+        Task Delete(T item);
+        Task<int> Save();
+        Task<T> GetById(int id);
     }
 }

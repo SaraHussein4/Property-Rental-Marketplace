@@ -1,0 +1,91 @@
+﻿
+
+
+/*------------------------------------*/
+
+/*.header {
+    font-size: 36px;
+    font-weight: bold;
+}*/
+/*Start Property Type*/
+/*.propertyType .item {
+    height: 110px;
+    cursor: pointer;
+}
+    .propertyType .item .box1 {
+        background-color: #C2C6CC;
+        color: rgb(255,255,255,0);
+        font-size: 35px;
+        font-weight: 800;
+        transition: 0.3s;
+    }
+    .propertyType .item:hover .box1 {
+        color: rgb(255,255,255,0.5);
+    }
+    .propertyType .item.selected .box1 {
+        color: rgb(255,255,255);
+
+    }
+    .propertyType .item .box2 {
+        background-color: #EFF0F2;
+        color: #484848;
+        font-size: 16px;
+        font-weight: bold;
+    }*/
+/*End Property Type*/
+/*Start Facilites*/
+/*.facilites .item{
+    height: 80px;    
+}
+.facilites .plus, .facilites .minus {
+    background-color: #E8EAEC;
+    cursor: pointer;
+    font-size: 22px;
+    font-weight: 900;
+}
+.facilites .disables{
+    cursor: not-allowed;
+}
+.facilites .content{
+    font-weight: 600;
+    font-size: 20px;
+}
+.facilites .content .number {
+    font-size: 22px;
+}*/
+/*End Facilites*/
+/*Start Amenity*/
+/*.amenities .item {
+    height: 110px;
+    cursor: pointer;
+}
+
+    .amenities .item .box1 {
+        background-color: #C2C6CC;
+        color: rgb(255,255,255,0);
+        font-size: 35px;
+        font-weight: 800;
+        transition: 0.3s;
+    }
+
+    .amenities .item:hover .box1 {
+        color: rgb(255,255,255,0.5);
+    }
+
+    .amenities .item.selected .box1 {
+        color: rgb(255,255,255);
+    }
+
+    .amenities .item .box2 {
+        background-color: #EFF0F2;
+        color: #484848;
+        font-size: 16px;
+        font-weight: bold;
+    }*/
+/*legend Amenity*/
+
+/*.submitButton {
+    background-color: #9A9A9A;
+    color: white;
+    padding: 10px 20px;
+}*/
