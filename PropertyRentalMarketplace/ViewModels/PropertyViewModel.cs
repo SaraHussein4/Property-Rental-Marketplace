@@ -20,6 +20,7 @@ namespace PropertyRentalMarketplace.ViewModels
         public DateTime ListedAt { get; set; }
         public DateTime UnListDate { get; set; }
         public ListingType ListingType { get; set; }
+        
 
         // Foreign Key
         public int PropertyTypeId { get; set; }
