@@ -19,7 +19,7 @@ namespace PropertyRentalMarketplace
             builder.Services.AddScoped<ICountryRepository, CountryRepository>();
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IPropertyRepository, PropertyRepository>();
-
+            builder.Services.AddScoped<IFavouriteRepository, FavouriteRepository>();
 
             builder.Services.AddControllersWithViews();
             builder.Services.AddDbContext<PropertyDbContext>(
