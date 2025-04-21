@@ -61,6 +61,7 @@ namespace PropertyRentalMarketplace.Controllers
 
             var HostAddPropertyViewModel = new HostAddPropertyViewModel();
             await PopulateViewModelAsync(HostAddPropertyViewModel);
+            //HostAddPropertyViewModel.CountryCode = "EG";
             //{
             //    propertyTypes = propertyTypes,
             //    amenities = amenities,

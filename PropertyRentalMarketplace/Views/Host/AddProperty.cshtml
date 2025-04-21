@@ -136,15 +136,30 @@
     <div class="row">
         <div class="mb-3 col-md-4">
             <label asp-for="CountryCode" class="form-label fw-bold">Country</label>
-            <select class="form-select countries" asp-for="CountryCode">
-                <option value="" selected>--Select--</option>
-                @foreach(var country in Model.countries){
-                   <option value="@country.Code" selected="@(country.Code==Model.CountryCode)">@country.Name</option>
-                } 
+            <select class="form-select countries" asp-for="CountryCode" data-countrycode="@Model.CountryCode">
+                <option value="" selected>--Select Countr--</option>
+                @* @foreach(var country in Model.countries){ *@
+                @*    <option value="@country.Code" selected="@(country.Code==Model.CountryCode)">@country.Name</option> *@
+                @* }  *@
             </select>
             <span asp-validation-for="CountryCode" class="text-danger"></span>
+        </div>
+        <div class="mb-3 col-md-4">
+            <label asp-for="StateCode" class="form-label fw-bold">State</label>
+            <select class="form-select states" asp-for="StateCode" data-statecode="@Model.StateCode">
+                <option value="" selected>--Select State--</option>
+            </select>
+            <span asp-validation-for="StateCode" class="text-danger"></span>
 
         </div>
+        @* <div class="mb-3 col-md-4"> *@
+        @*     <label asp-for="CityCode" class="form-label fw-bold">City</label> *@
+        @*     <select class="form-select cities" asp-for="CityCode"> *@
+        @*         <option value="" selected>--Select City--</option> *@
+        @*     </select> *@
+        @*     <span asp-validation-for="CityCode" class="text-danger"></span> *@
+
+        @* </div> *@
 
         <div class="mb-3 col-md-4">
             <label asp-for="Address" class="form-label fw-bold">Address</label>
