@@ -26,12 +26,11 @@ namespace PropertyRentalMarketplace
             builder.Services.AddScoped<IServiceRepository, ServiceRepository>();
 
             builder.Services.AddScoped<IUserRepository, UserRepository>();
-
+            builder.Services.AddScoped<IPropertyRepository, PropertyRepository>();
+            builder.Services.AddScoped<IFavouriteRepository, FavouriteRepository>();
             builder.Services.AddIdentity<User, IdentityRole>()
 
-                .AddEntityFrameworkStores<PropertyDbContext>();
-
-
+            .AddEntityFrameworkStores<PropertyDbContext>();
 
             builder.Services.AddControllersWithViews();
             builder.Services.AddDbContext<PropertyDbContext>(

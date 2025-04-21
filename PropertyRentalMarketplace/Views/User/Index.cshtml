@@ -1,7 +1,43 @@
-﻿
+﻿@model PropertyPageViewModel
 @{
     ViewData["Title"] = "Index";
+    Layout = "_UserLayout";
+
+}
+@section Styles{
+    <link rel="stylesheet" href="~/css/userStyle.css">
 }
 
-<h1>Index</h1>
+<div class="hero-section" style=" background:url('@Url.Content("~/images/hero_bg_2.jpg")') no-repeat center;">
+
+    <div class="container d-flex align-items-center justify-content-center fs-1 text-white flex-column">
+        <h1>Home</h1>
+    </div>
+</div>
+
+
+<div class="container-fluid  LatestProperty-section">
+    <h2 class="LatestProperty-heading">Latest on the <br/> Property Listing </h2>
+    <div class="row">
+        @foreach (var item in Model.AllProperities)
+        {
+        <partial name="PartialViews/CardPartialView" model="item"/>
+        }
+    </div>
+</div>
+
+
+<div class="container-fluid  LatestProperty-section">
+    <h2 class="FeaturedProperty-heading">Featured Properties<br/>on our Listing</h2>
+    <div class="row">
+        @foreach (var item in Model.FeaturedProperities)
+        {
+            <partial name="PartialViews/CardPartialView" model="item" />
+        }
+    </div>
+</div>
+
+
+
+
 

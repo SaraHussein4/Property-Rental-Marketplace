@@ -1,0 +1,38 @@
+﻿.LatestProperty-section{
+    margin-top:60px;
+    width:90%;
+}
+.LatestProperty-heading {
+    font-family: Montserrat ;
+    position: relative;
+    margin-bottom: 30px;
+    width:339px;
+    height:103px;
+    font-weight:700;
+    font-size:40px;
+}
+    .LatestProperty-heading::after, .FeaturedProperty-heading::after {
+        content: "";
+        position: absolute;
+        top: 105px;
+        left: 0px;
+        bottom: 0px;
+        right: 0px;
+        width: 130px;
+        height: 3px;
+        background-color: black;
+    }
+
+.carousel-dark .carousel-indicators [data-bs-target] {
+    background-color: #ffffff;
+}
+
+.FeaturedProperty-heading{
+    font-family: Montserrat;
+    position: relative;
+    margin-bottom: 30px;
+    width: 412px;
+    height: 103px;
+    font-weight: 700;
+    font-size: 40px;
+}
