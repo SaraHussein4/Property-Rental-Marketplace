@@ -1,4 +1,5 @@
 ﻿using PropertyBL.Interfaces;
+using PropertyBL.Repositories;
 using PropertyRentalDAL.Models;
 using System;
 using System.Collections.Generic;
