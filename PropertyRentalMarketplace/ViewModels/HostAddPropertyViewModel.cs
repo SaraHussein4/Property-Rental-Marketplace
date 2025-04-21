@@ -57,8 +57,8 @@ namespace PropertyRentalMarketplace.ViewModels
 
 
         public string CountryCode { get; set; }
-        //public string? City { get; set; }
-        //public string? State { get; set; }
+        //public string CityCode { get; set; }
+        public string StateCode { get; set; }
 
         [Required(ErrorMessage = "specifie your property location on the map")]
         public double Latitude { get; set; }

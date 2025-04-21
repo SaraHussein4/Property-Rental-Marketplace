@@ -1,41 +1,155 @@
-﻿    //async function getCountries() {
-    //    const response = await fetch('https://restcountries.com/v3.1/all')
-    //    countries = await response.json(); 
+﻿
+async function getCountryData(countryCode) {
+    try {
+        const response = await fetch(
+            `https://api.countrystatecity.in/v1/countries/${countryCode}`,
+            {
+                headers: {
+                    "X-CSCAPI-KEY": "WW9zNUVzYWtlOTZTWGpqZTg5Vk80d1JHVUwyWDRrd3dveG9BdGtITw=="
+                }
+            }
+        );
 
-    //    const selectElement = document.querySelector('.countries');
+        const country = await response.json();
+        return country;
 
-    //    // Clear existing options (if any)
-    //    selectElement.innerHTML = '';
+    } catch (error) {
+        console.error("Error fetching country data:", error);
+        throw error;
+    }
+}
 
-    //    // Add default option
-    //    const defaultOption = document.createElement('option');   
-    //    defaultOption.value = '';
-    //    defaultOption.textContent = '-- Select Country --';
-    //    selectElement.appendChild(defaultOption);
+async function getCountries() {
+    try {
+        const response = await fetch(
+            `https://api.countrystatecity.in/v1/countries`,
+            {
+                headers: {
+                    "X-CSCAPI-KEY": "WW9zNUVzYWtlOTZTWGpqZTg5Vk80d1JHVUwyWDRrd3dveG9BdGtITw=="
+                }
+            }
+        );
 
-    //    // Add countries alphabetically
-    //    countries
-    //        .sort((a, b) => a.name.common.localeCompare(b.name.common))
-    //        .forEach(country => {
-    //            const option = document.createElement('option');
-    //            option.value = country.cca2; // Country code (e.g., "US")
-    //            option.textContent = country.name.common; // Country name
-    //            selectElement.appendChild(option);
-    //        });
+        const countries = await response.json();
+        return countries;
 
-    //    console.log('Countries loaded successfully');
-    //}
+    } catch (error) {
+        console.error("Error fetching country data:", error);
+        throw error;
+    }
+}
 
+async function getStatesByCountry(countryCode) {
+    try {
+        const response = await fetch(
+            `https://api.countrystatecity.in/v1/countries/${countryCode}/states`,
+            {
+                headers: {
+                    "X-CSCAPI-KEY": "WW9zNUVzYWtlOTZTWGpqZTg5Vk80d1JHVUwyWDRrd3dveG9BdGtITw=="
+                }
+            }
+        );
+
+        const states = await response.json();
+        return states;
+
+    } catch (error) {
+        console.error("Error fetching country data:", error);
+        throw error;
+    }
+}
+
+async function getStateData(countryCode, statecode) {
+    try {
+        const response = await fetch(
+            `https://api.countrystatecity.in/v1/countries/${countryCode}/states/${statecode}`,
+            {
+                headers: {
+                    "X-CSCAPI-KEY": "WW9zNUVzYWtlOTZTWGpqZTg5Vk80d1JHVUwyWDRrd3dveG9BdGtITw=="
+                }
+            }
+        );
+
+        const state = await response.json();
+        return state;
+
+    } catch (error) {
+        console.error("Error fetching country data:", error);
+        throw error;
+    }
+}
+
+async function showCountries(countries) {
+
+    const countrySelectElement = document.querySelector('.countries');
+    const selectedCountryCode = countrySelectElement.dataset.countrycode
+
+    countrySelectElement.innerHTML = '';
+
+    // Add default option
+    const defaultOption = document.createElement('option');
+    defaultOption.value = '';
+    defaultOption.textContent = '-- Select Country --';
+    countrySelectElement.appendChild(defaultOption);
+
+    // Add countries alphabetically
+    countries.forEach(country => {
+        const option = document.createElement('option');
+        option.value = country.iso2; // Country code (e.g., "US")
+        option.textContent = country.name; // Country name
+        if (country.iso2 == selectedCountryCode) {
+            option.selected = true;
+        }
+        countrySelectElement.appendChild(option);
+    })
+    if (countrySelectElement.value != "") {
+        const states = await getStatesByCountry(countrySelectElement.value);
+        showStates(states)
+    }
+}
+
+async function showStates(states) {
+    const stateSelectElement = document.querySelector('.states');
+    const selectedStateCode = stateSelectElement.dataset.statecode
+
+    stateSelectElement.innerHTML = '';
+
+    // Add default option
+    const defaultOption = document.createElement('option');
+    defaultOption.value = '';
+    defaultOption.textContent = '-- Select State --';
+    stateSelectElement.appendChild(defaultOption);
+
+    // Add countries alphabetically
+    states.forEach(state => {
+        const option = document.createElement('option');
+        option.value = state.iso2; // Country code (e.g., "US")
+        option.textContent = state.name; // Country name
+        if (state.iso2 == selectedStateCode) {
+            option.selected = true;
+        }
+        stateSelectElement.appendChild(option);
+    })
+}
+
+
+async function handleCountries() {
+
+    let countries = await getCountries()
+    await showCountries(countries);
+}
 
 document.addEventListener('DOMContentLoaded', async function () {
+    let countrySelectElement = document.querySelector('.countries')
+    let stateSelectElement = document.querySelector('.states')
 
 
     let map;
     let marker;
-    console.log(document.getElementById('Latitude').value, document.getElementById('Longitude').value)
-    let defaultCoords = [document.getElementById('Latitude').value, document.getElementById('Longitude').value]; // Default: London coordinates
-    let selectElement = document.querySelector('.countries')
-    let countries = await getCountries()
+
+    await handleCountries()
+
+    let defaultCoords = [document.getElementById('Latitude').value, document.getElementById('Longitude').value];
 
     initMap();
 
@@ -79,14 +193,27 @@ document.addEventListener('DOMContentLoaded', async function () {
      }
 
     // Country selection change handler
-    selectElement.addEventListener('change', function () {
-        const countryCode = this.value;
-        if (countryCode) {
-            // Find the selected country in our countries array
-            const selectedCountry = countries.find(c => c.code === countryCode);
-            if (selectedCountry) {
-                updateMarkerPosition(selectedCountry.latitude, selectedCountry.longitude, 5);
-            }
+    countrySelectElement.addEventListener('change', async function () {
+        try {
+            const countryCode = this.value;
+            const country = await getCountryData(countryCode) 
+            updateMarkerPosition(country.latitude, country.longitude, 5);
+            const states = await getStatesByCountry(country.iso2); 
+            showStates(states)
+        }
+        catch(ex) {
+            error.log(ex)
+        }
+    });
+
+    stateSelectElement.addEventListener('change', async function () {
+        try {
+            const stateCode = this.value;
+            const state = await getStateData(countrySelectElement.value, stateCode)
+            updateMarkerPosition(state.latitude, state.longitude, 8);
+        }
+        catch (ex) {
+            error.log(ex)
         }
     });
 
@@ -126,10 +253,11 @@ document.addEventListener('DOMContentLoaded', async function () {
         });
     });
 
-    async function getCountries() {
-        let response = await fetch('/host/getcountries');
-        return await response.json();
-    }
+    //async function getCountries() {
+    //    let response = await fetch('/host/getcountries');
+    //    return await response.json();
+    //}
+
 
 });
 
