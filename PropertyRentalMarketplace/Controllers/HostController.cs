@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using PropertyBL.Interfaces;
 using PropertyDAL.Models;
 using PropertyRentalBL.Interfaces;
 using PropertyRentalBL.Repositories;
@@ -22,12 +23,14 @@ namespace PropertyRentalMarketplace.Controllers
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IServiceRepository _serviceRepository;
         private readonly IPropertyAmenityRepository _propertyAmenityRepository;
+        private readonly IUserRepository _userRepository;
 
         public HostController(IPropertyTypeRepository propertyTypeRepository,
             IAmenityRepository amenityRepository, ICountryRepository countryRepository, IImageRepository imageRepository,
             ILocationRepository locationRepository, IPropertyRepository propertyRepository, UserManager<User> userManager,
             RoleManager<IdentityRole> roleManager,
-            IServiceRepository serviceRepository, IPropertyAmenityRepository propertyAmenityRepository)
+            IServiceRepository serviceRepository, IPropertyAmenityRepository propertyAmenityRepository
+            ,IUserRepository userRepository)
         {
             _propertyTypeRepository = propertyTypeRepository;
             _amenityRepository = amenityRepository;
@@ -39,6 +42,7 @@ namespace PropertyRentalMarketplace.Controllers
             _roleManager = roleManager;
             _serviceRepository = serviceRepository;
             _propertyAmenityRepository = propertyAmenityRepository;
+            _userRepository = userRepository;
         }
         public IActionResult Index()
         {
@@ -320,6 +324,138 @@ namespace PropertyRentalMarketplace.Controllers
         //        return Json("Fail");
         //    }
         //}
+
+        public async Task<IActionResult> Profile(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                return NotFound("User not found.");
+            }
+
+            var viewModel = new UserProfileEditViewModel
+            {
+                Name = user.Name,
+                Gender = user.Gender,
+                PhoneNumber = user.PhoneNumber,
+                Image = user.Image,
+                Email = user.Email,
+                Id = user.Id,
+
+            };
+
+            return View(viewModel);
+        }
+        public async Task<IActionResult> EditProfile(string id)
+        {
+            var user =  await _userManager.FindByIdAsync(id);
+
+            if (user == null)
+            {
+                return NotFound("User not found.");
+            }
+
+            var viewModel = new UserProfileEditViewModel
+            {
+                Name = user.Name,
+                Gender = user.Gender,
+                PhoneNumber = user.PhoneNumber,
+                Image = user.Image,
+                Email = user.Email,
+                Id = user.Id,
+
+            };
+
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SaveEdit(UserProfileEditViewModel UserFromRequest)
+        {
+            var user = new User 
+            { 
+            Id = UserFromRequest.Id,
+            Name = UserFromRequest.Name,
+            Email = UserFromRequest.Email,
+            Image = UserFromRequest.Image,
+            Gender = UserFromRequest.Gender,
+            PhoneNumber = UserFromRequest.PhoneNumber,
+            };
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    await _userRepository.Update(user);
+                    await _userRepository.Save();
+                    return RedirectToAction("Profile", new { id = user.Id });
+                }
+                catch (Exception ex)
+                {
+                    var message = ex.InnerException?.Message ?? ex.Message;
+                    ModelState.AddModelError("", message);
+                }
+
+            }
+
+            return View("EditProfile", UserFromRequest);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UploadPhoto(string id, IFormFile ImgUrl)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+
+            if (user != null && ImgUrl != null)
+            {
+                string fileName = uploadImage(ImgUrl);
+                user.Image = fileName;
+
+                await _userManager.UpdateAsync(user);
+            }
+
+            return RedirectToAction("EditProfile", new { id = id });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ChangePassword(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+                return NotFound();
+
+            var viewModel = new ChangePasswordViewModel
+            {
+                Id = user.Id
+            };
+
+            return View(viewModel);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
+
+            var user = await _userManager.FindByIdAsync(model.Id);
+            if (user == null)
+                return NotFound();
+
+            var result = await _userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
+
+            if (result.Succeeded)
+            {
+                TempData["Success"] = "Password changed successfully.";
+                return RedirectToAction("EditProfile", new { id = model.Id });
+            }
+
+            foreach (var error in result.Errors)
+                ModelState.AddModelError(string.Empty, error.Description);
+
+            return View(model);
+        }
 
     }
 }

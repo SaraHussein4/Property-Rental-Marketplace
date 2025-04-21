@@ -5,7 +5,7 @@ async function getCountryData(countryCode) {
             `https://api.countrystatecity.in/v1/countries/${countryCode}`,
             {
                 headers: {
-                    "X-CSCAPI-KEY": "WW9zNUVzYWtlOTZTWGpqZTg5Vk80d1JHVUwyWDRrd3dveG9BdGtITw=="
+                    "X-CSCAPI-KEY": "WndlbUtKQVNRbm5tdnMyd2NQWWlpUFgyTkJ3YkNMbkpJeFF2c1Q1aA=="
                 }
             }
         );
@@ -25,7 +25,7 @@ async function getCountries() {
             `https://api.countrystatecity.in/v1/countries`,
             {
                 headers: {
-                    "X-CSCAPI-KEY": "WW9zNUVzYWtlOTZTWGpqZTg5Vk80d1JHVUwyWDRrd3dveG9BdGtITw=="
+                    "X-CSCAPI-KEY": "WndlbUtKQVNRbm5tdnMyd2NQWWlpUFgyTkJ3YkNMbkpJeFF2c1Q1aA=="
                 }
             }
         );
@@ -45,7 +45,7 @@ async function getStatesByCountry(countryCode) {
             `https://api.countrystatecity.in/v1/countries/${countryCode}/states`,
             {
                 headers: {
-                    "X-CSCAPI-KEY": "WW9zNUVzYWtlOTZTWGpqZTg5Vk80d1JHVUwyWDRrd3dveG9BdGtITw=="
+                    "X-CSCAPI-KEY": "WndlbUtKQVNRbm5tdnMyd2NQWWlpUFgyTkJ3YkNMbkpJeFF2c1Q1aA=="
                 }
             }
         );
@@ -65,7 +65,7 @@ async function getStateData(countryCode, statecode) {
             `https://api.countrystatecity.in/v1/countries/${countryCode}/states/${statecode}`,
             {
                 headers: {
-                    "X-CSCAPI-KEY": "WW9zNUVzYWtlOTZTWGpqZTg5Vk80d1JHVUwyWDRrd3dveG9BdGtITw=="
+                    "X-CSCAPI-KEY": "WndlbUtKQVNRbm5tdnMyd2NQWWlpUFgyTkJ3YkNMbkpJeFF2c1Q1aA=="
                 }
             }
         );
