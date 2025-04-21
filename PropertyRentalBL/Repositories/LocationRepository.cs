@@ -11,13 +11,17 @@ using System.Threading.Tasks;
 
 namespace PropertyRentalBL.Repositories
 {
-    public class ImageRepository:GenericRepository<Image>,IImageRepository
+    public class LocationRepository: GenericRepository<Location>,ILocationRepository
     {
         private readonly PropertyDbContext _context;
-
-        public ImageRepository(PropertyDbContext context) : base(context) {
+        public LocationRepository(PropertyDbContext context): base(context) { 
             _context = context;
             Debug.WriteLine($"{context.GetHashCode()}");
+
         }
+        //public test()
+        //{
+        //    Debug.WriteLine($"{_context.GetHash}")
+        //}
     }
 }

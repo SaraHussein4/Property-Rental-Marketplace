@@ -10,9 +10,8 @@ using System.Threading.Tasks;
 
 namespace PropertyRentalBL.Repositories
 {
-    public class PropertyRepository: GenericRepository<Property>, IPropertyRepository
+    public class ServiceRepository: GenericRepository<Service>, IServiceRepository  
     {
-        public PropertyRepository(PropertyDbContext context) : base(context) { }
+        public ServiceRepository(PropertyDbContext context) :base(context) { }
     }
-    
 }

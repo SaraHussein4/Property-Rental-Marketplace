@@ -188,21 +188,21 @@ namespace PropertyDAL.Contexts
             #endregion
 
             #region PropertyService
-            builder.Entity<PropertyService>().HasKey(pa => new { pa.PropertyId, pa.ServiceId });
+            //builder.Entity<PropertyService>().HasKey(pa => new { pa.PropertyId, pa.ServiceId });
 
-            // Relationship with property
-            builder.Entity<PropertyService>()
-                .HasOne(ps => ps.Property)
-                .WithMany(p => p.Services)
-                .HasForeignKey(ps => ps.PropertyId)
-                .OnDelete(DeleteBehavior.Restrict);
+            //// Relationship with property
+            //builder.Entity<PropertyService>()
+            //    .HasOne(ps => ps.Property)
+            //    .WithMany(p => p.Services)
+            //    .HasForeignKey(ps => ps.PropertyId)
+            //    .OnDelete(DeleteBehavior.Restrict);
 
-            // Relationship with service
-            builder.Entity<PropertyService>()
-                .HasOne(ps => ps.Service)
-                .WithMany(s => s.Properties)
-                .HasForeignKey(ps => ps.ServiceId)
-                .OnDelete(DeleteBehavior.Restrict);
+            //// Relationship with service
+            //builder.Entity<PropertyService>()
+            //    .HasOne(ps => ps.Service)
+            //    .WithMany(s => s.Properties)
+            //    .HasForeignKey(ps => ps.ServiceId)
+            //    .OnDelete(DeleteBehavior.Restrict);
 
             #endregion
 
@@ -230,6 +230,11 @@ namespace PropertyDAL.Contexts
             #region Service
             // Primary Key
             builder.Entity<Service>().HasKey(s => s.Id);
+            builder.Entity<Service>()
+                .HasOne(s => s.Property)
+                .WithMany(p => p.Services)
+                .HasForeignKey(s => s.PropertyId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             // Properties 
             builder.Entity<Service>().Property(s => s.Name).HasMaxLength(100);
@@ -287,7 +292,7 @@ namespace PropertyDAL.Contexts
         public virtual DbSet<Notification> Notifications { get; set; }
         public virtual DbSet<Property> Properties { get; set; }
         public virtual DbSet<PropertyAmenity> PropertyAmenities { get; set; }
-        public virtual DbSet<PropertyService> PropertyServices { get; set; }
+        //public virtual DbSet<PropertyService> PropertyServices { get; set; }
         public virtual DbSet<PropertyType> PropertyTypes { get; set; }
         public virtual DbSet<Rating> Ratings { get; set; }
         public virtual DbSet<Service> Services { get; set; }

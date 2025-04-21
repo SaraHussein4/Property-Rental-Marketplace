@@ -1,7 +1,9 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using PropertyBL.Interfaces;
 using PropertyBL.Repositories;
 using PropertyDAL.Contexts;
+using PropertyDAL.Models;
 using PropertyRentalBL.Interfaces;
 using PropertyRentalBL.Repositories;
 
@@ -17,9 +19,18 @@ namespace PropertyRentalMarketplace
             builder.Services.AddScoped<IPropertyTypeRepository, PropertyTypeRepository>();
             builder.Services.AddScoped<IAmenityRepository, AmenityRepository>();
             builder.Services.AddScoped<ICountryRepository, CountryRepository>();
+            builder.Services.AddScoped<IImageRepository, ImageRepository>();
+            builder.Services.AddScoped<ILocationRepository, LocationRepository>();
+            builder.Services.AddScoped<IPropertyRepository, PropertyRepository>();
+            builder.Services.AddScoped<IPropertyAmenityRepository, PropertyAmenityRepository>();
+            builder.Services.AddScoped<IServiceRepository, ServiceRepository>();
+
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IPropertyRepository, PropertyRepository>();
             builder.Services.AddScoped<IFavouriteRepository, FavouriteRepository>();
+            builder.Services.AddIdentity<User, IdentityRole>()
+
+            .AddEntityFrameworkStores<PropertyDbContext>();
 
             builder.Services.AddControllersWithViews();
             builder.Services.AddDbContext<PropertyDbContext>(
