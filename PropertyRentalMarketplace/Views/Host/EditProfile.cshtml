@@ -1,0 +1,61 @@
+﻿ @model PropertyRentalMarketplace.ViewModels.UserProfileEditViewModel
+
+@{
+    ViewData["Title"] = "Edit Profile";
+    Layout = "_Layout";
+}
+
+<div class="container mt-5">
+    <div class="row">
+        <!-- Profile Image Column -->
+        <div class="col-md-4">
+            <div class="card text-center p-3 shadow-sm">
+                <img src="~/images/@Model.Image" class="rounded-circle mx-auto mb-3"
+                     alt="Profile Photo"
+                     style="width: 120px; height: 120px; object-fit: cover;" />
+
+                <!-- File Upload Input -->
+                <form asp-action="UploadPhoto" asp-controller="User" method="post" enctype="multipart/form-data">
+                    <input type="hidden" name="Id" value="@Model.Id" />
+                    <input type="file" name="ImgUrl" accept="image/*" class="form-control mb-2" required />
+                    <button type="submit" class="btn btn-outline-secondary btn-sm">Upload Photo</button>
+                </form>
+
+                <hr />
+                <a asp-action="ChangePassword" asp-route-id="@Model.Id" class="btn btn-primary ms-2">Change Password</a>
+            </div>
+        </div>
+
+        <!-- Profile Edit Form Column -->
+        <div class="col-md-8">
+            <h3 class="mb-4">Edit Profile</h3>
+            <form asp-action="SaveEdit" asp-controller="User" method="post" enctype="multipart/form-data">
+                <input type="hidden" asp-for="Id" />
+
+                <div class="mb-3">
+                    <label asp-for="Name" class="form-label">Name</label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="PhoneNumber" class="form-label">Phone Number</label>
+                    <input asp-for="PhoneNumber" class="form-control" />
+                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Gender" class="form-label">Gender</label>
+                    <select asp-for="Gender" class="form-select">
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                    </select>
+                    <span asp-validation-for="Gender" class="text-danger"></span>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+                <a asp-action="Profile" asp-route-id="@Model.Id" class="btn btn-secondary ms-2">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,55 @@
+﻿
+@{
+    ViewData["Title"] = "PhoneLogin";
+    Layout = "_Layout";
+}
+
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+    <div class="card p-4 shadow rounded" style="width: 400px;">
+        <h4 class="text-center mb-4">Login or Signup</h4>
+
+        <form method="post" asp-action="Login">
+            <div class="mb-3">
+                <label class="form-label">Country</label>
+                <select class="form-select" name="CountryCode">
+                    <option value="+20" selected>EGY (+20)</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Phone Number</label>
+                <input type="text" name="PhoneNumber" class="form-control" placeholder="Enter Your Number" required />
+            </div>
+
+            <p class="text-muted small">
+                We'll call or text you to confirm your number. Standard message and data rates apply.
+            </p>
+
+            <button type="submit" class="btn btn-dark w-100 mb-2">Continue</button>
+
+            <div class="text-center mb-3">
+                <span class="text-muted">or</span>
+            </div>
+
+            <a href="@Url.Action("EmailLogin", "Account")" class="btn btn-outline-secondary w-100 mb-3">
+                <img src="~/icons/envelope.png" alt="Facebook" width="20" class="me-2"> Continue With Email
+            </a>
+
+            <div class="text-center mb-2">Or Continue With</div>
+
+            <div class="d-flex justify-content-around">
+                <button type="button" class="btn btn-light border">
+                    <img src="~/icons/facebook.png" alt="Facebook" width="20" class="me-2"> Facebook
+                </button>
+                <button type="button" class="btn btn-light border">
+                    <img src="~/icons/apple.svg" alt="Apple Id" width="20" class="me-2"> Apple ID
+                </button>
+                <button type="button" class="btn btn-light border">
+                    <img src="~/icons/google.png" alt="Facebook" width="20" class="me-2"> Google
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
