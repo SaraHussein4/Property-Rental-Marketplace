@@ -13,7 +13,11 @@ namespace PropertyRentalDAL.Models
         public int Distance { get; set; }
         public int StarRating { get; set; }
 
+        // Foreign Key
+        public int PropertyId { get; set; }
+
         // Navigation Properties
-        public virtual ICollection<PropertyService> Properties { get; set; } //
+        public virtual Property Property { get; set; }
+        //public virtual ICollection<PropertyService> Properties { get; set; } //
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using PropertyBL.Interfaces;
 using PropertyDAL.Contexts;
 using System;
@@ -12,10 +13,24 @@ namespace PropertyBL.Repositories
     public class GenericRepository<T> : IGenericRepository<T> where T : class
     {
         private readonly PropertyDbContext context;
+        private IDbContextTransaction transaction;
         public GenericRepository(PropertyDbContext _context)
         {
             context = _context;
         }
+        public async Task BeginTransactionAsync()
+        {
+            transaction = await context.Database.BeginTransactionAsync();
+        }
+        public async Task CommitAsync()
+        {
+            await transaction.CommitAsync();
+        }
+        public async Task RollbackAsync()
+        {
+            await transaction.RollbackAsync();
+        }
+
         public async Task Add(T item)
         {
             await context.AddAsync(item);

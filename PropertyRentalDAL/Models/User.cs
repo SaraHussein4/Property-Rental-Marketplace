@@ -11,6 +11,7 @@ namespace PropertyDAL.Models
 {
     public class User : IdentityUser
     {
+        public string Name{ get; set; }
         public Gender? Gender { get; set; }
         public string? Image { get; set; }
 

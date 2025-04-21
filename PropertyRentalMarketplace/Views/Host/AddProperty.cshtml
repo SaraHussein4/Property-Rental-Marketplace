@@ -15,91 +15,149 @@
     Listing Information
 </h1>
 
-<form method="post">
+<form method="post" asp-controller="Host" asp-action="AddProperty" enctype="multipart/form-data">
     <div class="row">
         <div class="mb-3 col-md-6 col-lg-4">
-            <label for="d" class="form-label fw-bold">Title</label>
-            <div class="input-group mb-3">
-                <input type="text" class="form-control" aria-label="">
-            </div>
+            <label asp-for="ListingType" class="form-label fw-bold">Listing Type</label>
+            <select class="form-select" asp-for="ListingType">
+                <option value="">-- Select Listing Type --</option>
+                <option value="1">Rent</option>
+                <option value="2">Buy</option>
+                <option value="3">Commerical Rent</option>
+                <option value="4">Commerical Buy</option>
+            </select>
+            <span asp-validation-for="ListingType" class="text-danger"></span>
         </div>
         <div class="mb-3 col-md-6 col-lg-4">
-            <label for="d" class="form-label fw-bold">Monthly Rent</label>
+            <label asp-for="PropertyTypeId" class="form-label fw-bold">Property Type</label>
+            <select class="form-select" asp-for="PropertyTypeId">
+                <option value="">-- Select Property Type --</option>
+                @foreach (var p in Model.propertyTypes)
+                {
+                    <option value="@p.Id">@p.Name</option>
+                }
+            </select>
+            <span asp-validation-for="PropertyTypeId" class="text-danger"></span>
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="mb-3 col-md-6 col-lg-4">
+            <label asp-for="Name" class="form-label fw-bold">Title</label>
+            <input type="text" class="form-control" asp-for="Name" placeholder="e.g., Luxury Apartment in Downtown">
+            <span asp-validation-for="Name" class="text-danger"></span>
+
+        </div>
+        <div class="mb-3 col-md-6 col-lg-4">
+            <label asp-for="FeesPerMonth" class="form-label fw-bold">Monthly Rent</label>
             <div class="input-group mb-3">
                 <span class="input-group-text">$</span>
-                <input type="text" class="form-control" aria-label="">
+                <input type="number" class="form-control" asp-for="FeesPerMonth" min="0" placeholder="0">
                 <span class="input-group-text">Per Month</span>
+                <span asp-validation-for="FeesPerMonth" class="text-danger"></span>
             </div>
         </div>
         <div class="mb-3 col-md-6 col-lg-4">
-            <label for="d" class="form-label fw-bold">Square footage</label>
+            <label asp-for="Area" class="form-label fw-bold">Square footage</label>
             <div class="input-group mb-3">
-                <input type="number" class="form-control" aria-label="">
+                <input type="number" class="form-control" asp-for="Area" min="0" placeholder="0">
                 <span class="input-group-text">sq. ft.</span>
+                <span asp-validation-for="Area" class="text-danger"></span>
+
             </div>
         </div>
         <div class="mb-3 col-12">
-            <label for="d" class="form-label fw-bold">Description</label>
-            <div class="input-group mb-3">
-                <textarea class="form-control" aria-label="" rows="6"></textarea>
-            </div>
+            <label asp-for="Description" class="form-label fw-bold">Description</label>
+            <textarea class="form-control" rows="6" asp-for="Description"
+                        placeholder="Describe the property features, amenities, and location..."></textarea>
+            <span asp-validation-for="Description" class="text-danger"></span>
+
         </div>
     </div>
 
-    <div class="row">
-    </div>
 
     <div class="row">
         <div class="mb-3 col-sm-6  col-md-4 col-lg-3">
-            <label for="" class="form-label fw-bold">Bedrooms</label>
-            <select class="form-select" aria-label="Default select example">
-                <option selected>Open this select menu</option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
+            <label asp-for="Bedrooms" class="form-label fw-bold">Bedrooms</label>
+            <select class="form-select" asp-for="Bedrooms">
+                <option value="">-- select --</option>
+                @for(var i = 1; i <= 10; ++i){
+                    <option value="@i">@i @(i == 1 ? "Bedroom" : "Bedrooms")</option>
+                }
+                <option value="11">11+ Bedrooms</option>
             </select>
+            <span asp-validation-for="Bedrooms" class="text-danger"></span>
+
         </div>
         <div class="mb-3 col-sm-6 col-md-4 col-lg-3">
-            <label for="" class="form-label fw-bold">Bathrooms</label>
-            <select class="form-select" aria-label="Default select example">
-                <option selected>Open this select menu</option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
+            <label asp-for="Bathrooms" class="form-label fw-bold">Bathrooms</label>
+            <select class="form-select" asp-for="Bathrooms">
+                <option value="">-- select --</option>
+                @for (var i = 1; i <= 10; ++i)
+                {
+                    <option value="@i">@i @(i == 1 ? "Bathroom" : "Bathrooms")</option>
+                }
+                <option value="11">11+ Bathrooms</option>
             </select>
+            <span asp-validation-for="Bathrooms" class="text-danger"></span>
+
         </div>
         <div class="mb-3 col-sm-6  col-md-4 col-lg-3">
-            <label for="" class="form-label fw-bold">Parking</label>
-            <select class="form-select" aria-label="Default select example">
-                <option selected>Open this select menu</option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
+            <label asp-for="GarageSlots" class="form-label fw-bold">Parking</label>
+            <select class="form-select" asp-for="GarageSlots">
+                <option value="">-- select --</option>
+                <option value="0">No Parking</option>
+                @for (var i = 1; i <= 5; ++i)
+                {
+                    <option value="@i">@i @(i == 1 ? "Space" : "Spaces")</option>
+                }
+                <option value="6">6+ Spaces</option>
             </select>
+            <span asp-validation-for="GarageSlots" class="text-danger"></span>
+
         </div>
         <div class="mb-3 col-sm-6  col-md-4 col-lg-3">
-            <label for="" class="form-label fw-bold">Bets</label>
-            <select class="form-select" aria-label="Default select example">
-                <option selected>Open this select menu</option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
+            <label asp-for="BetsAllowed" class="form-label fw-bold">Bets</label>
+            <select class="form-select" asp-for="BetsAllowed">
+                <option value="" selected>-- Select --</option>
+                <option value="0">No Pets</option>
+                @for (var i = 1; i <= 3; ++i)
+                {
+                    <option value="@i">@i @(i == 1 ? "Pet" : "Pets")</option>
+                }
+                <option value="4">4+ Pets</option>
             </select>
+            <span asp-validation-for="BetsAllowed" class="text-danger"></span>
+
         </div>
     </div>
 
-    <div class="row countriesparent" data-countries="@Html.Raw(Json.Serialize(Model.countries))">
+    <div class="row">
         <div class="mb-3 col-md-4">
-            <label for="" class="form-label fw-bold">Country</label>
-            <select class="form-select countries" aria-label="Default select example" >
+            <label asp-for="CountryCode" class="form-label fw-bold">Country</label>
+            <select class="form-select countries" asp-for="CountryCode">
+                <option value="" selected>--Select--</option>
                 @foreach(var country in Model.countries){
-                   <option value="@country.Code">@country.Name</option>
+                   <option value="@country.Code" selected="@(country.Code==Model.CountryCode)">@country.Name</option>
                 } 
             </select>
-            <input type="hidden" id="latitude" name="latitude">
-            <input type="hidden" id="longitude" name="longitude">
+            <span asp-validation-for="CountryCode" class="text-danger"></span>
+
+        </div>
+
+        <div class="mb-3 col-md-4">
+            <label asp-for="Address" class="form-label fw-bold">Address</label>
+            <input type="text" class="form-control" asp-for="Address"
+                   placeholder="e.g., 15 Mohamed Mahmoud Street, Bab El Louk, Cairo, Egypt">
+            <span asp-validation-for="Address" class="text-danger"></span>
+
         </div>
         <div class="mb-3 col-md-8" id="map" style="height: 400px; width: 100%;"></div>
+            
+        <input type="hidden" asp-for="Latitude">
+        <span asp-validation-for="Latitude" class="text-danger"></span>
+        <input type="hidden" asp-for="Longitude">
     </div>
 
     <div>
@@ -112,10 +170,10 @@
                     {
                         <div class="form-check">
                             <input type="checkbox" class="form-check-input" name="Amenities"
-                                    value="@amenity"
+                                    value="@amenity.Id" id="@amenity.Id"
                             @(Model.Amenities != null && Model.Amenities.Contains(amenity.Id) ? "checked"
                                 : "") />
-                            <label class="form-check-label">@amenity.Name</label>
+                            <label class="form-check-label" for="@amenity.Id">@amenity.Name</label>
                         </div>
                     }
                 </div>
@@ -130,10 +188,10 @@
                     {
                         <div class="form-check">
                             <input type="checkbox" class="form-check-input" name="Safeties"
-                                   value="@safety"
+                                   value="@safety.Id" id="@safety.Id"
                             @(Model.Safeties != null && Model.Safeties.Contains(safety.Id) ? "checked"
                                 : "") />
-                            <label class="form-check-label">@safety.Name</label>
+                            <label class="form-check-label" for="@safety.Id">@safety.Name</label>
                         </div>
                     }
                 </div>
@@ -141,42 +199,99 @@
         </div>
     </div>
 
-    <div class="row">
-        <div class="mb-3 col-sm-6  col-md-4 col-lg-3">
-            <label for="" class="form-label fw-bold">Bedrooms</label>
-            <select class="form-select" aria-label="Default select example">
-                <option selected>Open this select menu</option>
 
-            </select>
-        </div>
-        <div class="mb-3 col-sm-6 col-md-4 col-lg-3">
-            <label for="" class="form-label fw-bold">Bathrooms</label>
-            <select class="form-select" aria-label="Default select example">
-                <option selected>Open this select menu</option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
-            </select>
-        </div>
-        <div class="mb-3 col-sm-6  col-md-4 col-lg-3">
-            <label for="" class="form-label fw-bold">Parking</label>
-            <select class="form-select" aria-label="Default select example">
-                <option selected>Open this select menu</option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
-            </select>
-        </div>
-        <div class="mb-3 col-sm-6  col-md-4 col-lg-3">
-            <label for="" class="form-label fw-bold">Bets</label>
-            <select class="form-select" aria-label="Default select example">
-                <option selected>Open this select menu</option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
-            </select>
+    <div>
+        <h2>Nearby Services</h2>
+        <div id="services-container">
+
+                @for (var i = 0; i < 2; i++)
+                {
+                    <div class="row service-row">
+                        <!-- Name Field -->
+                        <div class="mb-3 col-md-6 col-lg-4">
+                            <label asp-for="Services[i].Name" class="form-label fw-bold">Service <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" asp-for="Services[i].Name" 
+                                placeholder="e.g., Mall, Cafe, Supermarkt ">
+                            <span asp-validation-for="Services[i].Name" class="text-danger"></span>
+                        </div>
+
+                        <!-- Distance Field -->
+                        <div class="mb-3 col-md-6 col-lg-4">
+                            <label asp-for="Services[i].Distance" class="form-label fw-bold">
+                                Distance (meters) <span class="text-danger">*</span>
+                            </label>
+                            <input type="number" class="form-control"
+                                   asp-for="Services[i].Distance"
+                                   min="0" max="10000">
+                            <span asp-validation-for="Services[i].Distance" class="text-danger"></span>
+                        </div>
+
+                        <!-- Rating Field -->
+                        <div class="mb-3 col-md-6 col-lg-4">
+                            <label asp-for="Services[i].StarRating" class="form-label fw-bold">
+                                Rating <span class="text-danger">*</span>
+                            </label>
+                            <div class="d-flex align-items-center gap-2">
+                               <span class="rating-display">1</span>
+                                <input type="range" class="form-range flex-grow-1"
+                                       asp-for="Services[i].StarRating"
+                                       min="1" max="5" step="1"
+                                       value="1">
+                                <span class="rating-display">5</span>
+                            </div>
+                            <span asp-validation-for="Services[i].StarRating" class="text-danger"></span>
+                        </div>
+                    </div>
+                }
         </div>
     </div>
+    <div>
+        <h2>Images</h2>
+        <div class="row">
+            <div class="mb-3 col-md-3">
+                <label asp-for="PrimaryImage" class="form-label">Cover Image</label>
+                <input class="form-control propertyPrimaryImage" type="file" asp-for="PrimaryImage" accept="image/*">
+                <span asp-validation-for="PrimaryImage" class="text-danger"></span>
+
+                <div id="primaryImagesPreview" class="d-flex flex-wrap gap-2 mt-3"></div>
+            </div>
+            <!-- Preview container -->
+            <div class="mb-3 col-md-9">
+                <label asp-for="Images" class="form-label">Property Image</label>
+                <input class="form-control propertyImages" type="file" asp-for="Images" accept="image/*" multiple>
+                <span asp-validation-for="Images" class="text-danger"></span>
+
+                <div id="imagesPreview" class="d-flex flex-wrap gap-2 mt-3"></div>
+            </div>
+            <!-- Preview container -->
+        </div>
+        
+    </div>
+
+
+
+    <div class="row">
+        <div class="mb-3 col-sm-6  col-md-4">
+            <label asp-for="ListingPlan" class="form-label fw-bold">Listing Plan</label>
+            <select class="form-select" asp-for="ListingPlan">
+                <option value="" selected>--Select--</option>
+                <option value="1">Standard Listing (15 Days Visibility)</option>
+                <option value="2">Standard Listing (30 Days Visibility)</option>
+                <option value="3">Featured Listing (15 Days - Priority Placement)</option>
+                <option value="4">Featured Listing (30 Days - Priority Placement)</option>
+            </select>
+            <span asp-validation-for="ListingPlan" class="text-danger"></span>
+
+        </div>
+        <div class="mb-3 col-md-6 col-lg-4">    
+            <label asp-for="PaymentMethod" class="form-label fw-bold">Payment Method</label>
+            <input type="text" class="form-control" asp-for="PaymentMethod">
+            <span asp-validation-for="PaymentMethod" class="text-danger"></span>
+
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">submit</button>
 </form>
     
 
@@ -188,6 +303,9 @@
 @section Scripts {
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="~/js/host/addProperty.js"></script> 
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js"></script>
 }
 
 @* <div class="propertyType mb-5" data-PropertyTypeId="@Model.PropertyTypeId"> *@

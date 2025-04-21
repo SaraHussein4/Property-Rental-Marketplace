@@ -21,6 +21,7 @@ namespace PropertyRentalDAL.Models
         public int Area { get; set; }
         public bool IsListed { get; set; }
         public bool IsFeatured { get; set; }
+        public int FeesPerMonth {  get; set; }
         public DateTime ListedAt { get; set; }
         public DateTime UnListDate { get; set; }
         public ListingType ListingType { get; set; }
@@ -34,7 +35,7 @@ namespace PropertyRentalDAL.Models
         public virtual PropertyType PropertyType { get; set; } //
         public virtual Location Location { get; set; } //
         public virtual User Host { get; set; } //
-        public virtual ICollection<PropertyService> Services { get; set; } //
+        public virtual ICollection<Service> Services { get; set; } //
         public virtual ICollection<PropertyAmenity> Amenities { get; set; } //
         public virtual ICollection<Image> Images { get; set; } //
         public virtual ICollection<Favourite> Favourites { get; set; } //

@@ -27,17 +27,21 @@
     //}
 
 
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', async function () {
+
 
     let map;
     let marker;
-    let defaultCoords = [26.820553, 30.802498]; // Default: London coordinates
+    console.log(document.getElementById('Latitude').value, document.getElementById('Longitude').value)
+    let defaultCoords = [document.getElementById('Latitude').value, document.getElementById('Longitude').value]; // Default: London coordinates
     let selectElement = document.querySelector('.countries')
-    let countries = JSON.parse(document.querySelector('.countriesparent').dataset.countries)
-    console.log(countries)
+    let countries = await getCountries()
+
+    initMap();
+
     function initMap() {
         // Initialize map
-        map = L.map('map').setView(defaultCoords, 13);
+        map = L.map('map').setView(defaultCoords, 5);
 
         // Add tile layer (OpenStreetMap)
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -59,39 +63,73 @@ document.addEventListener('DOMContentLoaded', function () {
             const { lat, lng } = marker.getLatLng();
             updateCoordinates(lat, lng);
         });
-
-        // Country selection change handler
-        selectElement.addEventListener('change', function () {
-
-            const countryCode = this.value;
-            console.log(countryCode);
-            if (countryCode) {
-                // Find the selected country in our countries array
-                const selectedCountry = countries.find(c => c.countryCode === countryCode);
-                if (selectedCountry) {
-                    updateMarkerPosition(selectedCountry.latitude, selectedCountry.longitude);
-                }
-            }
-        });
+            
     }
-
     // Update marker position and map view
-    function updateMarkerPosition(lat, lng) {
+    function updateMarkerPosition(lat, lng, zoomlevel = 5) {
         marker.setLatLng([lat, lng]);
-        map.setView([lat, lng], 13);
+        map.setView([lat, lng], zoomlevel);
         updateCoordinates(lat, lng);
     }
     function updateCoordinates(lat, lng) {
         // Update your form fields or display
-        document.getElementById('latitude').value = lat;
-        document.getElementById('longitude').value = lng;
+        document.getElementById('Latitude').value = lat;
+        document.getElementById('Longitude').value = lng;
         console.log(`Coordinates: ${lat}, ${lng}`);
      }
 
+    // Country selection change handler
+    selectElement.addEventListener('change', function () {
+        const countryCode = this.value;
+        if (countryCode) {
+            // Find the selected country in our countries array
+            const selectedCountry = countries.find(c => c.code === countryCode);
+            if (selectedCountry) {
+                updateMarkerPosition(selectedCountry.latitude, selectedCountry.longitude, 5);
+            }
+        }
+    });
 
+    document.querySelector('.propertyPrimaryImage').addEventListener('change', function (e) {
+        console.log("d;fka;")
+        const preview = document.getElementById('primaryImagesPreview');
+        preview.innerHTML = '';
 
+        Array.from(e.target.files).forEach(file => {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.style.maxHeight = '150px';
+                img.className = 'img-thumbnail m-1';
+                preview.appendChild(img);
+            }
+            reader.readAsDataURL(file);
+        });
+    });
 
-    initMap();
+    document.querySelector('.propertyImages').addEventListener('change', function (e) {
+        console.log("d;fka;")
+        const preview = document.getElementById('imagesPreview');
+        preview.innerHTML = '';
+
+        Array.from(e.target.files).forEach(file => {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.style.maxHeight = '150px';
+                img.className = 'img-thumbnail m-1';
+                preview.appendChild(img);
+            }
+            reader.readAsDataURL(file);
+        });
+    });
+
+    async function getCountries() {
+        let response = await fetch('/host/getcountries');
+        return await response.json();
+    }
 
 });
 
