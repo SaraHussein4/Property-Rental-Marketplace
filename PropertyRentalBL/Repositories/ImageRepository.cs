@@ -4,16 +4,20 @@ using PropertyRentalBL.Interfaces;
 using PropertyRentalDAL.Models;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace PropertyRentalBL.Repositories
 {
-    public class ImageRepository : GenericRepository<Image>, IImageRepository
+    public class ImageRepository:GenericRepository<Image>,IImageRepository
     {
-        public ImageRepository(PropertyDbContext _context) : base(_context)
-        {
+        private readonly PropertyDbContext _context;
+
+        public ImageRepository(PropertyDbContext context) : base(context) {
+            _context = context;
+            Debug.WriteLine($"{context.GetHashCode()}");
         }
     }
 }

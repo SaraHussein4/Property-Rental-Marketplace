@@ -26,6 +26,7 @@ namespace PropertyRentalMarketplace.ViewModels
         public int PropertyTypeId { get; set; }
         public int LocationId { get; set; }
         public string UserId { get; set; }
+        public bool IsFavourite { get; set; }
 
         // Navigation Properties
         public virtual PropertyType PropertyType { get; set; } //

@@ -1,0 +1,31 @@
+﻿@model PropertyRentalMarketplace.ViewModels.UserProfileEditViewModel
+
+@{
+    ViewData["Title"] = "Profile";
+    Layout = "_Layout";
+}
+
+<div class="container mt-5">
+    <div class="row">
+        <!-- Left Card (User Sidebar) -->
+        <div class="col-md-4">
+            <div class="card text-center p-3 shadow-sm">
+                <img src="~/images/@Model.Image" class="rounded-circle mx-auto mb-3" alt="Profile Photo" style="width: 100px; height: 100px; object-fit: cover;">
+                <a href="#" class="btn btn-outline-secondary btn-sm mb-3">Upload a Photo</a>
+            </div>
+        </div>
+
+        <!-- Right Content (Profile Info) -->
+        <div class="col-md-8">
+            <h4>Hello, @Model.Name</h4>
+            <a asp-action="EditProfile" asp-route-id="@Model.Id" class="btn btn-outline-dark mb-3">Edit Profile</a>
+
+            <div class="border-top pt-3">
+                <h6 class="mb-3">Contact Info</h6>
+                <p><strong>Phone:</strong> @Model.PhoneNumber</p>
+                <p><strong>Gender:</strong> @Model.Gender</p>
+                <p><strong>Email:</strong> @Model.Email</p>
+            </div>
+        </div>
+    </div>
+</div>

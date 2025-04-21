@@ -1,43 +1,161 @@
-﻿    //async function getCountries() {
-    //    const response = await fetch('https://restcountries.com/v3.1/all')
-    //    countries = await response.json(); 
+﻿
+async function getCountryData(countryCode) {
+    try {
+        const response = await fetch(
+            `https://api.countrystatecity.in/v1/countries/${countryCode}`,
+            {
+                headers: {
+                    "X-CSCAPI-KEY": "WndlbUtKQVNRbm5tdnMyd2NQWWlpUFgyTkJ3YkNMbkpJeFF2c1Q1aA=="
+                }
+            }
+        );
 
-    //    const selectElement = document.querySelector('.countries');
+        const country = await response.json();
+        return country;
 
-    //    // Clear existing options (if any)
-    //    selectElement.innerHTML = '';
+    } catch (error) {
+        console.error("Error fetching country data:", error);
+        throw error;
+    }
+}
 
-    //    // Add default option
-    //    const defaultOption = document.createElement('option');   
-    //    defaultOption.value = '';
-    //    defaultOption.textContent = '-- Select Country --';
-    //    selectElement.appendChild(defaultOption);
+async function getCountries() {
+    try {
+        const response = await fetch(
+            `https://api.countrystatecity.in/v1/countries`,
+            {
+                headers: {
+                    "X-CSCAPI-KEY": "WndlbUtKQVNRbm5tdnMyd2NQWWlpUFgyTkJ3YkNMbkpJeFF2c1Q1aA=="
+                }
+            }
+        );
 
-    //    // Add countries alphabetically
-    //    countries
-    //        .sort((a, b) => a.name.common.localeCompare(b.name.common))
-    //        .forEach(country => {
-    //            const option = document.createElement('option');
-    //            option.value = country.cca2; // Country code (e.g., "US")
-    //            option.textContent = country.name.common; // Country name
-    //            selectElement.appendChild(option);
-    //        });
+        const countries = await response.json();
+        return countries;
 
-    //    console.log('Countries loaded successfully');
-    //}
+    } catch (error) {
+        console.error("Error fetching country data:", error);
+        throw error;
+    }
+}
+
+async function getStatesByCountry(countryCode) {
+    try {
+        const response = await fetch(
+            `https://api.countrystatecity.in/v1/countries/${countryCode}/states`,
+            {
+                headers: {
+                    "X-CSCAPI-KEY": "WndlbUtKQVNRbm5tdnMyd2NQWWlpUFgyTkJ3YkNMbkpJeFF2c1Q1aA=="
+                }
+            }
+        );
+
+        const states = await response.json();
+        return states;
+
+    } catch (error) {
+        console.error("Error fetching country data:", error);
+        throw error;
+    }
+}
+
+async function getStateData(countryCode, statecode) {
+    try {
+        const response = await fetch(
+            `https://api.countrystatecity.in/v1/countries/${countryCode}/states/${statecode}`,
+            {
+                headers: {
+                    "X-CSCAPI-KEY": "WndlbUtKQVNRbm5tdnMyd2NQWWlpUFgyTkJ3YkNMbkpJeFF2c1Q1aA=="
+                }
+            }
+        );
+
+        const state = await response.json();
+        return state;
+
+    } catch (error) {
+        console.error("Error fetching country data:", error);
+        throw error;
+    }
+}
+
+async function showCountries(countries) {
+
+    const countrySelectElement = document.querySelector('.countries');
+    const selectedCountryCode = countrySelectElement.dataset.countrycode
+
+    countrySelectElement.innerHTML = '';
+
+    // Add default option
+    const defaultOption = document.createElement('option');
+    defaultOption.value = '';
+    defaultOption.textContent = '-- Select Country --';
+    countrySelectElement.appendChild(defaultOption);
+
+    // Add countries alphabetically
+    countries.forEach(country => {
+        const option = document.createElement('option');
+        option.value = country.iso2; // Country code (e.g., "US")
+        option.textContent = country.name; // Country name
+        if (country.iso2 == selectedCountryCode) {
+            option.selected = true;
+        }
+        countrySelectElement.appendChild(option);
+    })
+    if (countrySelectElement.value != "") {
+        const states = await getStatesByCountry(countrySelectElement.value);
+        showStates(states)
+    }
+}
+
+async function showStates(states) {
+    const stateSelectElement = document.querySelector('.states');
+    const selectedStateCode = stateSelectElement.dataset.statecode
+
+    stateSelectElement.innerHTML = '';
+
+    // Add default option
+    const defaultOption = document.createElement('option');
+    defaultOption.value = '';
+    defaultOption.textContent = '-- Select State --';
+    stateSelectElement.appendChild(defaultOption);
+
+    // Add countries alphabetically
+    states.forEach(state => {
+        const option = document.createElement('option');
+        option.value = state.iso2; // Country code (e.g., "US")
+        option.textContent = state.name; // Country name
+        if (state.iso2 == selectedStateCode) {
+            option.selected = true;
+        }
+        stateSelectElement.appendChild(option);
+    })
+}
 
 
-document.addEventListener('DOMContentLoaded', function () {
+async function handleCountries() {
+
+    let countries = await getCountries()
+    await showCountries(countries);
+}
+
+document.addEventListener('DOMContentLoaded', async function () {
+    let countrySelectElement = document.querySelector('.countries')
+    let stateSelectElement = document.querySelector('.states')
+
 
     let map;
     let marker;
-    let defaultCoords = [26.820553, 30.802498]; // Default: London coordinates
-    let selectElement = document.querySelector('.countries')
-    let countries = JSON.parse(document.querySelector('.countriesparent').dataset.countries)
-    console.log(countries)
+
+    await handleCountries()
+
+    let defaultCoords = [document.getElementById('Latitude').value, document.getElementById('Longitude').value];
+
+    initMap();
+
     function initMap() {
         // Initialize map
-        map = L.map('map').setView(defaultCoords, 13);
+        map = L.map('map').setView(defaultCoords, 5);
 
         // Add tile layer (OpenStreetMap)
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -59,39 +177,87 @@ document.addEventListener('DOMContentLoaded', function () {
             const { lat, lng } = marker.getLatLng();
             updateCoordinates(lat, lng);
         });
-
-        // Country selection change handler
-        selectElement.addEventListener('change', function () {
-
-            const countryCode = this.value;
-            console.log(countryCode);
-            if (countryCode) {
-                // Find the selected country in our countries array
-                const selectedCountry = countries.find(c => c.countryCode === countryCode);
-                if (selectedCountry) {
-                    updateMarkerPosition(selectedCountry.latitude, selectedCountry.longitude);
-                }
-            }
-        });
+            
     }
-
     // Update marker position and map view
-    function updateMarkerPosition(lat, lng) {
+    function updateMarkerPosition(lat, lng, zoomlevel = 5) {
         marker.setLatLng([lat, lng]);
-        map.setView([lat, lng], 13);
+        map.setView([lat, lng], zoomlevel);
         updateCoordinates(lat, lng);
     }
     function updateCoordinates(lat, lng) {
         // Update your form fields or display
-        document.getElementById('latitude').value = lat;
-        document.getElementById('longitude').value = lng;
+        document.getElementById('Latitude').value = lat;
+        document.getElementById('Longitude').value = lng;
         console.log(`Coordinates: ${lat}, ${lng}`);
      }
 
+    // Country selection change handler
+    countrySelectElement.addEventListener('change', async function () {
+        try {
+            const countryCode = this.value;
+            const country = await getCountryData(countryCode) 
+            updateMarkerPosition(country.latitude, country.longitude, 5);
+            const states = await getStatesByCountry(country.iso2); 
+            showStates(states)
+        }
+        catch(ex) {
+            error.log(ex)
+        }
+    });
 
+    stateSelectElement.addEventListener('change', async function () {
+        try {
+            const stateCode = this.value;
+            const state = await getStateData(countrySelectElement.value, stateCode)
+            updateMarkerPosition(state.latitude, state.longitude, 8);
+        }
+        catch (ex) {
+            error.log(ex)
+        }
+    });
 
+    document.querySelector('.propertyPrimaryImage').addEventListener('change', function (e) {
+        console.log("d;fka;")
+        const preview = document.getElementById('primaryImagesPreview');
+        preview.innerHTML = '';
 
-    initMap();
+        Array.from(e.target.files).forEach(file => {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.style.maxHeight = '150px';
+                img.className = 'img-thumbnail m-1';
+                preview.appendChild(img);
+            }
+            reader.readAsDataURL(file);
+        });
+    });
+
+    document.querySelector('.propertyImages').addEventListener('change', function (e) {
+        console.log("d;fka;")
+        const preview = document.getElementById('imagesPreview');
+        preview.innerHTML = '';
+
+        Array.from(e.target.files).forEach(file => {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.style.maxHeight = '150px';
+                img.className = 'img-thumbnail m-1';
+                preview.appendChild(img);
+            }
+            reader.readAsDataURL(file);
+        });
+    });
+
+    //async function getCountries() {
+    //    let response = await fetch('/host/getcountries');
+    //    return await response.json();
+    //}
+
 
 });
 

@@ -12,8 +12,8 @@ using PropertyDAL.Contexts;
 namespace PropertyRentalDAL.Migrations
 {
     [DbContext(typeof(PropertyDbContext))]
-    [Migration("20250420112554_Initial Migration")]
-    partial class InitialMigration
+    [Migration("20250421132532_v3")]
+    partial class v3
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -214,6 +214,10 @@ namespace PropertyRentalDAL.Migrations
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("datetimeoffset");
 
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -333,6 +337,35 @@ namespace PropertyRentalDAL.Migrations
                         .IsUnique();
 
                     b.ToTable("Bookings");
+                });
+
+            modelBuilder.Entity("PropertyRentalDAL.Models.Country", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<decimal>("latitude")
+                        .HasColumnType("decimal(9,6)");
+
+                    b.Property<decimal>("longitude")
+                        .HasColumnType("decimal(9,6)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Country");
                 });
 
             modelBuilder.Entity("PropertyRentalDAL.Models.Favourite", b =>
@@ -476,6 +509,9 @@ namespace PropertyRentalDAL.Migrations
                         .HasMaxLength(5000)
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("FeesPerMonth")
+                        .HasColumnType("int");
+
                     b.Property<int>("GarageSlots")
                         .HasColumnType("int");
 
@@ -540,21 +576,6 @@ namespace PropertyRentalDAL.Migrations
                     b.HasIndex("AmenityId");
 
                     b.ToTable("PropertyAmenities");
-                });
-
-            modelBuilder.Entity("PropertyRentalDAL.Models.PropertyService", b =>
-                {
-                    b.Property<int>("PropertyId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ServiceId")
-                        .HasColumnType("int");
-
-                    b.HasKey("PropertyId", "ServiceId");
-
-                    b.HasIndex("ServiceId");
-
-                    b.ToTable("PropertyServices");
                 });
 
             modelBuilder.Entity("PropertyRentalDAL.Models.PropertyType", b =>
@@ -627,10 +648,15 @@ namespace PropertyRentalDAL.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<int>("PropertyId")
+                        .HasColumnType("int");
+
                     b.Property<int>("StarRating")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("PropertyId");
 
                     b.ToTable("Services");
                 });
@@ -811,7 +837,7 @@ namespace PropertyRentalDAL.Migrations
                     b.Navigation("Property");
                 });
 
-            modelBuilder.Entity("PropertyRentalDAL.Models.PropertyService", b =>
+            modelBuilder.Entity("PropertyRentalDAL.Models.Service", b =>
                 {
                     b.HasOne("PropertyRentalDAL.Models.Property", "Property")
                         .WithMany("Services")
@@ -819,15 +845,7 @@ namespace PropertyRentalDAL.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("PropertyRentalDAL.Models.Service", "Service")
-                        .WithMany("Properties")
-                        .HasForeignKey("ServiceId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.Navigation("Property");
-
-                    b.Navigation("Service");
                 });
 
             modelBuilder.Entity("PropertyDAL.Models.User", b =>
@@ -879,11 +897,6 @@ namespace PropertyRentalDAL.Migrations
                 {
                     b.Navigation("Booking")
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("PropertyRentalDAL.Models.Service", b =>
-                {
-                    b.Navigation("Properties");
                 });
 #pragma warning restore 612, 618
         }
