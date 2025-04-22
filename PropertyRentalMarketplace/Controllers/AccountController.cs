@@ -105,9 +105,11 @@ namespace PropertyRentalMarketplace.Controllers
             }
             return View("Login",loginViewModel);
         }
-        public IActionResult Logout()
+        public async Task <IActionResult> Logout()
         { 
-            return View();
+            await signInManager.SignOutAsync();
+
+            return RedirectToAction("Login", "Account");
         }
     }
 }

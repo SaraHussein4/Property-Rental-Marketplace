@@ -5,30 +5,30 @@
     Layout = "_AuthLayout";
 }
 
-<div class="container mt-5">
-    <div>
-<div class="d-flex justify-content-center align-items-center min-vh-100">
-    <h1>Login</h1>
 
-    <hr />
-    <div class="card p-4 shadow" style="width: 100%; max-width: 400px;">
-        
+    <h1>Login</h1>
+            <div class="main-agileinfo">
+                <div class="agileits-top">
         <form asp-action="Login" method="post">
             <div asp-validation-summary="All" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="UserName" class="control-label"></label>
-                <input asp-for="UserName" class="form-control" />
+                <input asp-for="UserName" class="form-control text" />
                 <span asp-validation-for="UserName" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Password" class="control-label"></label>
-                <input asp-for="Password" class="form-control" />
+                <input asp-for="Password" class="form-control text" />
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="RememberMe" /> @Html.DisplayNameFor(model => model.RememberMe)
+          
+            <div class="wthree-text">
+                <label class="anim">
+                    <input asp-for="RememberMe" class="checkbox" required="">
+                    <span>@Html.DisplayNameFor(model => model.RememberMe)</span>
+
                 </label>
+                <div class="clear"> </div>
             </div>
             <div class="form-group">
                 <a asp-action="ForgetPassword" class="btn btn-link">Forgot your password?</a>
@@ -41,8 +41,7 @@
 
     </div>
 </div>
-</div>
-</div>
+
 
 
 @section Scripts {
