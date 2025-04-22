@@ -24,7 +24,7 @@ namespace PropertyRentalMarketplace.ViewModels
 
         [Required(ErrorMessage = "Description is required")]
         [MaxLength(3000, ErrorMessage = "Description cannot exceed 2000 characters")]
-        [MinLength(1000, ErrorMessage = "Description cannot be less than 1000 characters")]
+        [MinLength(200, ErrorMessage = "Description cannot be less than 1000 characters")]
         public string Description { get; set; } //
 
         [Required(ErrorMessage = "Property type is required")]

@@ -179,7 +179,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         });
             
     }
-    // Update marker position and map view
+    // Update marker position and map viewd
     function updateMarkerPosition(lat, lng, zoomlevel = 5) {
         marker.setLatLng([lat, lng]);
         map.setView([lat, lng], zoomlevel);
