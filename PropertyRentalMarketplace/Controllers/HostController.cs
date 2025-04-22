@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using PropertyBL.Interfaces;
@@ -11,6 +12,7 @@ using PropertyRentalMarketplace.ViewModels;
 
 namespace PropertyRentalMarketplace.Controllers
 {
+    [Authorize("Host")]
     public class HostController : Controller
     {
         private readonly IPropertyTypeRepository _propertyTypeRepository;
@@ -424,26 +426,26 @@ namespace PropertyRentalMarketplace.Controllers
 
         }
 
-        //public async Task<IActionResult> create()
-        //{
-        //    try
-        //    {
-        //        var user = new User
-        //        {
-        //            UserName = "AhmedHamdy",
-        //            Email = "ahmed@gmail.com",
-        //            Gender = Gender.Male,
-        //        };
-        //        var result = await _userManager.CreateAsync(user, "Ahmed$1");
-        //        var role = await _roleManager.FindByIdAsync("3");
-        //        var roleResult = await _userManager.AddToRoleAsync(user, role.Name);
-        //        return Json("Success");
-        //    }
-        //    catch
-        //    {
-        //        return Json("Fail");
-        //    }
-        //}
+        public async Task<IActionResult> create()
+        {
+            try
+            {
+                var user = new User
+                {
+                    UserName = "AhmedHamdy",
+                    Email = "ahmed@gmail.com",
+                    Gender = Gender.Male,
+                };
+                var result = await _userManager.CreateAsync(user, "Ahmed$1");
+                var role = await _roleManager.FindByIdAsync("3");
+                var roleResult = await _userManager.AddToRoleAsync(user, role.Name);
+                return Json("Success");
+            }
+            catch
+            {
+                return Json("Fail");
+            }
+        }
 
         public async Task<IActionResult> Profile(string id)
         {
