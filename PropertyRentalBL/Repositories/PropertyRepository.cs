@@ -1,4 +1,5 @@
-﻿using PropertyBL.Repositories;
+﻿using Microsoft.EntityFrameworkCore;
+using PropertyBL.Repositories;
 using PropertyDAL.Contexts;
 using PropertyRentalBL.Interfaces;
 using PropertyRentalDAL.Models;
@@ -12,7 +13,15 @@ namespace PropertyRentalBL.Repositories
 {
     public class PropertyRepository: GenericRepository<Property>, IPropertyRepository
     {
-        public PropertyRepository(PropertyDbContext context) : base(context) { }
+        PropertyDbContext _context;
+        public PropertyRepository(PropertyDbContext context) : base(context) {
+            _context = context;
+        }
+
+        public Task<List<Property>> GetActiveListedPropertiesHostedBySpecificHost(string hostId)
+        {
+            return _context.Properties.AsNoTracking().Where(p => p.UserId == hostId && p.UnListDate > DateTime.Now).ToListAsync();
+        }
     }
     
 }

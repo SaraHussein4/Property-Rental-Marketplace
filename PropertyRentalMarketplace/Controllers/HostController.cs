@@ -197,7 +197,7 @@ namespace PropertyRentalMarketplace.Controllers
                 }
 
                 await _propertyRepository.CommitAsync();
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Dashboard", "Host");
             }
             catch (Exception ex)
             {
@@ -307,13 +307,6 @@ namespace PropertyRentalMarketplace.Controllers
                 await _propertyRepository.RollbackAsync();
                 return Json($"{ex.Message}, {ex.InnerException}");
             }
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> GetCountries()
-        {
-            var countries = await _countryRepository.GetAll();
-            return Json(countries);
         }
 
         private async Task PopulateHostAddPropertyViewModelAsync(HostAddPropertyViewModel viewModel)
@@ -426,6 +419,52 @@ namespace PropertyRentalMarketplace.Controllers
 
         }
 
+<<<<<<< HEAD
+        [HttpGet]
+        public async Task<IActionResult> Dashboard()
+        {
+            return View();
+        }
+
+        public async Task<IActionResult> DealClosed([FromBody] HostDealClosedViewModel model)
+        {
+            int x = 0;
+            return Json(model);
+        }
+        public async Task<IActionResult> LoadTab(string tab)
+        {
+            // We Must get the Logged IN User 
+
+            return tab switch
+            {
+                "active" => PartialView("_ActiveListings", await _propertyRepository.GetActiveListedPropertiesHostedBySpecificHost("23d1c943-494f-489b-acaf-5144c2fe2387")),
+                "booked" => PartialView("_BookedProperties"),
+                "expired" => PartialView("_ExpiredListings"),
+                _ => PartialView("_ActiveListings", new List<Property>())
+            };
+        }
+
+        //public async Task<IActionResult> create()
+        //{
+        //    try
+        //    {
+        //        var user = new User
+        //        {
+        //            UserName = "AhmedHamdy",
+        //            Email = "ahmed@gmail.com",
+        //            Gender = Gender.Male,
+        //        };
+        //        var result = await _userManager.CreateAsync(user, "Ahmed$1");
+        //        var role = await _roleManager.FindByIdAsync("3");
+        //        var roleResult = await _userManager.AddToRoleAsync(user, role.Name);
+        //        return Json("Success");
+        //    }
+        //    catch
+        //    {
+        //        return Json("Fail");
+        //    }
+        //}
+=======
         public async Task<IActionResult> create()
         {
             try
@@ -446,6 +485,7 @@ namespace PropertyRentalMarketplace.Controllers
                 return Json("Fail");
             }
         }
+>>>>>>> main
 
         public async Task<IActionResult> Profile(string id)
         {
