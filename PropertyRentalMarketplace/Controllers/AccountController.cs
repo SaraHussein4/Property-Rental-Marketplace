@@ -10,13 +10,7 @@ namespace PropertyRentalMarketplace.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly UserManager<User> userManager;
-
-        public AccountController(UserManager<User> _userManager)
-        {
-            userManager = _userManager;
-        }
-
+      
         private readonly UserManager<User> userManager;
         private readonly SignInManager<User> signInManager;
 
@@ -44,7 +38,7 @@ namespace PropertyRentalMarketplace.Controllers
                     IsAgree = model.IsAgree,
                     Gender = model.Gender
                 };
-<<<<<<< HEAD
+
            var Result = await userManager.CreateAsync(User , model.Password);
                 if (Result.Succeeded)
                 {
@@ -58,21 +52,7 @@ namespace PropertyRentalMarketplace.Controllers
                 }
             }
             return View(model);
-=======
-            var Result = await userManager.CreateAsync(User , model.Password);
-      if (Result.Succeeded)
-      {
-          return RedirectToAction("Login");
-      }
-      else
-      {
-          foreach (var error in Result.Errors)
-              ModelState.AddModelError(string.Empty, error.Description);
-          
-      }
-  }
-            return View();
->>>>>>> b07bf7f07108d5c3fba15340b5bd54d10fe729ba
+
         }
 
         public IActionResult Index()
@@ -99,11 +79,7 @@ namespace PropertyRentalMarketplace.Controllers
         {
             return View();
         }
-        public IActionResult Register()
-
-        {
-            return View();
-        }
+      
         public IActionResult Login()
         {
             return View("Login");
