@@ -422,6 +422,12 @@ namespace PropertyRentalMarketplace.Controllers
         {
             return View();
         }
+
+        public async Task<IActionResult> DealClosed([FromBody] HostDealClosedViewModel model)
+        {
+            int x = 0;
+            return Json(model);
+        }
         public async Task<IActionResult> LoadTab(string tab)
         {
             // We Must get the Logged IN User 

@@ -20,7 +20,7 @@ namespace PropertyRentalBL.Repositories
 
         public Task<List<Property>> GetActiveListedPropertiesHostedBySpecificHost(string hostId)
         {
-            return _context.Properties.AsNoTracking().Where(p => p.UserId == hostId && p.UnListDate >= DateTime.Now).ToListAsync();
+            return _context.Properties.AsNoTracking().Where(p => p.UserId == hostId && p.UnListDate > DateTime.Now).ToListAsync();
         }
     }
     

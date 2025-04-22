@@ -23,31 +23,9 @@
 </div>
 
 @section Scripts {
-    <script>
-        $(document).ready(function() {
-            // Load default tab (Active Listings)
-            loadTab('active');
 
-            // Tab click event
-            $('[data-tab]').click(function(e) {
-                e.preventDefault();
-                const tab = $(this).data('tab');
-                loadTab(tab);
-            });
-        });
-
-        function loadTab(tabName) {
-            $.ajax({
-                url: '@Url.Action("LoadTab", "Host")',
-                type: 'GET',
-                data: { tab: tabName },
-                success: function(response) {
-                    $('#tabContent').html(response);
-                    // Update active tab UI
-                    $('[data-tab]').removeClass('active');
-                    $(`[data-tab="${tabName}"]`).addClass('active');
-                }
-            });
-        }
-    </script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/js/host/dashboard.js"></script>
 }
