@@ -24,8 +24,8 @@
 				@foreach (var gender in Enum.GetValues(typeof(Gender)).Cast<Gender>())
 				{
 					<label class="me-2">
-						<input type="radio" asp-for="Gender" value="@gender" />
-						<span>@gender</span>
+						<input type="radio" name="Gender" value="@gender" />
+						@gender
 					</label>
 				}
 				<span asp-validation-for="Gender" class="text-danger"></span>
@@ -40,6 +40,7 @@
 				<div class="clear"> </div>
 			</div>
 			<input type="submit" value="SIGNUP">
+			<div asp-validation-summary="All" class="text-danger"></div>
 		</form>
 		<p>Do you have an Account? <a  asp-controller="Account"  asp-action="Login">Login Now!</a></p>
 	</div>
