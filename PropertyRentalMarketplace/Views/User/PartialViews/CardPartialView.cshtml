@@ -1,4 +1,4 @@
-﻿@model PropertyViewModel
+﻿@model Property
 
 @{
     var carouselId = "carousel_" + Model.Id;
@@ -28,6 +28,21 @@
         </div>
     </div>
 
-    <p>@Model.Name</p>
+    <p class="p-card">@Model.Name</p>
     <p class="me-1">@Model.Address</p>
+
+    <div class="row px-3">
+        <div class="col-lg-3 col-2 p-0" style="width:19%">
+            <i class="fa-solid fa-bed " ></i> <span class="m-2">@($"{@Model.BedRooms} ")</span>
+        </div>
+        <div class="col-lg-3 col-2 p-0" style="width:19%">
+            <i class="fa-solid fa-sink " ></i>  <span class="m-2">@($"{@Model.BathRooms} ")</span>
+        </div>
+        <div class="col-lg-3 col-2 p-0" style="width:19%">
+            <i class="fa-solid fa-car " ></i> <span class="m-2">@($"{@Model.GarageSlots} ")</span>
+        </div>
+        <div class="col-lg-3 col-2 p-0" style="width:19%">
+            <i class="fa-solid fa-paw " ></i> <span class="m-2">@($"{@Model.BetsAllowd} ")</span>
+        </div>
+    </div>
 </div>
