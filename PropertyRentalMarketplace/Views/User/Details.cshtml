@@ -1,0 +1,125 @@
+﻿@model PropertyRentalMarketplace.ViewModels.PropertyViewModel
+@{
+    ViewData["Title"] = "Details";
+     Layout = "_UserLayout";
+}
+
+@{
+    //بحسب العدد الذيادة للصور
+    var Images = Model.Images.ToList();
+    int extraPhoto = Images.Count - 5;
+}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-6 mt-5 ">
+            <img src="@Images[0].Path" class="img-fluid rounded mb-2 " style="height: 400px;width : 800px; object-fit: cover;" />
+        </div>
+        <div class="col-md-6 mt-5">
+            <div class="row g-2">
+                @for(var i =1;i<4;i++){
+                    <img src="@Images[i].Path" class="img-fluid rounded mb-2 " style="height: 192px;width : 320px; object-fit: cover;" />
+                }
+                <div class="position-relative" style="height: 192px; width: 320px;">
+                    <img src="@Images[4].Path" class="img-fluid rounded mb-2" style="height: 192px;width: 320px; object-fit: cover;" />
+                    @if(extraPhoto>0){
+                    <div class="position-absolute top-50 start-50 translate-middle bg-dark bg-opacity-50 text-white fw-bold rounded px-2 py-1 btn btnclass"
+                            data-bs-toggle="modal"
+                            data-bs-target="#moreImagesModal">
+                        +@extraPhoto More Photos
+                    </div>
+                    }
+                   
+                </div>
+            </div>
+        </div>
+      </div>
+  </div>
+<div class="modal fade" id="moreImagesModal" tabindex="-1" aria-labelledby="moreImagesModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="moreImagesModalLabel">More Photos</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row g-3">
+                    @for (var i = 5; i < Images.Count; i++)
+                    {
+                        <div class="col-md-4">
+                            <img src="@Images[i].Path" class="img-fluid rounded" style="height: 250px; width: 100%; object-fit: cover;" />
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container">
+<div class="card border-0 bg-transparent m-3  col-md-8 " style="width: 280px; height : 140px ;">
+    <div class="row g-0">
+        <div class="col-md-3 ">
+            <img src="@Images[9].Path" class="img-fluid rounded-circle ms-2 mt-4" alt="...">
+        </div>
+        <div class="col-md-9 p-2">
+            <div class="card-body">
+                <p class="card-text">Listed by</p>
+                <h5 class="card-title">@Model.Name</h5>
+
+                <p class="card-text">For:1000$ - 5000$</p>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+  <div class="container mt-5">
+      <div>
+        <h2 style="color: #484848 ;">Well furnished Apartment</h2> 
+        <i class="fa-regular fa-heart"></i>
+        <i class="fa-solid fa-share-nodes"></i>
+        <p style="color: #bcbcbc;">@Model.Address</p>
+    </div>
+    <div class="col-md-4 gap-2 d-flex">
+        <div class="col">
+            <div class="card text-center shadow-sm" style="width: 170px; height: 130px;">
+                <i class="fa-solid fa-bed fs-3 mt-4"></i>
+                <div class="card-body">
+                    <h5 class="card-title d-flex justify-content-center  align-items-center">@($"{@Model.BedRooms} BedRooms")</h5>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card text-center shadow-sm" style="width: 170px; height: 130px;">
+                <i class="fa-solid fa-sink fs-3 mt-4"></i>
+              
+                <div class="card-body">
+                    <h5 class="card-title d-flex justify-content-center  align-items-center">@($"{@Model.BathRooms} BathRooms")</h5>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card text-center shadow-sm" style="width: 170px; height: 130px;">
+                <i class="fa-solid fa-car fs-3 mt-4"></i>
+                <div class="card-body">
+                    <h5 class="card-title d-flex justify-content-center  align-items-center">@($"{@Model.GarageSlots} Garage Slots")</h5>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card text-center shadow-sm" style="width: 170px; height: 130px;">
+                <i class="fa-solid fa-paw fs-3 mt-4"></i>
+                <div class="card-body">
+                    <h5 class="card-title d-flex justify-content-center  align-items-center">@($"{@Model.BetsAllowd} Bets")</h5>
+                </div>
+            </div>
+        </div>
+  </div>
+  <div class="mt-5">
+    <h2 style="color: #484848 ;">Offered Amenities</h2>
+    <div class="col-md-6">
+        <p> @Model.Description</p>
+        </div>
+    </div>
+  @* ---------------------------- *@
+    </div>
+
