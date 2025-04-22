@@ -3,13 +3,11 @@
 @{
     ViewData["Title"] = "EditProperty";
     Layout = "_Layout";
-
 }
 
 @section Styles {
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="stylesheet" href="~/css/host/addProperty.css" />
-
 }
 
 <form method="post" asp-controller="Host" asp-action="EditProperty" enctype="multipart/form-data">
@@ -36,7 +34,6 @@
                 }
             </select>
             <span asp-validation-for="PropertyTypeId" class="text-danger"></span>
-
         </div>
     </div>
 
@@ -45,7 +42,6 @@
             <label asp-for="Name" class="form-label fw-bold">Title</label>
             <input type="text" class="form-control" asp-for="Name" placeholder="e.g., Luxury Apartment in Downtown">
             <span asp-validation-for="Name" class="text-danger"></span>
-
         </div>
         <div class="mb-3 col-md-6 col-lg-4">
             <label asp-for="FeesPerMonth" class="form-label fw-bold">Monthly Rent</label>
@@ -62,7 +58,6 @@
                 <input type="number" class="form-control" asp-for="Area" min="0" placeholder="0">
                 <span class="input-group-text">sq. ft.</span>
                 <span asp-validation-for="Area" class="text-danger"></span>
-
             </div>
         </div>
         <div class="mb-3 col-12">
@@ -70,10 +65,8 @@
             <textarea class="form-control" rows="6" asp-for="Description"
                       placeholder="Describe the property features, amenities, and location..."></textarea>
             <span asp-validation-for="Description" class="text-danger"></span>
-
         </div>
     </div>
-
 
     <div class="row">
         <div class="mb-3 col-sm-6  col-md-4 col-lg-3">
@@ -87,7 +80,6 @@
                 <option value="11">11+ Bedrooms</option>
             </select>
             <span asp-validation-for="Bedrooms" class="text-danger"></span>
-
         </div>
         <div class="mb-3 col-sm-6 col-md-4 col-lg-3">
             <label asp-for="Bathrooms" class="form-label fw-bold">Bathrooms</label>
@@ -100,7 +92,6 @@
                 <option value="11">11+ Bathrooms</option>
             </select>
             <span asp-validation-for="Bathrooms" class="text-danger"></span>
-
         </div>
         <div class="mb-3 col-sm-6  col-md-4 col-lg-3">
             <label asp-for="GarageSlots" class="form-label fw-bold">Parking</label>
@@ -114,7 +105,6 @@
                 <option value="6">6+ Spaces</option>
             </select>
             <span asp-validation-for="GarageSlots" class="text-danger"></span>
-
         </div>
         <div class="mb-3 col-sm-6  col-md-4 col-lg-3">
             <label asp-for="BetsAllowed" class="form-label fw-bold">Bets</label>
@@ -128,7 +118,6 @@
                 <option value="4">4+ Pets</option>
             </select>
             <span asp-validation-for="BetsAllowed" class="text-danger"></span>
-
         </div>
     </div>
 
@@ -146,15 +135,12 @@
                 <option value="" selected>--Select State--</option>
             </select>
             <span asp-validation-for="StateCode" class="text-danger"></span>
-
         </div>
-
         <div class="mb-3 col-md-4">
             <label asp-for="Address" class="form-label fw-bold">Address</label>
             <input type="text" class="form-control" asp-for="Address"
                    placeholder="e.g., 15 Mohamed Mahmoud Street, Bab El Louk, Cairo, Egypt">
             <span asp-validation-for="Address" class="text-danger"></span>
-
         </div>
         <div class="mb-3 col-md-8" id="map" style="height: 400px; width: 100%;"></div>
 
@@ -256,7 +242,6 @@
                 <label asp-for="PrimaryImage" class="form-label">Cover Image</label>
                 <input class="form-control propertyPrimaryImage" type="file" asp-for="PrimaryImage" accept="image/*">
                 <span asp-validation-for="PrimaryImage" class="text-danger"></span>
-                <!-- Preview container -->
                 <div id="primaryImagesPreview" class="d-flex flex-wrap gap-2 mt-3">
                     <img src="~/images/@Model.PrimaryImageUrl" class="img-thumbnail m-1" style="max-height: 150px;"/>
                 </div>
@@ -265,18 +250,15 @@
                 <label asp-for="Images" class="form-label">Property Image</label>
                 <input class="form-control propertyImages" type="file" asp-for="Images" accept="image/*" multiple>
                 <span asp-validation-for="Images" class="text-danger"></span>
-                <!-- Preview container -->
                 <div id="imagesPreview" class="d-flex flex-wrap gap-2 mt-3">
                     @foreach(var imgUrl in Model.ImagesUrls){
                         <img src="~/images/@imgUrl" class="img-thumbnail m-1" style="max-height: 150px;" />
                     }
                 </div>
-
             </div>
         </div>
 
     </div>
-
 
     <button type="submit" class="btn btn-primary">submit</button>
 </form>

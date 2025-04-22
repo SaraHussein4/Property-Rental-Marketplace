@@ -89,7 +89,6 @@ namespace PropertyRentalMarketplace.Controllers
             int i = 0;
             foreach(Service service in property.Services)
             {
-
                 model.Services[i].Name = service.Name;
                 model.Services[i].Distance = service.Distance;
                 model.Services[i].StarRating = service.StarRating;
@@ -132,7 +131,6 @@ namespace PropertyRentalMarketplace.Controllers
 
                 await _propertyRepository.BeginTransactionAsync();
 
-                
                 property.Id = model.Id;
                 property.Name = model.Name;
                 property.Description = model.Description;
@@ -161,13 +159,10 @@ namespace PropertyRentalMarketplace.Controllers
                 }
                 await _propertyRepository.Save();
 
-
-
                 property.Amenities.Clear();
                 await _propertyAmenityRepository.Save();
                 await AddPropertyAmenities(property.Id, model.Amenities);
                 await AddPropertyAmenities(property.Id, model.Safeties);
-
 
                 if (model.PrimaryImage != null)
                 {
@@ -208,11 +203,10 @@ namespace PropertyRentalMarketplace.Controllers
                 return Json($"{ex.Message}, {ex.InnerException}");
             }
         }
+
         [HttpGet]
         public async Task<IActionResult> AddProperty()
         {
-
-
             var HostAddPropertyViewModel = new HostAddPropertyViewModel();
             await PopulateHostAddPropertyViewModelAsync(HostAddPropertyViewModel);
             return View(HostAddPropertyViewModel);
@@ -222,7 +216,6 @@ namespace PropertyRentalMarketplace.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddProperty(HostAddPropertyViewModel model)
         {
-
             if (!ModelState.IsValid) {
                 await PopulateHostAddPropertyViewModelAsync(model);
                 return View(model);
@@ -524,7 +517,6 @@ namespace PropertyRentalMarketplace.Controllers
                 }
 
             }
-
             return View("EditProfile", UserFromRequest);
         }
 
@@ -558,6 +550,7 @@ namespace PropertyRentalMarketplace.Controllers
 
             return View(viewModel);
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
