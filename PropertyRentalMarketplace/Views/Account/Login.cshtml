@@ -1,0 +1,40 @@
+﻿@model PropertyRentalMarketplace.ViewModels.LoginViewModel
+
+@{
+    ViewData["Title"] = "Login";
+    Layout = "_AuthLayout";
+}
+
+
+<h1>SignUp Form</h1>
+<div class="main-agileinfo">
+	<div class="agileits-top">
+		<form asp-controller="Account" asp-action="Login" enctype="multipart/form-data" method="post">
+			<input class="text" asp-for="Email" placeholder="Email" required="">
+			<span asp-validation-for="Email" class="text-danger"></span>
+			<br />
+			<input class="text" asp-for="Password" placeholder="Password" required="">
+			<span asp-validation-for="Password" class="text-danger"></span>
+			<br />
+			<div class="wthree-text">
+				<label class="anim">
+					<input asp-for="RememberMe" class="checkbox" required="">
+					<span>Remember Me</span>
+
+				</label>
+				<div class="clear"> </div>
+			</div>
+			<input type="submit" value="SIGNIN">
+			<div asp-validation-summary="All" class="text-danger"></div>
+		</form>
+		<p>Don't have an Account? <a asp-controller="Account" asp-action="Register">Sign Up Now!</a></p>
+		<p><a asp-controller="Account" asp-action="ForgetPassword">Forget Password</a></p>
+
+
+		<div  asp-validation-summary="All"></div>
+	</div>
+</div>
+
+@section ValidationScript {
+	<partial name="_ValidationScriptsPartial" />
+}

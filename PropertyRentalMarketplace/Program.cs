@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using PropertyBL.Interfaces;
@@ -28,11 +29,21 @@ namespace PropertyRentalMarketplace
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IPropertyRepository, PropertyRepository>();
             builder.Services.AddScoped<IFavouriteRepository, FavouriteRepository>();
-            builder.Services.AddIdentity<User, IdentityRole>()
+            builder.Services.AddIdentity<User, IdentityRole>(Options =>
+            {
+                Options.Password.RequireNonAlphanumeric = true;
+                Options.Password.RequireDigit = true;
+            })
+            .AddEntityFrameworkStores<PropertyDbContext>()
+            .AddDefaultTokenProviders();
 
-            .AddEntityFrameworkStores<PropertyDbContext>();
+            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(Options =>
+                {
+                    Options.LoginPath = "Account/Login";
+                });
 
-            builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews();
             builder.Services.AddDbContext<PropertyDbContext>(
                   optionBuilder =>
                   {
@@ -48,6 +59,7 @@ namespace PropertyRentalMarketplace
                 app.UseExceptionHandler("/Home/Error");
             }
             app.UseRouting();
+            app.UseAuthentication();
 
             app.UseAuthorization();
 
