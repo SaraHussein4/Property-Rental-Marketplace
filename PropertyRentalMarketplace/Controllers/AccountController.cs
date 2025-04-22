@@ -7,6 +7,12 @@ namespace PropertyRentalMarketplace.Controllers
 {
     public class AccountController : Controller
     {
+        private readonly UserManager<User> userManager;
+
+        public AccountController(UserManager<User> _userManager)
+        {
+            userManager = _userManager;
+        }
 
         [HttpGet]
         public IActionResult Register()
@@ -15,7 +21,7 @@ namespace PropertyRentalMarketplace.Controllers
         }
 
         [HttpPost]
-        public IActionResult Register(RegisterViewModel model)
+        public async Task<IActionResult> Register(RegisterViewModel model)
         {
             if (ModelState.IsValid) {
                 var User = new User()
@@ -25,8 +31,19 @@ namespace PropertyRentalMarketplace.Controllers
                     IsAgree = model.IsAgree,
                     Gender = model.Gender
                 };
+           var Result = await userManager.CreateAsync(User , model.Password);
+                if (Result.Succeeded)
+                {
+                    return RedirectToAction("Login");
+                }
+                else
+                {
+                    foreach (var error in Result.Errors)
+                        ModelState.AddModelError(string.Empty, error.Description);
+                    
+                }
             }
-            return View();
+            return View(model);
         }
 
 
