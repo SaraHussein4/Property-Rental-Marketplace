@@ -11,8 +11,6 @@
 <body>
 	<div class="main-w3layouts wrapper">
 				@RenderBody()
-			</div>
-		</div>
 		<ul class="colorlib-bubbles">
 			<li></li>
 			<li></li>
@@ -28,6 +26,11 @@
 	</div>
 
 	@RenderSection("Scripts", required: false)
+
+	<script src="~/lib/jquery/dist/jquery.min.js"></script>
+	<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="~/js/site.js" asp-append-version="true"></script>
+	@await RenderSectionAsync("ValidationScript" , required:false)
 
 </body>
 </html>
