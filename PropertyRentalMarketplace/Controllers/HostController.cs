@@ -146,19 +146,12 @@ namespace PropertyRentalMarketplace.Controllers
                 property.ListingType = (ListingType)model.ListingType;
                 property.PropertyTypeId = model.PropertyTypeId;
 
-
-
-                //Location loc = new Location()
-                //{
                 property.Location.Latitude = model.Latitude;
                 property.Location.Longitude = model.Longitude;
                 property.Location.Country = model.CountryCode;
                 property.Location.City = "Dummy";
                 property.Location.State = model.StateCode;
-                //};
-                //await _locationRepository.Add(loc); // 
                 await _locationRepository.Save();
-
 
                 for (int i = 0; i < model.Services.Count; ++i)
                 {
@@ -166,7 +159,6 @@ namespace PropertyRentalMarketplace.Controllers
                     property.Services[i].Distance = model.Services[i].Distance;
                     property.Services[i].StarRating = model.Services[i].StarRating;
                 }
-
                 await _propertyRepository.Save();
 
 
@@ -223,50 +215,6 @@ namespace PropertyRentalMarketplace.Controllers
 
             var HostAddPropertyViewModel = new HostAddPropertyViewModel();
             await PopulateHostAddPropertyViewModelAsync(HostAddPropertyViewModel);
-            //HostAddPropertyViewModel.CountryCode = "EG";
-            //{
-            //    propertyTypes = propertyTypes,
-            //    amenities = amenities,
-            //    safeties = safeties,
-            //    countries = countries,
-            //    listingTypes = listingTypes,
-
-            //    PropertyTypeId = 4,
-            //    ListingType = 2,
-            //    Name = "da;f",
-            //    FeesPerMonth = 100,
-            //    Area = 100,
-            //    Description = "a;dkf",
-
-            //    Bedrooms = 5,
-            //    Bathrooms = 5,
-            //    GarageSlots = 2,
-            //    BetsAllowed = 1,
-
-            //    CountryCode = "SA",
-            //    Latitude = 1,
-            //    Longitude = 1,
-
-            //    Services = [
-            //        new ServiceViewModel(){
-            //            Name = "adf",
-            //            Distance = 100,
-            //            StarRating = 3
-            //        },
-            //        new ServiceViewModel(){
-            //            Name = "dkfjd;",
-            //            Distance = 100,
-            //            StarRating = 5
-            //        }
-            //    ],
-
-            //    Amenities = new int[] { 1, 2 },
-            //    Safeties = new int[] { 7, 11 },
-
-
-            //    ListingPlan = 1
-
-            //};
             return View(HostAddPropertyViewModel);
         }
 
@@ -318,9 +266,6 @@ namespace PropertyRentalMarketplace.Controllers
                 await _propertyRepository.Add(property);
                 await _propertyRepository.Save();
 
-
-
-
                 foreach(var modelService in model.Services)
                 {
                     var service = new Service()
@@ -334,10 +279,8 @@ namespace PropertyRentalMarketplace.Controllers
                     await _serviceRepository.Save();
                 }
 
-
                 await AddPropertyAmenities(property.Id, model.Amenities);
                 await AddPropertyAmenities(property.Id, model.Safeties);
-
 
                 Image primaryImage = new Image()
                 {
@@ -347,7 +290,6 @@ namespace PropertyRentalMarketplace.Controllers
                 };
                 await _imageRepository.Add(primaryImage);
                 await _imageRepository.Save();
-
 
                 foreach (var image in model.Images)
                 {
@@ -369,7 +311,6 @@ namespace PropertyRentalMarketplace.Controllers
                 await _propertyRepository.RollbackAsync();
                 return Json($"{ex.Message}, {ex.InnerException}");
             }
-
         }
 
         [HttpGet]
@@ -378,7 +319,6 @@ namespace PropertyRentalMarketplace.Controllers
             var countries = await _countryRepository.GetAll();
             return Json(countries);
         }
-
 
         private async Task PopulateHostAddPropertyViewModelAsync(HostAddPropertyViewModel viewModel)
         {
