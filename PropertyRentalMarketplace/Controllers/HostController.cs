@@ -48,23 +48,181 @@ namespace PropertyRentalMarketplace.Controllers
         {
             return View();
         }
+
+        [HttpGet]
+        public async Task<IActionResult> EditProperty(int propertyId)
+        {
+            Property property = await _propertyRepository.GetById(propertyId);
+            HostEditPropertyViewModel model = new HostEditPropertyViewModel() { 
+                Id = propertyId,
+                Address = property.Address,
+                Description = property.Description,
+                CountryCode = property.Location.Country,
+                StateCode = property.Location.State,
+                Latitude = property.Location.Latitude,
+                Longitude = property.Location.Longitude,
+                Bedrooms = property.BedRooms,
+                Bathrooms = property.BathRooms,
+                GarageSlots = property.GarageSlots,
+                BetsAllowed = property.BetsAllowd,
+                Name = property.Name,
+                FeesPerMonth = property.FeesPerMonth,
+                ListingType = (int)property.ListingType,
+                Area = property.Area,
+                PropertyTypeId = property.PropertyTypeId,
+                Safeties = new List<int>(),
+                Amenities = new List<int>()
+            };
+            await PopulateHostEditPropertyViewModelAsync(model);
+
+            foreach (PropertyAmenity amenity in property.Amenities)
+            {
+                if(amenity.Amenity.AmenityCategory.Name == "Amenity")
+                {
+                    model.Amenities.Add(amenity.AmenityId);
+                }
+                else 
+                {
+                    model.Safeties.Add(amenity.AmenityId);
+                }
+            }
+            int i = 0;
+            foreach(Service service in property.Services)
+            {
+
+                model.Services[i].Name = service.Name;
+                model.Services[i].Distance = service.Distance;
+                model.Services[i].StarRating = service.StarRating;
+                i++;
+            }
+            model.ImagesUrls = new List<string>();
+            foreach(Image img in property.Images)
+            {
+                if (img.IsPrimary)
+                {
+                    model.PrimaryImageUrl = img.Path;
+                }
+                else
+                {
+                    model.ImagesUrls.Add(img.Path);
+                }
+            }
+
+            return View(model);
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditProperty(HostEditPropertyViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                PopulateHostEditPropertyViewModelAsync(model);
+                return View(model);
+            }
+            try
+            {
+                Property property = await _propertyRepository.GetById(model.Id);
+                
+                if(property.Host.Id != "23d1c943-494f-489b-acaf-5144c2fe2387")
+                {
+                    return Json("You Can't Edit Property of Another Host");
+                }
+
+                await _propertyRepository.BeginTransactionAsync();
+
+                
+                property.Id = model.Id;
+                property.Name = model.Name;
+                property.Description = model.Description;
+                property.Address = model.Address;
+                property.BedRooms = model.Bedrooms;
+                property.BathRooms = model.Bathrooms;
+                property.GarageSlots = model.GarageSlots;
+                property.BetsAllowd = model.BetsAllowed;
+                property.Area = model.Area;
+                property.FeesPerMonth = model.FeesPerMonth;
+                property.ListingType = (ListingType)model.ListingType;
+                property.PropertyTypeId = model.PropertyTypeId;
+
+
+
+                //Location loc = new Location()
+                //{
+                property.Location.Latitude = model.Latitude;
+                property.Location.Longitude = model.Longitude;
+                property.Location.Country = model.CountryCode;
+                property.Location.City = "Dummy";
+                property.Location.State = model.StateCode;
+                //};
+                //await _locationRepository.Add(loc); // 
+                await _locationRepository.Save();
+
+
+                for (int i = 0; i < model.Services.Count; ++i)
+                {
+                    property.Services[i].Name = model.Services[i].Name;
+                    property.Services[i].Distance = model.Services[i].Distance;
+                    property.Services[i].StarRating = model.Services[i].StarRating;
+                }
+
+                await _propertyRepository.Save();
+
+
+
+                property.Amenities.Clear();
+                await _propertyAmenityRepository.Save();
+                await AddPropertyAmenities(property.Id, model.Amenities);
+                await AddPropertyAmenities(property.Id, model.Safeties);
+
+
+                if (model.PrimaryImage != null)
+                {
+                    await _imageRepository.DeletePrimaryImageForProperty(property.Id);
+                    Image primaryImage = new Image()
+                    {
+                        Path = uploadImage(model.PrimaryImage),
+                        IsPrimary = true,
+                        PropertyId = property.Id
+                    };
+                    await _imageRepository.Add(primaryImage);
+                    await _imageRepository.Save();
+                }
+
+                if (model.Images != null)
+                {
+                    await _imageRepository.DeleteNonPrimaryImagesForProperty(property.Id);
+
+                    foreach (var image in model.Images)
+                    {
+                        Image img = new Image()
+                        {
+                            Path = uploadImage(image),
+                            IsPrimary = false,
+                            PropertyId = property.Id
+                        };
+                        await _imageRepository.Add(img);
+                    }
+                    await _imageRepository.Save();
+                }
+
+                await _propertyRepository.CommitAsync();
+                return RedirectToAction("Index", "Home");
+            }
+            catch (Exception ex)
+            {
+                await _propertyRepository.RollbackAsync();
+                return Json($"{ex.Message}, {ex.InnerException}");
+            }
+        }
         [HttpGet]
         public async Task<IActionResult> AddProperty()
         {
-            var propertyTypes = await _propertyTypeRepository.GetAll();
-            var amenities = await _amenityRepository.GetAmenities();
-            var safeties = await _amenityRepository.GetSafeties();
-            var countries = await _countryRepository.GetAll();
-            var listingTypes = Enum.GetValues(typeof(ListingType))
-                      .Cast<ListingType>()
-                      .Select(e => new ListingTypeViewModel
-                      {
-                          Id = ((int)e),
-                          Name = e.ToString()
-                      });
+
 
             var HostAddPropertyViewModel = new HostAddPropertyViewModel();
-            await PopulateViewModelAsync(HostAddPropertyViewModel);
+            await PopulateHostAddPropertyViewModelAsync(HostAddPropertyViewModel);
             //HostAddPropertyViewModel.CountryCode = "EG";
             //{
             //    propertyTypes = propertyTypes,
@@ -113,24 +271,25 @@ namespace PropertyRentalMarketplace.Controllers
         }
 
         [HttpPost]
-        //[ValidateAntiForgeryToken]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddProperty(HostAddPropertyViewModel model)
         {
 
             if (!ModelState.IsValid) {
-                await PopulateViewModelAsync(model);
+                await PopulateHostAddPropertyViewModelAsync(model);
                 return View(model);
             }
             try
             {
                 await _propertyRepository.BeginTransactionAsync();
+
                 Location loc = new Location()
                 {
                     Latitude = model.Latitude,
                     Longitude = model.Longitude,
                     Country = model.CountryCode,
                     City = "Dummy",
-                    State = "Dummy"
+                    State = model.StateCode,
                 };
                 await _locationRepository.Add(loc); // 
                 await _locationRepository.Save();
@@ -154,12 +313,13 @@ namespace PropertyRentalMarketplace.Controllers
                     UnListDate = unListDate,
                     ListingType = (ListingType)model.ListingType,
                     PropertyTypeId = model.PropertyTypeId,
-                    LocationId = loc.Id,
                     UserId = "23d1c943-494f-489b-acaf-5144c2fe2387",
                 };
-
                 await _propertyRepository.Add(property);
                 await _propertyRepository.Save();
+
+
+
 
                 foreach(var modelService in model.Services)
                 {
@@ -174,8 +334,10 @@ namespace PropertyRentalMarketplace.Controllers
                     await _serviceRepository.Save();
                 }
 
+
                 await AddPropertyAmenities(property.Id, model.Amenities);
                 await AddPropertyAmenities(property.Id, model.Safeties);
+
 
                 Image primaryImage = new Image()
                 {
@@ -187,7 +349,7 @@ namespace PropertyRentalMarketplace.Controllers
                 await _imageRepository.Save();
 
 
-                foreach(var image in model.Images)
+                foreach (var image in model.Images)
                 {
                     Image img = new Image()
                     {
@@ -208,9 +370,6 @@ namespace PropertyRentalMarketplace.Controllers
                 return Json($"{ex.Message}, {ex.InnerException}");
             }
 
-
-
-            return Json(new { success = true, message = "Data saved" });
         }
 
         [HttpGet]
@@ -221,7 +380,7 @@ namespace PropertyRentalMarketplace.Controllers
         }
 
 
-        private async Task PopulateViewModelAsync(HostAddPropertyViewModel viewModel)
+        private async Task PopulateHostAddPropertyViewModelAsync(HostAddPropertyViewModel viewModel)
         {
             var propertyTypes = await _propertyTypeRepository.GetAll();
             var amenities = await _amenityRepository.GetAmenities();
@@ -250,6 +409,33 @@ namespace PropertyRentalMarketplace.Controllers
             }
         }
 
+        private async Task PopulateHostEditPropertyViewModelAsync(HostEditPropertyViewModel viewModel) {
+            var propertyTypes = await _propertyTypeRepository.GetAll();
+            var amenities = await _amenityRepository.GetAmenities();
+            var safeties = await _amenityRepository.GetSafeties();
+            var countries = await _countryRepository.GetAll();
+            var listingTypes = Enum.GetValues(typeof(ListingType))
+                      .Cast<ListingType>()
+                      .Select(e => new ListingTypeViewModel
+                      {
+                          Id = ((int)e),
+                          Name = e.ToString()
+                      });
+
+            viewModel.propertyTypes = propertyTypes;
+            viewModel.amenities = amenities;
+            viewModel.safeties = safeties;
+            viewModel.countries = countries;
+            viewModel.listingTypes = listingTypes;
+            if (viewModel.Services == null)
+            {
+                viewModel.Services = new List<ServiceViewModel>()
+                {
+                    new ServiceViewModel(),
+                    new ServiceViewModel()
+                };
+            }
+        }
 
         public string uploadImage(IFormFile ImgUrl)
         {

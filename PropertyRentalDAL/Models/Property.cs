@@ -35,11 +35,11 @@ namespace PropertyRentalDAL.Models
         public virtual PropertyType PropertyType { get; set; } //
         public virtual Location Location { get; set; } //
         public virtual User Host { get; set; } //
-        public virtual ICollection<Service> Services { get; set; } //
-        public virtual ICollection<PropertyAmenity> Amenities { get; set; } //
-        public virtual ICollection<Image> Images { get; set; } //
-        public virtual ICollection<Favourite> Favourites { get; set; } //
-        public virtual ICollection<Booking> Bookings { get; set; } //
+        public virtual List<Service> Services { get; set; } //
+        public virtual List<PropertyAmenity> Amenities { get; set; } //
+        public virtual List<Image> Images { get; set; } //
+        public virtual List<Favourite> Favourites { get; set; } //
+        public virtual List<Booking> Bookings { get; set; } //
 
 
     }

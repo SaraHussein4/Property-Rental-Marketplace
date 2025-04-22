@@ -10,5 +10,8 @@ namespace PropertyRentalBL.Interfaces
 {
     public interface IImageRepository:IGenericRepository<Image>
     {
+        public Task DeletePrimaryImageForProperty(int propertyId);
+
+        public Task DeleteNonPrimaryImagesForProperty(int propertyId);
     }
 }

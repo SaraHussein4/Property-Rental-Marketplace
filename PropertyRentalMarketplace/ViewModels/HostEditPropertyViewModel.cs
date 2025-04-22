@@ -1,17 +1,20 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using PropertyRentalDAL.Models;
+﻿using PropertyRentalDAL.Models;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace PropertyRentalMarketplace.ViewModels
 {
-    public class HostAddPropertyViewModel
+    public class HostEditPropertyViewModel
     {
         public IEnumerable<PropertyType>? propertyTypes { get; set; }
-        public IEnumerable<Amenity>? amenities {  get; set; }
-        public IEnumerable<Amenity>? safeties {  get; set; }
-        public IEnumerable<Country>? countries {  get; set; }
-        public IEnumerable<ListingTypeViewModel>? listingTypes {  get; set; }
+        public IEnumerable<Amenity>? amenities { get; set; }
+        public IEnumerable<Amenity>? safeties { get; set; }
+        public IEnumerable<Country>? countries { get; set; }
+        public IEnumerable<ListingTypeViewModel>? listingTypes { get; set; }
 
+        
+        public int Id { get; set; }
+        
         [Required(ErrorMessage = "Listing type is required")]
         [Range(1, 4, ErrorMessage = "Please enter between 0-4 pets")]
 
@@ -33,11 +36,11 @@ namespace PropertyRentalMarketplace.ViewModels
         [Required(ErrorMessage = "Number of Bedrooms is required")]
         [Range(0, 11, ErrorMessage = "Please enter between 0-11 Bedrooms")]
         public int Bedrooms { get; set; } //
-        
+
         [Required(ErrorMessage = "Number of Bathrooms is required")]
         [Range(0, 11, ErrorMessage = "Please enter between 0-11 Bathrooms")]
         public int Bathrooms { get; set; } //
-        
+
         [Required(ErrorMessage = "Number of Parking slots is required")]
         [Range(0, 6, ErrorMessage = "Please enter between 0-6 parking slots")]
         public int GarageSlots { get; set; } //
@@ -67,23 +70,22 @@ namespace PropertyRentalMarketplace.ViewModels
 
         public List<ServiceViewModel> Services { get; set; }
 
-        public IEnumerable<int>? Amenities { get; set; }
-        public IEnumerable<int>? Safeties { get; set; }
+        public List<int>? Amenities { get; set; }
+        public List<int>? Safeties { get; set; }
 
 
-        [Required(ErrorMessage = "Cover image is required")]
+        //[Required(ErrorMessage = "Cover image is required")]
         [DataType(DataType.Upload)]
-        public IFormFile PrimaryImage { get; set; }
-        public string? PrimaryImageUrl {  get; set; }
+        public IFormFile? PrimaryImage { get; set; }
+        public string? PrimaryImageUrl { get; set; }
 
-        [Required(ErrorMessage = "At least 5 property image is required")]
+        //[Required(ErrorMessage = "At least 5 property image is required")]
         [DataType(DataType.Upload)]
-        public List<IFormFile> Images { get; set; }
-        public List<string>? ImagesUrls {  get; set; }
+        public List<IFormFile>? Images { get; set; }
+        public List<string>? ImagesUrls { get; set; }
 
 
-        public int ListingPlan { get; set; }
-        public string PaymentMethod {  get; set; }
-
+        //public int ListingPlan { get; set; }
+        //public string PaymentMethod { get; set; }
     }
 }
