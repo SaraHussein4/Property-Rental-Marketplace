@@ -34,7 +34,7 @@ namespace PropertyRentalMarketplace.Controllers
             };
             return View(model);
         }
-        public async Task<IActionResult> Details()
+        public async Task<IActionResult> Details(int id)
         {
             var images = new List<Image>
             {
