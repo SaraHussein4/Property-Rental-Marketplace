@@ -1,4 +1,6 @@
-﻿@model PropertyViewModel
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@model Property
 
 @{
     var carouselId = "carousel_" + Model.Id;
@@ -6,6 +8,7 @@
 }
 
 <div class="col-lg-3 mb-4">
+
     <div id="@carouselId" class="carousel carousel-dark slide" data-bs-ride="carousel">
         <div class="carousel-indicators">
             @for (int i = 0; i < images.Count; i++)
@@ -28,6 +31,23 @@
         </div>
     </div>
 
-    <p>@Model.Name</p>
+
+    <p class="p-card">@Model.Name</p>
     <p class="me-1">@Model.Address</p>
+        <a asp-controller="User" asp-action="Details" asp-route-id="@Model.Id">details</a>
+
+    <div class="row px-3">
+        <div class="col-lg-3 col-2 p-0" style="width:19%">
+            <i class="fa-solid fa-bed " ></i> <span class="m-2">@($"{@Model.BedRooms} ")</span>
+        </div>
+        <div class="col-lg-3 col-2 p-0" style="width:19%">
+            <i class="fa-solid fa-sink " ></i>  <span class="m-2">@($"{@Model.BathRooms} ")</span>
+        </div>
+        <div class="col-lg-3 col-2 p-0" style="width:19%">
+            <i class="fa-solid fa-car " ></i> <span class="m-2">@($"{@Model.GarageSlots} ")</span>
+        </div>
+        <div class="col-lg-3 col-2 p-0" style="width:19%">
+            <i class="fa-solid fa-paw " ></i> <span class="m-2">@($"{@Model.BetsAllowd} ")</span>
+        </div>
+    </div>
 </div>

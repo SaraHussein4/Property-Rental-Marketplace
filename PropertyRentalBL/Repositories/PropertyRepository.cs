@@ -1,4 +1,5 @@
-﻿using PropertyBL.Repositories;
+﻿using Microsoft.EntityFrameworkCore;
+using PropertyBL.Repositories;
 using PropertyDAL.Contexts;
 using PropertyRentalBL.Interfaces;
 using PropertyRentalDAL.Models;
@@ -12,7 +13,16 @@ namespace PropertyRentalBL.Repositories
 {
     public class PropertyRepository: GenericRepository<Property>, IPropertyRepository
     {
-        public PropertyRepository(PropertyDbContext context) : base(context) { }
+        private readonly PropertyDbContext _context;
+        public PropertyRepository(PropertyDbContext context) : base(context) {
+        _context = context;
+        
+        }
+
+        public async Task<IEnumerable<Property>> GetAllFeatured()
+        {
+            return await _context.Properties.Where(p=>p.IsFeatured==true).ToListAsync();
+        }
     }
     
 }

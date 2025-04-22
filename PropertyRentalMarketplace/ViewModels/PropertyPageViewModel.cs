@@ -4,8 +4,8 @@ namespace PropertyRentalMarketplace.ViewModels
 {
     public class PropertyPageViewModel
     {
-        public List<PropertyViewModel>? AllProperities  { get; set; }
-        public List<PropertyViewModel>? FeaturedProperities { get; set; }
+        public IEnumerable<Property>? AllProperities { get; set; }
+        public IEnumerable<Property>? FeaturedProperities { get; set; }
 
     }
 }

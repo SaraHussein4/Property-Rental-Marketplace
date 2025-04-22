@@ -17,7 +17,6 @@ namespace PropertyRentalMarketplace.Controllers
     //[Authorize]
     public class UserController : Controller
     {
-        // IUserRepository
         private readonly IPropertyRepository _propertyRepository;
         private readonly IFavouriteRepository _favouriteRepository;
         private readonly IImageRepository _imageRepository;
@@ -29,6 +28,7 @@ namespace PropertyRentalMarketplace.Controllers
             _favouriteRepository = favouriteRepository;
             _imageRepository = imageRepository;
         }
+<<<<<<< HEAD
         #region index
         //public async Task<IActionResult> Index()
         //{
@@ -91,6 +91,19 @@ namespace PropertyRentalMarketplace.Controllers
         //}
         #endregion
         #region details
+=======
+        public async Task<IActionResult> Index()
+        {
+            var allProperities = (await _propertyRepository.GetAll()).OrderByDescending(p=>p.ListedAt).Take(4).ToList();
+            var featuedModel = await _propertyRepository.GetAllFeatured();
+            var model = new PropertyPageViewModel
+            {
+                AllProperities = allProperities,
+                FeaturedProperities = featuedModel
+            };
+            return View(model);
+        }
+>>>>>>> origin/Sara
         public async Task<IActionResult> Details(int id)
         {
             //var images = new List<Image>

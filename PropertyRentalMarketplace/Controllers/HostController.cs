@@ -12,7 +12,7 @@ using PropertyRentalMarketplace.ViewModels;
 
 namespace PropertyRentalMarketplace.Controllers
 {
-    [Authorize("Host")]
+    //[Authorize("Host")]
     public class HostController : Controller
     {
         private readonly IPropertyTypeRepository _propertyTypeRepository;

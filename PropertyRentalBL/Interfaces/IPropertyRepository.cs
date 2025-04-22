@@ -11,5 +11,7 @@ namespace PropertyRentalBL.Interfaces
 {
     public interface IPropertyRepository : IGenericRepository<Property>
     {
+        Task<IEnumerable<Property>> GetAllFeatured();
+
     }
 }
