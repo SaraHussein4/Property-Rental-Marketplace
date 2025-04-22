@@ -195,7 +195,7 @@ namespace PropertyRentalMarketplace.Controllers
                 }
 
                 await _propertyRepository.CommitAsync();
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Dashboard", "Host");
             }
             catch (Exception ex)
             {
@@ -307,13 +307,6 @@ namespace PropertyRentalMarketplace.Controllers
             }
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetCountries()
-        {
-            var countries = await _countryRepository.GetAll();
-            return Json(countries);
-        }
-
         private async Task PopulateHostAddPropertyViewModelAsync(HostAddPropertyViewModel viewModel)
         {
             var propertyTypes = await _propertyTypeRepository.GetAll();
@@ -422,6 +415,24 @@ namespace PropertyRentalMarketplace.Controllers
             }
              await _propertyAmenityRepository.Save();
 
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Dashboard()
+        {
+            return View();
+        }
+        public async Task<IActionResult> LoadTab(string tab)
+        {
+            // We Must get the Logged IN User 
+
+            return tab switch
+            {
+                "active" => PartialView("_ActiveListings", await _propertyRepository.GetActiveListedPropertiesHostedBySpecificHost("23d1c943-494f-489b-acaf-5144c2fe2387")),
+                "booked" => PartialView("_BookedProperties"),
+                "expired" => PartialView("_ExpiredListings"),
+                _ => PartialView("_ActiveListings", new List<Property>())
+            };
         }
 
         //public async Task<IActionResult> create()
