@@ -254,6 +254,7 @@ namespace PropertyRentalMarketplace.Controllers
                     UnListDate = unListDate,
                     ListingType = (ListingType)model.ListingType,
                     PropertyTypeId = model.PropertyTypeId,
+                    LocationId = loc.Id,
                     UserId = "23d1c943-494f-489b-acaf-5144c2fe2387",
                 };
                 await _propertyRepository.Add(property);
