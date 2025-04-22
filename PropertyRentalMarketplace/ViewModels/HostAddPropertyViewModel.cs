@@ -24,7 +24,7 @@ namespace PropertyRentalMarketplace.ViewModels
 
         [Required(ErrorMessage = "Description is required")]
         [MaxLength(3000, ErrorMessage = "Description cannot exceed 2000 characters")]
-        [MinLength(1000, ErrorMessage = "Description cannot be less than 1000 characters")]
+        [MinLength(200, ErrorMessage = "Description cannot be less than 1000 characters")]
         public string Description { get; set; } //
 
         [Required(ErrorMessage = "Property type is required")]
@@ -66,14 +66,6 @@ namespace PropertyRentalMarketplace.ViewModels
         public string Address { get; set; }
 
         public List<ServiceViewModel> Services { get; set; }
-
-        //public string? NearbyServiceName1 { get; set; }
-        //public string? NearbyServiceDistance1 { get; set; }
-        //public string? NearbyServiceRate1 { get; set; }
-
-        //public string? NearbyServiceName2 { get; set; }
-        //public string? NearbyServiceDistance2 { get; set; }
-        //public string? NearbyServiceRate2 { get; set; }
 
         public IEnumerable<int>? Amenities { get; set; }
         public IEnumerable<int>? Safeties { get; set; }

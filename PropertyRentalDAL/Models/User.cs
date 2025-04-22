@@ -11,15 +11,16 @@ namespace PropertyDAL.Models
 {
     public class User : IdentityUser
     {
-        public string Name{ get; set; }
+        public string Name { get; set; }    
         public Gender? Gender { get; set; }
         public string? Image { get; set; }
+        public bool IsAgree {  get; set; }  
 
         // Navigation Property
-        public virtual ICollection<Favourite> Favourites { get; set; } // 
-        public virtual ICollection<Booking> Bookings { get; set; } //
-        public virtual ICollection<Property> HostedProperties { get; set; }  //
-        public virtual ICollection<Notification> Notifications { get; set; } //
+        public virtual ICollection<Favourite>? Favourites { get; set; } // 
+        public virtual ICollection<Booking>? Bookings { get; set; } //
+        public virtual ICollection<Property>? HostedProperties { get; set; }  //
+        public virtual ICollection<Notification>? Notifications { get; set; } //
 
     }
 }

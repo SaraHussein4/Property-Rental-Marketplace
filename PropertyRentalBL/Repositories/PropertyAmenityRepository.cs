@@ -1,4 +1,5 @@
-﻿using PropertyBL.Repositories;
+﻿using Microsoft.EntityFrameworkCore;
+using PropertyBL.Repositories;
 using PropertyDAL.Contexts;
 using PropertyRentalBL.Interfaces;
 using PropertyRentalDAL.Models;
@@ -12,6 +13,16 @@ namespace PropertyRentalBL.Repositories
 {
     public class PropertyAmenityRepository:GenericRepository<PropertyAmenity>,IPropertyAmenityRepository
     {
-        public PropertyAmenityRepository(PropertyDbContext context):base(context) { }
+        private readonly PropertyDbContext _context;
+
+        public PropertyAmenityRepository(PropertyDbContext context):base(context)
+        {
+            _context = context;
+        }
+
+        public async Task DeleteAmenitiesForProperty(int propertyId)
+        {
+            await _context.PropertyAmenities.Where(pa => pa.PropertyId == propertyId).ExecuteDeleteAsync();
+        }
     }
 }

@@ -15,6 +15,7 @@ namespace PropertyRentalDAL.Models
         public string State { get; set; }
         public double Latitude { get; set; }
         public double Longitude { get; set; }
+        
 
         // Navigation Properity
         public virtual Property Property { get; set; } //

@@ -1,4 +1,5 @@
-﻿using PropertyBL.Repositories;
+﻿using Microsoft.EntityFrameworkCore;
+using PropertyBL.Repositories;
 using PropertyDAL.Contexts;
 using PropertyRentalBL.Interfaces;
 using PropertyRentalDAL.Models;
@@ -18,6 +19,16 @@ namespace PropertyRentalBL.Repositories
         public ImageRepository(PropertyDbContext context) : base(context) {
             _context = context;
             Debug.WriteLine($"{context.GetHashCode()}");
+        }
+
+        public async Task DeleteNonPrimaryImagesForProperty(int propertyId)
+        {
+            await _context.Images.Where(img => img.PropertyId == propertyId && img.IsPrimary == false).ExecuteDeleteAsync();
+        }
+
+        public async Task DeletePrimaryImageForProperty(int propertyId)
+        {
+            await _context.Images.Where(img => img.PropertyId == propertyId && img.IsPrimary == true).ExecuteDeleteAsync();
         }
     }
 }
