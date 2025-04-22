@@ -27,6 +27,8 @@ namespace PropertyRentalMarketplace.ViewModels
         public int LocationId { get; set; }
         public string UserId { get; set; }
         public bool IsFavourite { get; set; }
+        //image list
+        public List<ImageViewModel> Images { get; set; }
 
         // Navigation Properties
         public virtual PropertyType PropertyType { get; set; } //
@@ -34,7 +36,7 @@ namespace PropertyRentalMarketplace.ViewModels
         public virtual User Host { get; set; } //
         public IEnumerable<PropertyService> Services { get; set; } //
         public IEnumerable<PropertyAmenity> Amenities { get; set; } //
-        public IEnumerable<Image> Images { get; set; } //
+        //public IEnumerable<Image> Images { get; set; } //
         public IEnumerable<Favourite> Favourites { get; set; } //
         public IEnumerable<Booking> Bookings { get; set; } //
     }

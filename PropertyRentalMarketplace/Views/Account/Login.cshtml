@@ -6,6 +6,42 @@
 }
 
 
+@*     <h1>Login</h1> *@
+@*             <div class="main-agileinfo"> *@
+@*                 <div class="agileits-top"> *@
+@*         <form asp-action="Login" method="post"> *@
+@*             <div asp-validation-summary="All" class="text-danger"></div> *@
+@*             <div class="form-group"> *@
+@*                 <label asp-for="UserName" class="control-label"></label> *@
+@*                 <input asp-for="UserName" class="form-control text" /> *@
+@*                 <span asp-validation-for="UserName" class="text-danger"></span> *@
+@*             </div> *@
+@*             <div class="form-group"> *@
+@*                 <label asp-for="Password" class="control-label"></label> *@
+@*                 <input asp-for="Password" class="form-control text" /> *@
+@*                 <span asp-validation-for="Password" class="text-danger"></span> *@
+@*             </div> *@
+          
+@*             <div class="wthree-text"> *@
+@*                 <label class="anim"> *@
+@*                     <input asp-for="RememberMe" class="checkbox" required=""> *@
+@*                     <span>@Html.DisplayNameFor(model => model.RememberMe)</span> *@
+
+@*                 </label> *@
+@*                 <div class="clear"> </div> *@
+@*             </div> *@
+@*             <div class="form-group"> *@
+@*                 <a asp-action="ForgetPassword" class="btn btn-link">Forgot your password?</a> *@
+@*             </div> *@
+@*             <div class="form-group"> *@
+@*                 <input type="submit" value="Create" class="btn btn-success" /> *@
+@*             </div> *@
+@*         </form> *@
+@*         <a asp-action="Register">Create Account</a> *@
+
+@*     </div> *@
+@* </div> *@
+
 <h1>SignUp Form</h1>
 <div class="main-agileinfo">
 	<div class="agileits-top">
@@ -34,6 +70,7 @@
 		<div  asp-validation-summary="All"></div>
 	</div>
 </div>
+
 
 @section ValidationScript {
 	<partial name="_ValidationScriptsPartial" />
