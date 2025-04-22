@@ -2,14 +2,17 @@
 
 @{
     ViewData["Title"] = "Login";
+    Layout = "_AuthLayout";
 }
 
-<h1>Login</h1>
+<div class="container mt-5">
+    <div>
+<div class="d-flex justify-content-center align-items-center min-vh-100">
+    <h1>Login</h1>
 
-<h4>LoginViewModel</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
+    <hr />
+    <div class="card p-4 shadow" style="width: 100%; max-width: 400px;">
+        
         <form asp-action="Login" method="post">
             <div asp-validation-summary="All" class="text-danger"></div>
             <div class="form-group">
@@ -28,20 +31,19 @@
                 </label>
             </div>
             <div class="form-group">
-                <label asp-for="ForgetPassword" class="control-label"></label>
-                <input asp-for="ForgetPassword" class="form-control" />
-                <span asp-validation-for="ForgetPassword" class="text-danger"></span>
+                <a asp-action="ForgetPassword" class="btn btn-link">Forgot your password?</a>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Create" class="btn btn-success" />
             </div>
         </form>
+        <a asp-action="Register">Create Account</a>
+
     </div>
 </div>
-
-<div>
-    <a asp-action="Register">Create Account</a>
 </div>
+</div>
+
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
