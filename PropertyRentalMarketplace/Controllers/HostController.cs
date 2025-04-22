@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using PropertyBL.Interfaces;
@@ -11,6 +12,7 @@ using PropertyRentalMarketplace.ViewModels;
 
 namespace PropertyRentalMarketplace.Controllers
 {
+    [Authorize("Host")]
     public class HostController : Controller
     {
         private readonly IPropertyTypeRepository _propertyTypeRepository;

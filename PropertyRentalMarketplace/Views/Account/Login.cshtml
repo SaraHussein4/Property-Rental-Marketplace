@@ -6,44 +6,72 @@
 }
 
 
-    <h1>Login</h1>
-            <div class="main-agileinfo">
-                <div class="agileits-top">
-        <form asp-action="Login" method="post">
-            <div asp-validation-summary="All" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="UserName" class="control-label"></label>
-                <input asp-for="UserName" class="form-control text" />
-                <span asp-validation-for="UserName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Password" class="control-label"></label>
-                <input asp-for="Password" class="form-control text" />
-                <span asp-validation-for="Password" class="text-danger"></span>
-            </div>
+@*     <h1>Login</h1> *@
+@*             <div class="main-agileinfo"> *@
+@*                 <div class="agileits-top"> *@
+@*         <form asp-action="Login" method="post"> *@
+@*             <div asp-validation-summary="All" class="text-danger"></div> *@
+@*             <div class="form-group"> *@
+@*                 <label asp-for="UserName" class="control-label"></label> *@
+@*                 <input asp-for="UserName" class="form-control text" /> *@
+@*                 <span asp-validation-for="UserName" class="text-danger"></span> *@
+@*             </div> *@
+@*             <div class="form-group"> *@
+@*                 <label asp-for="Password" class="control-label"></label> *@
+@*                 <input asp-for="Password" class="form-control text" /> *@
+@*                 <span asp-validation-for="Password" class="text-danger"></span> *@
+@*             </div> *@
           
-            <div class="wthree-text">
-                <label class="anim">
-                    <input asp-for="RememberMe" class="checkbox" required="">
-                    <span>@Html.DisplayNameFor(model => model.RememberMe)</span>
+@*             <div class="wthree-text"> *@
+@*                 <label class="anim"> *@
+@*                     <input asp-for="RememberMe" class="checkbox" required=""> *@
+@*                     <span>@Html.DisplayNameFor(model => model.RememberMe)</span> *@
 
-                </label>
-                <div class="clear"> </div>
-            </div>
-            <div class="form-group">
-                <a asp-action="ForgetPassword" class="btn btn-link">Forgot your password?</a>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-success" />
-            </div>
-        </form>
-        <a asp-action="Register">Create Account</a>
+@*                 </label> *@
+@*                 <div class="clear"> </div> *@
+@*             </div> *@
+@*             <div class="form-group"> *@
+@*                 <a asp-action="ForgetPassword" class="btn btn-link">Forgot your password?</a> *@
+@*             </div> *@
+@*             <div class="form-group"> *@
+@*                 <input type="submit" value="Create" class="btn btn-success" /> *@
+@*             </div> *@
+@*         </form> *@
+@*         <a asp-action="Register">Create Account</a> *@
 
-    </div>
+@*     </div> *@
+@* </div> *@
+
+<h1>SignUp Form</h1>
+<div class="main-agileinfo">
+	<div class="agileits-top">
+		<form asp-controller="Account" asp-action="Login" enctype="multipart/form-data" method="post">
+			<input class="text" asp-for="Email" placeholder="Email" required="">
+			<span asp-validation-for="Email" class="text-danger"></span>
+			<br />
+			<input class="text" asp-for="Password" placeholder="Password" required="">
+			<span asp-validation-for="Password" class="text-danger"></span>
+			<br />
+			<div class="wthree-text">
+				<label class="anim">
+					<input asp-for="RememberMe" class="checkbox" required="">
+					<span>Remember Me</span>
+
+				</label>
+				<div class="clear"> </div>
+			</div>
+			<input type="submit" value="SIGNIN">
+			<div asp-validation-summary="All" class="text-danger"></div>
+		</form>
+		<p>Don't have an Account? <a asp-controller="Account" asp-action="Register">Sign Up Now!</a></p>
+		<p><a asp-controller="Account" asp-action="ForgetPassword">Forget Password</a></p>
+
+
+		<div  asp-validation-summary="All"></div>
+	</div>
 </div>
 
 
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+@section ValidationScript {
+	<partial name="_ValidationScriptsPartial" />
 }

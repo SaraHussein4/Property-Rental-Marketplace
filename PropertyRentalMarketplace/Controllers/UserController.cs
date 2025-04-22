@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PropertyBL.Interfaces;
 using PropertyDAL.Models;
@@ -11,7 +12,8 @@ using System.Security.Claims;
 
 namespace PropertyRentalMarketplace.Controllers
 {
-    
+
+    [Authorize]
     public class UserController : Controller
     {
         // IUserRepository
