@@ -12,7 +12,6 @@ namespace PropertyRentalMarketplace.Controllers
 {
     public class AccountController : Controller
     {
-      
         private readonly UserManager<User> userManager;
         private readonly SignInManager<User> signInManager;
 
