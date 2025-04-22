@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.Elfie.Serialization;
 using Microsoft.EntityFrameworkCore;
 using PropertyBL.Interfaces;
 using PropertyDAL.Models;
@@ -32,8 +33,14 @@ namespace PropertyRentalMarketplace.Controllers
         #region index
         public async Task<IActionResult> Index()
         {
-
-            return View();
+            var allProperities =(await _propertyRepository.GetAll()).OrderByDescending(p=>p.ListedAt).ToList();
+            var featuredModel = await _propertyRepository.GetAllFeatured();
+            var model = new PropertyPageViewModel
+            {
+                AllProperities = allProperities,
+                FeaturedProperities = featuredModel
+            };
+            return View(model);
         }
         #endregion
         #region details
@@ -53,18 +60,18 @@ namespace PropertyRentalMarketplace.Controllers
             //    new Image { Id = 10, Path= "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRBU3UXoeGSiQtW0no3PdFq_g_rKEWKS9flyw&s", PropertyId = 1 }
 
             //};
-            var property = await _propertyRepository.GetById(1);
-            if (property == null)
-            {
-                return View("Error");
-            }
-            var images = await _imageRepository.GetAll();
-            var imagesVM = images.Select(s => new ImageViewModel
-            {
-                Id = s.Id,
-                Path = s.Path,
-                IsPrimary = s.IsPrimary,
-            }).ToList();
+            //var property = await _propertyRepository.GetById(1);
+            //if (property == null)
+            //{
+            //    return View("Error");
+            //}
+            //var images = await _imageRepository.GetAll();
+            //var imagesVM = images.Select(s => new ImageViewModel
+            //{
+            //    Id = s.Id,
+            //    Path = s.Path,
+            //    IsPrimary = s.IsPrimary,
+            //}).ToList();
             //var imagesVM = new List<ImageViewModel>
             //{
             //    new ImageViewModel{
@@ -75,33 +82,33 @@ namespace PropertyRentalMarketplace.Controllers
 
             //};
 
-            var propertyVm = new PropertyViewModel()
-            {
-                Id = property.Id,
-                Name = property.Name,
-                Address = property.Address,
-                Description = property.Description,
-                BedRooms = property.BedRooms,
-                BathRooms = property.BathRooms,
-                BetsAllowd = property.BetsAllowd,
-                GarageSlots = property.GarageSlots,
-                IsListed = property.IsListed,
-                IsFeatured = property.IsFeatured,
-                ListedAt = property.ListedAt,
-                UnListDate = property.UnListDate,
-                ListingType = property.ListingType,
-               Images= imagesVM
+            //var propertyVm = new PropertyViewModel()
+            //{
+            //    Id = property.Id,
+            //    Name = property.Name,
+            //    Address = property.Address,
+            //    Description = property.Description,
+            //    BedRooms = property.BedRooms,
+            //    BathRooms = property.BathRooms,
+            //    BetsAllowd = property.BetsAllowd,
+            //    GarageSlots = property.GarageSlots,
+            //    IsListed = property.IsListed,
+            //    IsFeatured = property.IsFeatured,
+            //    ListedAt = property.ListedAt,
+            //    UnListDate = property.UnListDate,
+            //    ListingType = property.ListingType,
+            //   Images= imagesVM
 
-            };
+            //};
            
 
 
-           var model = new List<PropertyViewModel> { propertyVm };
-            if(model == null)
-            {
-                return View("Error");
-            }
-                return View("Details" ,property);
+           //var model = new List<PropertyViewModel> { propertyVm };
+           // if(model == null)
+           // {
+           //     return View("Error");
+           // }
+                return View("Details" );
         }
         #endregion
     }
