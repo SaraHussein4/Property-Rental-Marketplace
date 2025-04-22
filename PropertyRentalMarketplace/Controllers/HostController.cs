@@ -371,35 +371,41 @@ namespace PropertyRentalMarketplace.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> SaveEdit(UserProfileEditViewModel UserFromRequest)
+        public async Task<IActionResult> SaveEdit(UserProfileEditViewModel userFromRequest)
         {
-            var user = new User 
-            { 
-            Id = UserFromRequest.Id,
-            Name = UserFromRequest.Name,
-            Email = UserFromRequest.Email,
-            Image = UserFromRequest.Image,
-            Gender = UserFromRequest.Gender,
-            PhoneNumber = UserFromRequest.PhoneNumber,
-            };
+            //if (!ModelState.IsValid)
+            //    return View("EditProfile", userFromRequest);
 
-            if (ModelState.IsValid)
+            var user = await _userManager.FindByIdAsync(userFromRequest.Id);
+            if (user == null)
+                return NotFound();
+
+            // Update editable fields
+            user.Name = userFromRequest.Name;
+            user.PhoneNumber = userFromRequest.PhoneNumber;
+            user.Gender = userFromRequest.Gender;
+
+            try
             {
-                try
+                var result = await _userManager.UpdateAsync(user);
+
+                if (result.Succeeded)
                 {
-                    await _userRepository.Update(user);
-                    await _userRepository.Save();
                     return RedirectToAction("Profile", new { id = user.Id });
                 }
-                catch (Exception ex)
-                {
-                    var message = ex.InnerException?.Message ?? ex.Message;
-                    ModelState.AddModelError("", message);
-                }
 
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError("", error.Description);
+                }
+            }
+            catch (Exception ex)
+            {
+                var message = ex.InnerException?.Message ?? ex.Message;
+                ModelState.AddModelError("", message);
             }
 
-            return View("EditProfile", UserFromRequest);
+            return View("EditProfile", userFromRequest);
         }
 
         [HttpPost]
@@ -409,13 +415,26 @@ namespace PropertyRentalMarketplace.Controllers
 
             if (user != null && ImgUrl != null)
             {
+                // Delete old image
+                if (!string.IsNullOrEmpty(user.Image))
+                {
+                    var oldImagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", user.Image);
+                    if (System.IO.File.Exists(oldImagePath))
+                        System.IO.File.Delete(oldImagePath);
+                }
+
+                // Upload new image
                 string fileName = uploadImage(ImgUrl);
                 user.Image = fileName;
 
-                await _userManager.UpdateAsync(user);
+                var result = await _userManager.UpdateAsync(user);
+                if (result.Succeeded)
+                {
+                    return Json(new { success = true, imageFileName = fileName });
+                }
             }
 
-            return RedirectToAction("EditProfile", new { id = id });
+            return Json(new { success = false });
         }
 
         [HttpGet]
@@ -434,7 +453,7 @@ namespace PropertyRentalMarketplace.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
+        public async Task<IActionResult> SaveChangePassword(ChangePasswordViewModel model)
         {
             if (!ModelState.IsValid)
                 return View(model);
