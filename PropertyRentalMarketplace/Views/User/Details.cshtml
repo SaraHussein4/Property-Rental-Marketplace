@@ -1,9 +1,17 @@
-﻿ @model PropertyRentalMarketplace.ViewModels.PropertyViewModel 
+﻿ @model PropertyViewModel 
 @{
     ViewData["Title"] = "Details";
     Layout = "_UserLayout";
 }
+@section Styles {
+    <link rel="stylesheet" href="~/css/userStyle.css">
+}
+<div class="hero-section" style=" background:url('@Url.Content("~/images/hero_bg_2.jpg")') no-repeat center;">
 
+    <div class="container d-flex align-items-center justify-content-center fs-1 text-white flex-column">
+        <h1>Home</h1>
+    </div>
+</div>
 @{
     //بحسب العدد الذيادة للصور 
     var Images = Model.Images?.ToList() ; 
@@ -223,7 +231,7 @@
                         @for (int i = 4; i < Amentites.Count; i++)
                         {
                             <div class="col-md-4">
-                                <div class="border rounded text-center py-2 bg-light">
+                                    <div class="border-0 text-center">
                                     @Amentites[i].Name
                                 </div>
                             </div>
