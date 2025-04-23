@@ -25,6 +25,8 @@ namespace PropertyRentalMarketplace
             builder.Services.AddScoped<IPropertyRepository, PropertyRepository>();
             builder.Services.AddScoped<IPropertyAmenityRepository, PropertyAmenityRepository>();
             builder.Services.AddScoped<IServiceRepository, ServiceRepository>();
+            builder.Services.AddScoped<IBookingRepository, BookingRepository>();
+
 
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IPropertyRepository, PropertyRepository>();

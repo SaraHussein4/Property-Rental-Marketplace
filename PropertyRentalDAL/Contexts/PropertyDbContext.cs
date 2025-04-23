@@ -45,7 +45,7 @@ namespace PropertyDAL.Contexts
 
             #region Booking
             // Composite Primary Key
-            builder.Entity<Booking>().HasKey(b => new { b.UserId, b.PropertyId });
+            builder.Entity<Booking>().HasKey(b => b.Id);
 
             // Properties 
             builder.Entity<Booking>().Property(b => b.StartDate).HasColumnType("date");
@@ -56,8 +56,14 @@ namespace PropertyDAL.Contexts
             // Relationships With User 
             builder.Entity<Booking>()
                 .HasOne(b => b.User)
-                .WithMany(u => u.Bookings)
+                .WithMany(u => u.BookingsUser)
                 .HasForeignKey(b => b.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Booking>()
+                .HasOne(b => b.Host)
+                .WithMany(u => u.BookingsHost)
+                .HasForeignKey(b => b.HostId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             // Relationships With Property
@@ -71,7 +77,7 @@ namespace PropertyDAL.Contexts
             builder.Entity<Booking>().
                 HasOne(b => b.Rating)
                 .WithOne(r => r.Booking)
-                .HasForeignKey<Booking>(b => b.RatingId)
+                .HasForeignKey<Rating>(r => r.BookingId)
                 .OnDelete(DeleteBehavior.Restrict);
             #endregion
 

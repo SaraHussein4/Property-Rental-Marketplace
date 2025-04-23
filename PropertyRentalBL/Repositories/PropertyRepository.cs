@@ -11,16 +11,22 @@ using System.Threading.Tasks;
 
 namespace PropertyRentalBL.Repositories
 {
-    public class PropertyRepository: GenericRepository<Property>, IPropertyRepository
+    public class PropertyRepository : GenericRepository<Property>, IPropertyRepository
     {
         PropertyDbContext _context;
         public PropertyRepository(PropertyDbContext context) : base(context) {
             _context = context;
         }
 
-        public Task<List<Property>> GetActiveListedPropertiesHostedBySpecificHost(string hostId)
+        public async Task<List<Property>> GetActiveListedPropertiesHostedBySpecificHost(string hostId)
         {
-            return _context.Properties.AsNoTracking().Where(p => p.UserId == hostId && p.UnListDate > DateTime.Now).ToListAsync();
+            return await _context.Properties.AsNoTracking().Where(p => p.UserId == hostId && p.IsListed == true && p.UnListDate > DateTime.Now).ToListAsync();
+        }
+
+        public async Task<List<Property>> GetExpiredPropertiesHostedBySpecificHost(string hostId)
+        {
+            return await _context.Properties.AsNoTracking().Where(p => p.UserId == hostId && p.IsListed == true && p.UnListDate <= DateTime.Now).ToListAsync();
+
         }
     }
     
