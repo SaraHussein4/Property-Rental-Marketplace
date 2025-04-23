@@ -26,13 +26,15 @@ namespace PropertyRentalMarketplace.Controllers
         private readonly IServiceRepository _serviceRepository;
         private readonly IPropertyAmenityRepository _propertyAmenityRepository;
         private readonly IUserRepository _userRepository;
+        private readonly IBookingRepository _bookingRepository;
+
 
         public HostController(IPropertyTypeRepository propertyTypeRepository,
             IAmenityRepository amenityRepository, ICountryRepository countryRepository, IImageRepository imageRepository,
             ILocationRepository locationRepository, IPropertyRepository propertyRepository, UserManager<User> userManager,
             RoleManager<IdentityRole> roleManager,
             IServiceRepository serviceRepository, IPropertyAmenityRepository propertyAmenityRepository
-            ,IUserRepository userRepository)
+            ,IUserRepository userRepository, IBookingRepository bookingRepository)
         {
             _propertyTypeRepository = propertyTypeRepository;
             _amenityRepository = amenityRepository;
@@ -45,6 +47,7 @@ namespace PropertyRentalMarketplace.Controllers
             _serviceRepository = serviceRepository;
             _propertyAmenityRepository = propertyAmenityRepository;
             _userRepository = userRepository;
+            _bookingRepository = bookingRepository;
         }
         public IActionResult Index()
         {
@@ -428,8 +431,44 @@ namespace PropertyRentalMarketplace.Controllers
 
         public async Task<IActionResult> DealClosed([FromBody] HostDealClosedViewModel model)
         {
-            int x = 0;
-            return Json(model);
+            bool exist = await _userRepository.CheckUserByPhone(model.phoneNumber);
+            User client;
+            if (exist) {
+                try
+                {
+                    await _bookingRepository.BeginTransactionAsync();
+                    client = await _userRepository.GetUserByPhone(model.phoneNumber);
+
+                    Booking booking = new Booking()
+                    {
+                        HostId = "23d1c943-494f-489b-acaf-5144c2fe2387",
+                        UserId = client.Id,
+                        PropertyId = model.PropertyId,
+                        FeePerMonth = model.FeePerMonth,
+                        StartDate = model.StartDate,
+                        EndDate = model.EndDate,
+                        IsActive = true
+                    };
+                    await _bookingRepository.Add(booking);
+                    await _bookingRepository.Save();
+            
+                    Property property = await _propertyRepository.GetById(model.PropertyId);
+                    property.IsListed = false;
+                    await _propertyRepository.Save();
+
+                    await _bookingRepository.CommitAsync();
+                }
+                catch
+                {
+                    await _bookingRepository.RollbackAsync();
+                }
+            }
+            else
+            {
+                /**/
+            }
+            return Json("Sucesss");
+
         }
         public async Task<IActionResult> LoadTab(string tab)
         {
@@ -438,7 +477,7 @@ namespace PropertyRentalMarketplace.Controllers
             return tab switch
             {
                 "active" => PartialView("_ActiveListings", await _propertyRepository.GetActiveListedPropertiesHostedBySpecificHost("23d1c943-494f-489b-acaf-5144c2fe2387")),
-                "booked" => PartialView("_BookedProperties"),
+                "booked" => PartialView("_BookedProperties", await _bookingRepository.GetActiveBookingsForHost("23d1c943-494f-489b-acaf-5144c2fe2387")),
                 "expired" => PartialView("_ExpiredListings"),
                 _ => PartialView("_ActiveListings", new List<Property>())
             };
@@ -450,18 +489,19 @@ namespace PropertyRentalMarketplace.Controllers
         //    {
         //        var user = new User
         //        {
-        //            UserName = "AhmedHamdy",
-        //            Email = "ahmed@gmail.com",
+        //            Name = "Mostafa Murad",
+        //            UserName = "MostafaMurad",
+        //            Email = "mostafa@gmail.com",
         //            Gender = Gender.Male,
         //        };
-        //        var result = await _userManager.CreateAsync(user, "Ahmed$1");
-        //        var role = await _roleManager.FindByIdAsync("3");
+        //        var result = await _userManager.CreateAsync(user, "Mostafa$1");
+        //        var role = await _roleManager.FindByIdAsync("2");
         //        var roleResult = await _userManager.AddToRoleAsync(user, role.Name);
         //        return Json("Success");
         //    }
-        //    catch
+        //    catch(Exception ex) 
         //    {
-        //        return Json("Fail");
+        //        return Json(ex);
         //    }
         //}
 

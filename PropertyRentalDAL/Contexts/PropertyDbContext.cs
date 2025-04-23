@@ -56,8 +56,14 @@ namespace PropertyDAL.Contexts
             // Relationships With User 
             builder.Entity<Booking>()
                 .HasOne(b => b.User)
-                .WithMany(u => u.Bookings)
+                .WithMany(u => u.BookingsUser)
                 .HasForeignKey(b => b.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Booking>()
+                .HasOne(b => b.Host)
+                .WithMany(u => u.BookingsHost)
+                .HasForeignKey(b => b.HostId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             // Relationships With Property

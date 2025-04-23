@@ -12,5 +12,6 @@ namespace PropertyRentalBL.Interfaces
     public interface IPropertyRepository : IGenericRepository<Property>
     {
         public Task<List<Property>> GetActiveListedPropertiesHostedBySpecificHost(string hostId);
+        public Task<List<Property>> GetBookedPropertiesHostedBySpecificHost(string hostId);
     }
 }

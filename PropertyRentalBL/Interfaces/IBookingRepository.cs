@@ -10,5 +10,6 @@ namespace PropertyRentalBL.Interfaces
 {
     public interface IBookingRepository: IGenericRepository<Booking>
     {
+        public Task<List<Booking>> GetActiveBookingsForHost(string hostid);
     }
 }
