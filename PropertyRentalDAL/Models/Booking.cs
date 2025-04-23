@@ -10,18 +10,16 @@ namespace PropertyRentalDAL.Models
 {
     public class Booking
     {
-        // Composite primary key (Foreign keys)
-        public string UserId { get; set; }
-        public int PropertyId { get; set; }
+        public int Id { get; set; }
 
-        //
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public int FeePerMonth { get; set; }
         public bool IsActive { get; set; }
 
         //Foreign Key
-        public virtual int RatingId { get; set; }
+        public string UserId { get; set; }
+        public int PropertyId { get; set; }
 
         // Navigation Properties
         public virtual User User { get; set; } //

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PropertyDAL.Contexts;
 
@@ -11,9 +12,11 @@ using PropertyDAL.Contexts;
 namespace PropertyRentalDAL.Migrations
 {
     [DbContext(typeof(PropertyDbContext))]
-    partial class PropertyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250422235844_v4")]
+    partial class v4
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -326,6 +329,9 @@ namespace PropertyRentalDAL.Migrations
                     b.Property<int>("PropertyId")
                         .HasColumnType("int");
 
+                    b.Property<int>("RatingId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("date");
 
@@ -336,6 +342,9 @@ namespace PropertyRentalDAL.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("PropertyId");
+
+                    b.HasIndex("RatingId")
+                        .IsUnique();
 
                     b.HasIndex("UserId");
 
@@ -615,9 +624,6 @@ namespace PropertyRentalDAL.Migrations
                     b.Property<int>("AmenitiesRating")
                         .HasColumnType("int");
 
-                    b.Property<int>("BookingId")
-                        .HasColumnType("int");
-
                     b.Property<int>("CommunicationRating")
                         .HasColumnType("int");
 
@@ -634,9 +640,6 @@ namespace PropertyRentalDAL.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("BookingId")
-                        .IsUnique();
 
                     b.ToTable("Ratings");
                 });
@@ -740,6 +743,12 @@ namespace PropertyRentalDAL.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("PropertyRentalDAL.Models.Rating", "Rating")
+                        .WithOne("Booking")
+                        .HasForeignKey("PropertyRentalDAL.Models.Booking", "RatingId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("PropertyDAL.Models.User", "User")
                         .WithMany("Bookings")
                         .HasForeignKey("UserId")
@@ -747,6 +756,8 @@ namespace PropertyRentalDAL.Migrations
                         .IsRequired();
 
                     b.Navigation("Property");
+
+                    b.Navigation("Rating");
 
                     b.Navigation("User");
                 });
@@ -838,17 +849,6 @@ namespace PropertyRentalDAL.Migrations
                     b.Navigation("Property");
                 });
 
-            modelBuilder.Entity("PropertyRentalDAL.Models.Rating", b =>
-                {
-                    b.HasOne("PropertyRentalDAL.Models.Booking", "Booking")
-                        .WithOne("Rating")
-                        .HasForeignKey("PropertyRentalDAL.Models.Rating", "BookingId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Booking");
-                });
-
             modelBuilder.Entity("PropertyRentalDAL.Models.Service", b =>
                 {
                     b.HasOne("PropertyRentalDAL.Models.Property", "Property")
@@ -881,12 +881,6 @@ namespace PropertyRentalDAL.Migrations
                     b.Navigation("Amenities");
                 });
 
-            modelBuilder.Entity("PropertyRentalDAL.Models.Booking", b =>
-                {
-                    b.Navigation("Rating")
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("PropertyRentalDAL.Models.Location", b =>
                 {
                     b.Navigation("Property")
@@ -909,6 +903,12 @@ namespace PropertyRentalDAL.Migrations
             modelBuilder.Entity("PropertyRentalDAL.Models.PropertyType", b =>
                 {
                     b.Navigation("Properties");
+                });
+
+            modelBuilder.Entity("PropertyRentalDAL.Models.Rating", b =>
+                {
+                    b.Navigation("Booking")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }
