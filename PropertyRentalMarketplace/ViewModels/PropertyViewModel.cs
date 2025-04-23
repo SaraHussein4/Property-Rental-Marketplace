@@ -45,7 +45,6 @@ namespace PropertyRentalMarketplace.ViewModels
         //public IEnumerable<Image> Images { get; set; } //
         public List<IFormFile> Imageshost { get; set; }
         public string ImagesHost { get; set; }
-        //public List<string> ImagesHost { get; set; }
         public IEnumerable<Favourite> Favourites { get; set; } //
         public IEnumerable<Booking> Bookings { get; set; } //
     }

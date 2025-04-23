@@ -61,7 +61,7 @@ namespace PropertyBL.Repositories
         
         public async Task<string> getimagehost(int propertyid)
         {
-            return await context.Images.Where(w => w.PropertyId == propertyid).Select(s => s.Path).FirstOrDefaultAsync();
+            return await context.Properties.Where(w =>w.Id == propertyid).Select(s => s.Host.Image).FirstOrDefaultAsync();
 
         }
         //Amenities 

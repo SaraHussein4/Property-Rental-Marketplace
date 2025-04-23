@@ -57,7 +57,7 @@ namespace PropertyRentalMarketplace.Controllers
                 return View("Error");
             }
             var images= await _imageRepository.GetImageById(id);
-            var imghost = await _userRepository.getimagehost(id);
+            var imghost = await _propertyRepository.getimagehost(id);
             //var Amenitie = await _amenityRepository.GetAllAmenitiesById(id);
             //var safeties = await _amenityRepository.GetSafeties();
             var model = new PropertyViewModel

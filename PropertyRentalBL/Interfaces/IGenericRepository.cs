@@ -17,7 +17,7 @@ namespace PropertyBL.Interfaces
         Task<int> Save();
         Task<T> GetById(int id);
         Task<List<Image>> GetImageById(int propertyid);
-        Task<string> getimagehost( int propertyid);//
+       Task<string> getimagehost(int propertyid);//
         public  Task BeginTransactionAsync();
         public Task CommitAsync();
         public Task RollbackAsync();
