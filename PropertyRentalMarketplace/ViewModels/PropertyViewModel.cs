@@ -20,8 +20,11 @@ namespace PropertyRentalMarketplace.ViewModels
         public DateTime ListedAt { get; set; }
         public DateTime UnListDate { get; set; }
         public ListingType ListingType { get; set; }
-        
 
+        public int FeesPerMonth { get; set; }
+        //data host
+        public string PhoneNumber { get; set; }
+        public string Email { get; set; }
         // Foreign Key
         public int PropertyTypeId { get; set; }
         public int LocationId { get; set; }
@@ -30,6 +33,9 @@ namespace PropertyRentalMarketplace.ViewModels
         //image list
         public List<Image> Images { get; set; }
         public Property Property { get; set; }
+        //Amenities 
+        //public List<Amenity> amenities {  get; set; }
+        //public List<Amenity>? safeties { get; set; }
         // Navigation Properties
         public virtual PropertyType PropertyType { get; set; } //
         public virtual Location Location { get; set; } //
@@ -37,6 +43,9 @@ namespace PropertyRentalMarketplace.ViewModels
         public IEnumerable<PropertyService> Services { get; set; } //
         public IEnumerable<PropertyAmenity> Amenities { get; set; } //
         //public IEnumerable<Image> Images { get; set; } //
+        public List<IFormFile> Imageshost { get; set; }
+        public string ImagesHost { get; set; }
+        //public List<string> ImagesHost { get; set; }
         public IEnumerable<Favourite> Favourites { get; set; } //
         public IEnumerable<Booking> Bookings { get; set; } //
     }

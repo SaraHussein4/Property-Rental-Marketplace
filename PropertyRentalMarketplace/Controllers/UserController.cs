@@ -22,13 +22,18 @@ namespace PropertyRentalMarketplace.Controllers
         private readonly IPropertyRepository _propertyRepository;
         private readonly IFavouriteRepository _favouriteRepository;
         private readonly IImageRepository _imageRepository;
+        private readonly IUserRepository _userRepository;
+        private readonly IAmenityRepository _amenityRepository;
 
         public UserController(IPropertyRepository propertyRepository
-            , IFavouriteRepository favouriteRepository ,IImageRepository imageRepository )
+            , IFavouriteRepository favouriteRepository ,IImageRepository imageRepository 
+            ,IUserRepository userRepository ,IAmenityRepository amenityRepository)
         {
             _propertyRepository = propertyRepository;
             _favouriteRepository = favouriteRepository;
             _imageRepository = imageRepository;
+            _userRepository = userRepository;
+            _amenityRepository = amenityRepository;
         }
         #region index
         public async Task<IActionResult> Index()
@@ -44,7 +49,7 @@ namespace PropertyRentalMarketplace.Controllers
         }
         #endregion
         #region details
-        public async Task<IActionResult> Details(int id, PropertyViewModel propertyViewModel)
+        public async Task<IActionResult> Details(int id, PropertyViewModel propertyViewModel ,UserProfileEditViewModel userProfileEditViewModel)
         {
             var data = await _propertyRepository.GetById(id);
             if (data == null)
@@ -52,6 +57,9 @@ namespace PropertyRentalMarketplace.Controllers
                 return View("Error");
             }
             var images= await _imageRepository.GetImageById(id);
+            var imghost = await _userRepository.getimagehost(id);
+            //var Amenitie = await _amenityRepository.GetAllAmenitiesById(id);
+            //var safeties = await _amenityRepository.GetSafeties();
             var model = new PropertyViewModel
             {
                 Property = data,
@@ -66,11 +74,18 @@ namespace PropertyRentalMarketplace.Controllers
                 ListedAt = data.ListedAt,
                 UnListDate = data.UnListDate,
                 ListingType = data.ListingType,
-                Amenities = data.Amenities,
+                //Amenities = data.Amenities,
                 BetsAllowd = data.BetsAllowd,
                 GarageSlots = data.GarageSlots,
-                Images = images
+                FeesPerMonth = data.FeesPerMonth,
+                ImagesHost = imghost,
+                Images = images,
+                 PhoneNumber = data.Host.PhoneNumber,
+                 Email=data.Host.Email,
+                //amenities = Amenitie,
+                //safeties = safeties
             };
+            
             
             return View("Details",model);
         }

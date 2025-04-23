@@ -14,6 +14,7 @@ namespace PropertyRentalBL.Interfaces
 
         public Task DeleteNonPrimaryImagesForProperty(int propertyId);
         public  Task<List<Image>> GetImageById(int propertyid);
-        
+      
+
     }
 }

@@ -9,6 +9,7 @@ namespace PropertyBL.Interfaces
 {
     public interface IUserRepository: IGenericRepository<User>
     {
-
+        //public Task<Property> GetImgHostById(int id); //
+        public  Task<string> getimagehost(int propertyid); //
     }
 }
