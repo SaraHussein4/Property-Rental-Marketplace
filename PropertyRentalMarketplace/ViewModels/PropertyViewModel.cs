@@ -28,8 +28,8 @@ namespace PropertyRentalMarketplace.ViewModels
         public string UserId { get; set; }
         public bool IsFavourite { get; set; }
         //image list
-        public List<ImageViewModel> Images { get; set; }
-
+        public List<Image> Images { get; set; }
+        public Property Property { get; set; }
         // Navigation Properties
         public virtual PropertyType PropertyType { get; set; } //
         public virtual Location Location { get; set; } //
