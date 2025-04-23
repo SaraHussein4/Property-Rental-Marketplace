@@ -4,11 +4,14 @@
     Layout = "_UserLayout";
 }
 
- @{ 
-     //بحسب العدد الذيادة للصور 
-     var Images = Model.Images?.ToList() ; 
-     int extraPhoto = Images.Count - 5; 
- } 
+@{
+    //بحسب العدد الذيادة للصور 
+    var Images = Model.Images?.ToList() ; 
+    int extraPhoto = Images.Count - 5;
+    var Amentites = Model.amenities;
+    var amentitesList = Amentites != null ? Amentites.ToList() : new List<Amenity>();
+    int extraAmentites = Amentites.Count - 5;
+} 
 @* <h2>details</h2> *@
 @* <h2>@extraPhoto</h2> *@
 
@@ -161,16 +164,77 @@
         </div>
     </div>
     <div class="container mt-5">
-        <h2 style="color: #484848 ;">Offered Amenities</h2>
-        @* <p class="d-flex flex-wrap gap-2"> *@
-        @*     @foreach (var i in Model.amenities) *@
-        @*     { *@
-        @*         <span class="badge rounded-pill bg-success px-3 py-2">@i.Name</span> *@
-        @*     } *@
-        @* </p> *@
+
+        <div class="col-md-4 mt-5">
+            <div class="row g-2">
+
+                @if (Amentites.Count <= 4)
+                {
+                    foreach (var amenity in Amentites)
+                    {
+                            <div class="col-md-2">
+                                <div class="border-0 text-center  ">
+                                @amenity.Name
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    // أول 3 + الأخير عليه الزر
+                    foreach (var amenity in Amentites.Take(3))
+                    {
+                        <div class="col-6">
+                                <div class="border-0 text-center ">
+                                @amenity.Name
+                            </div>
+                        </div>
+                    }
+
+                    <div class="col-6 ">
+                        <div class="border-0 text-center  ">
+                            @Amentites[3].Name
+                        </div>
+
+                        <div class=" bg-dark bg-opacity-50 text-white fw-bold rounded px-2 py-1 btn btnclass mt-5"
+                             data-bs-toggle="modal"
+                             data-bs-target="#moreAmenitiesModal">
+                                +@extraAmentites More of Amenities
+                        </div>
+                    </div>
+                }
+
+            </div>
+    
+    </div>
+</div>
+
+       @if (Amentites.Count > 4)
+        {
+    <div class="modal fade" id="moreAmenitiesModal" tabindex="-1" aria-labelledby="moreAmenitiesModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="moreAmenitiesModalLabel">More Amenities</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row g-2">
+                        @for (int i = 4; i < Amentites.Count; i++)
+                        {
+                            <div class="col-md-4">
+                                <div class="border rounded text-center py-2 bg-light">
+                                    @Amentites[i].Name
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
 
     </div>
-    
+    }
   @* ---------------------------- *@
     </div>
 
