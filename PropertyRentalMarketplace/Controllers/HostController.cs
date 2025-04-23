@@ -478,7 +478,7 @@ namespace PropertyRentalMarketplace.Controllers
             {
                 "active" => PartialView("_ActiveListings", await _propertyRepository.GetActiveListedPropertiesHostedBySpecificHost("23d1c943-494f-489b-acaf-5144c2fe2387")),
                 "booked" => PartialView("_BookedProperties", await _bookingRepository.GetActiveBookingsForHost("23d1c943-494f-489b-acaf-5144c2fe2387")),
-                "expired" => PartialView("_ExpiredListings"),
+                "expired" => PartialView("_ExpiredListings", await _propertyRepository.GetExpiredPropertiesHostedBySpecificHost("23d1c943-494f-489b-acaf-5144c2fe2387")),
                 _ => PartialView("_ActiveListings", new List<Property>())
             };
         }
