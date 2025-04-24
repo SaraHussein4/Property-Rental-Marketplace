@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace PropertyRentalBL.Repositories
 {
-    public class PropertyRepository: GenericRepository<Property>, IPropertyRepository
+    public class PropertyRepository : GenericRepository<Property>, IPropertyRepository
     {
         private readonly PropertyDbContext _context;
         public PropertyRepository(PropertyDbContext context) : base(context) {
@@ -26,6 +26,19 @@ namespace PropertyRentalBL.Repositories
         public async Task<string> getimagehost(int propertyid)
         {
             return await _context.Properties.Where(w => w.Id == propertyid).Select(s => s.Host.Image).FirstOrDefaultAsync();
+        PropertyDbContext _context;
+        public PropertyRepository(PropertyDbContext context) : base(context) {
+            _context = context;
+        }
+
+        public async Task<List<Property>> GetActiveListedPropertiesHostedBySpecificHost(string hostId)
+        {
+            return await _context.Properties.AsNoTracking().Where(p => p.UserId == hostId && p.IsListed == true && p.UnListDate > DateTime.Now).ToListAsync();
+        }
+
+        public async Task<List<Property>> GetExpiredPropertiesHostedBySpecificHost(string hostId)
+        {
+            return await _context.Properties.AsNoTracking().Where(p => p.UserId == hostId && p.IsListed == true && p.UnListDate <= DateTime.Now).ToListAsync();
 
         }
     }

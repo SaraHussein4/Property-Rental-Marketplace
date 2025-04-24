@@ -17,10 +17,12 @@ namespace PropertyDAL.Models
         public bool IsAgree {  get; set; }  
 
         // Navigation Property
-        public virtual ICollection<Favourite>? Favourites { get; set; } // 
-        public virtual ICollection<Booking>? Bookings { get; set; } //
-        public virtual ICollection<Property>? HostedProperties { get; set; }  //
-        public virtual ICollection<Notification>? Notifications { get; set; } //
+        public virtual ICollection<Favourite>? Favourites { get; set; } // For User
+        public virtual ICollection<Booking>? BookingsUser { get; set; } // FOR Both Usee And Host
+        public virtual ICollection<Booking>? BookingsHost { get; set; } // FOR Both Usee And Host
+
+        public virtual ICollection<Property>? HostedProperties { get; set; }  // For Host
+        public virtual ICollection<Notification>? Notifications { get; set; } // For Both
 
     }
 }

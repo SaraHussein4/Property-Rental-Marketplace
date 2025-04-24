@@ -26,13 +26,15 @@ namespace PropertyRentalMarketplace.Controllers
         private readonly IServiceRepository _serviceRepository;
         private readonly IPropertyAmenityRepository _propertyAmenityRepository;
         private readonly IUserRepository _userRepository;
+        private readonly IBookingRepository _bookingRepository;
+
 
         public HostController(IPropertyTypeRepository propertyTypeRepository,
             IAmenityRepository amenityRepository, ICountryRepository countryRepository, IImageRepository imageRepository,
             ILocationRepository locationRepository, IPropertyRepository propertyRepository, UserManager<User> userManager,
             RoleManager<IdentityRole> roleManager,
             IServiceRepository serviceRepository, IPropertyAmenityRepository propertyAmenityRepository
-            ,IUserRepository userRepository)
+            ,IUserRepository userRepository, IBookingRepository bookingRepository)
         {
             _propertyTypeRepository = propertyTypeRepository;
             _amenityRepository = amenityRepository;
@@ -45,6 +47,7 @@ namespace PropertyRentalMarketplace.Controllers
             _serviceRepository = serviceRepository;
             _propertyAmenityRepository = propertyAmenityRepository;
             _userRepository = userRepository;
+            _bookingRepository = bookingRepository;
         }
         public IActionResult Index()
         {
@@ -197,7 +200,7 @@ namespace PropertyRentalMarketplace.Controllers
                 }
 
                 await _propertyRepository.CommitAsync();
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Dashboard", "Host");
             }
             catch (Exception ex)
             {
@@ -307,13 +310,6 @@ namespace PropertyRentalMarketplace.Controllers
                 await _propertyRepository.RollbackAsync();
                 return Json($"{ex.Message}, {ex.InnerException}");
             }
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> GetCountries()
-        {
-            var countries = await _countryRepository.GetAll();
-            return Json(countries);
         }
 
         private async Task PopulateHostAddPropertyViewModelAsync(HostAddPropertyViewModel viewModel)
@@ -426,26 +422,89 @@ namespace PropertyRentalMarketplace.Controllers
 
         }
 
-        public async Task<IActionResult> create()
+
+        [HttpGet]
+        public async Task<IActionResult> Dashboard()
         {
-            try
-            {
-                var user = new User
-                {
-                    UserName = "AhmedHamdy",
-                    Email = "ahmed@gmail.com",
-                    Gender = Gender.Male,
-                };
-                var result = await _userManager.CreateAsync(user, "Ahmed$1");
-                var role = await _roleManager.FindByIdAsync("3");
-                var roleResult = await _userManager.AddToRoleAsync(user, role.Name);
-                return Json("Success");
-            }
-            catch
-            {
-                return Json("Fail");
-            }
+            return View();
         }
+
+        public async Task<IActionResult> DealClosed([FromBody] HostDealClosedViewModel model)
+        {
+            bool exist = await _userRepository.CheckUserByPhone(model.phoneNumber);
+            User client;
+            if (exist) {
+                try
+                {
+                    await _bookingRepository.BeginTransactionAsync();
+                    client = await _userRepository.GetUserByPhone(model.phoneNumber);
+
+                    Booking booking = new Booking()
+                    {
+                        HostId = "23d1c943-494f-489b-acaf-5144c2fe2387",
+                        UserId = client.Id,
+                        PropertyId = model.PropertyId,
+                        FeePerMonth = model.FeePerMonth,
+                        StartDate = model.StartDate,
+                        EndDate = model.EndDate,
+                        IsActive = true
+                    };
+                    await _bookingRepository.Add(booking);
+                    await _bookingRepository.Save();
+            
+                    Property property = await _propertyRepository.GetById(model.PropertyId);
+                    property.IsListed = false;
+                    await _propertyRepository.Save();
+
+                    await _bookingRepository.CommitAsync();
+                }
+                catch
+                {
+                    await _bookingRepository.RollbackAsync();
+                }
+            }
+            else
+            {
+                /**/
+            }
+            return Json("Sucesss");
+
+        }
+        public async Task<IActionResult> LoadTab(string tab)
+        {
+            // We Must get the Logged IN User 
+
+            return tab switch
+            {
+                "active" => PartialView("_ActiveListings", await _propertyRepository.GetActiveListedPropertiesHostedBySpecificHost("23d1c943-494f-489b-acaf-5144c2fe2387")),
+                "booked" => PartialView("_BookedProperties", await _bookingRepository.GetActiveBookingsForHost("23d1c943-494f-489b-acaf-5144c2fe2387")),
+                "expired" => PartialView("_ExpiredListings", await _propertyRepository.GetExpiredPropertiesHostedBySpecificHost("23d1c943-494f-489b-acaf-5144c2fe2387")),
+                _ => PartialView("_ActiveListings", new List<Property>())
+            };
+        }
+
+        //public async Task<IActionResult> create()
+        //{
+        //    try
+        //    {
+        //        var user = new User
+        //        {
+        //            Name = "Mostafa Murad",
+        //            UserName = "MostafaMurad",
+        //            Email = "mostafa@gmail.com",
+        //            Gender = Gender.Male,
+        //        };
+        //        var result = await _userManager.CreateAsync(user, "Mostafa$1");
+        //        var role = await _roleManager.FindByIdAsync("2");
+        //        var roleResult = await _userManager.AddToRoleAsync(user, role.Name);
+        //        return Json("Success");
+        //    }
+        //    catch(Exception ex) 
+        //    {
+        //        return Json(ex);
+        //    }
+        //}
+
 
         public async Task<IActionResult> Profile(string id)
         {
@@ -493,34 +552,42 @@ namespace PropertyRentalMarketplace.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> SaveEdit(UserProfileEditViewModel UserFromRequest)
+        public async Task<IActionResult> SaveEdit(UserProfileEditViewModel userFromRequest)
         {
-            var user = new User 
-            { 
-            Id = UserFromRequest.Id,
-            Name = UserFromRequest.Name,
-            Email = UserFromRequest.Email,
-            Image = UserFromRequest.Image,
-            Gender = UserFromRequest.Gender,
-            PhoneNumber = UserFromRequest.PhoneNumber,
-            };
+            //if (!ModelState.IsValid)
+            //    return View("EditProfile", userFromRequest);
 
-            if (ModelState.IsValid)
+            var user = await _userManager.FindByIdAsync(userFromRequest.Id);
+            if (user == null)
+                return NotFound();
+
+            // Update editable fields
+            user.Name = userFromRequest.Name;
+            user.PhoneNumber = userFromRequest.PhoneNumber;
+            user.Gender = userFromRequest.Gender;
+
+            try
             {
-                try
+                var result = await _userManager.UpdateAsync(user);
+
+                if (result.Succeeded)
                 {
-                    await _userRepository.Update(user);
-                    await _userRepository.Save();
                     return RedirectToAction("Profile", new { id = user.Id });
                 }
-                catch (Exception ex)
-                {
-                    var message = ex.InnerException?.Message ?? ex.Message;
-                    ModelState.AddModelError("", message);
-                }
 
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError("", error.Description);
+                }
             }
-            return View("EditProfile", UserFromRequest);
+            catch (Exception ex)
+            {
+                var message = ex.InnerException?.Message ?? ex.Message;
+                ModelState.AddModelError("", message);
+            }
+
+            return View("EditProfile", userFromRequest);
+
         }
 
         [HttpPost]
@@ -530,13 +597,26 @@ namespace PropertyRentalMarketplace.Controllers
 
             if (user != null && ImgUrl != null)
             {
+                // Delete old image
+                if (!string.IsNullOrEmpty(user.Image))
+                {
+                    var oldImagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", user.Image);
+                    if (System.IO.File.Exists(oldImagePath))
+                        System.IO.File.Delete(oldImagePath);
+                }
+
+                // Upload new image
                 string fileName = uploadImage(ImgUrl);
                 user.Image = fileName;
 
-                await _userManager.UpdateAsync(user);
+                var result = await _userManager.UpdateAsync(user);
+                if (result.Succeeded)
+                {
+                    return Json(new { success = true, imageFileName = fileName });
+                }
             }
 
-            return RedirectToAction("EditProfile", new { id = id });
+            return Json(new { success = false });
         }
 
         [HttpGet]
@@ -556,7 +636,7 @@ namespace PropertyRentalMarketplace.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
+        public async Task<IActionResult> SaveChangePassword(ChangePasswordViewModel model)
         {
             if (!ModelState.IsValid)
                 return View(model);
