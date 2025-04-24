@@ -19,6 +19,7 @@
 <div class="container-fluid  LatestProperty-section">
     <h2 class="LatestProperty-heading">Latest on the <br/> Property Listing </h2>
     <div class="row">
+ 
         @foreach (var item in Model.AllProperities)
         {
         <partial name="PartialViews/CardPartialView" model="item"/>
@@ -41,3 +42,8 @@
 
 
 
+<div class="container-fluid hosted-section">
+    <h2>Try Hosting With Us</h2>
+    <p>Earn extra just by renting your property...</p>
+    <a class="host-button me-2">Become a Host</a>
+</div>

@@ -1,0 +1,24 @@
+﻿@model IEnumerable<PropertyType>
+@{
+    ViewData["Title"] = "FindProperty";
+    Layout = "_UserLayout";
+    bool isFirst = true;
+
+}
+@section Styles {
+    <link rel="stylesheet" href="~/css/userStyle.css">
+}
+<div class="container tab-container">
+    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+        @foreach (var item in Model){
+            <button class="tab-btn @(isFirst?"active":"")" id="nav-@item" data-bs-toggle="tab" data-bs-target="#nav-@item" type="button" role="tab" aria-controls="nav-@item" aria-selected="@(isFirst.ToString())">@item.Name</button>
+            isFirst = false;
+        }
+     </div>
+</div>
+<div class="tab-content container" id="nav-tabContent">
+    <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-profile-home" tabindex="0">...</div>
+    <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab" tabindex="0">...</div>
+    <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab" tabindex="0">...</div>
+    <div class="tab-pane fade" id="nav-disabled" role="tabpanel" aria-labelledby="nav-disabled-tab" tabindex="0">...</div>
+</div>

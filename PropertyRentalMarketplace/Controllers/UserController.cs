@@ -24,16 +24,18 @@ namespace PropertyRentalMarketplace.Controllers
         private readonly IImageRepository _imageRepository;
         private readonly IUserRepository _userRepository;
         private readonly IAmenityRepository _amenityRepository;
+        private readonly IPropertyTypeRepository _propertyTypeRepository;
 
         public UserController(IPropertyRepository propertyRepository
             , IFavouriteRepository favouriteRepository ,IImageRepository imageRepository 
-            ,IUserRepository userRepository ,IAmenityRepository amenityRepository)
+            ,IUserRepository userRepository ,IAmenityRepository amenityRepository , IPropertyTypeRepository propertyTypeRepository)
         {
             _propertyRepository = propertyRepository;
             _favouriteRepository = favouriteRepository;
             _imageRepository = imageRepository;
             _userRepository = userRepository;
             _amenityRepository = amenityRepository;
+            _propertyTypeRepository = propertyTypeRepository;
         }
         #region index
         public async Task<IActionResult> Index()
@@ -58,7 +60,6 @@ namespace PropertyRentalMarketplace.Controllers
             }
             var images= await _imageRepository.GetImageById(id);
             var imghost = await _propertyRepository.getimagehost(id);
-            //var safeties = await _amenityRepository.GetSafeties();
             var AllAmenities = await _amenityRepository.GetAmenities();
             var model = new PropertyViewModel
             {
@@ -90,5 +91,12 @@ namespace PropertyRentalMarketplace.Controllers
             return View("Details",model);
         }
         #endregion
+
+
+        public async Task<IActionResult> FindProperty()
+        {
+            var model = await _propertyTypeRepository.GetAll();
+            return View(model);
+        }
     }
 }

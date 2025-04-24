@@ -23,6 +23,11 @@ namespace PropertyRentalBL.Repositories
         {
             return await _context.Properties.Where(p=>p.IsFeatured==true).ToListAsync();
         }
+        public async Task<string> getimagehost(int propertyid)
+        {
+            return await _context.Properties.Where(w => w.Id == propertyid).Select(s => s.Host.Image).FirstOrDefaultAsync();
+
+        }
     }
     
 }
