@@ -12,6 +12,6 @@ namespace PropertyRentalBL.Interfaces
     {
         public Task<IEnumerable<Amenity>> GetAmenities();
         public Task<IEnumerable<Amenity>> GetSafeties();
-        //public Task<List<Amenity>> GetAllAmenitiesById(int propertyid);
+        public Task<List<Amenity>> GetAllAmenitiesById(int propertyid);
     }
 }

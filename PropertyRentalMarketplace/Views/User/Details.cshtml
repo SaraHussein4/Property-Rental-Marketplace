@@ -19,6 +19,9 @@
     var Amentites = Model.amenities;
     var amentitesList = Amentites != null ? Amentites.ToList() : new List<Amenity>();
     int extraAmentites = Amentites.Count - 5;
+    var Safeties = Model.safeties;
+    var safetiesList = Safeties != null ? Safeties.ToList() : new List<Amenity>();
+    int extraSafeties = Safeties.Count - 5;
 } 
 @* <h2>details</h2> *@
 @* <h2>@extraPhoto</h2> *@
@@ -174,6 +177,8 @@
     <div class="container mt-5">
 
         <div class="col-md-4 mt-5">
+            <h2 class="mb-5" style="color: #484848 ;">Offered Amenities</h2>
+
             <div class="row g-2">
 
                 @if (Amentites.Count <= 4)
@@ -243,6 +248,80 @@
 
     </div>
     }
+    <div class="container mt-5">
+        <div class="col-md-6 mt-5">
+            <h2 class="mb-5" style="color: #484848 ;">Safety and Hygiene</h2>
+
+            <div class="row g-2">
+
+                @if (Safeties.Count <= 4)
+                {
+                    foreach (var safeties in Safeties)
+                    {
+                        <div class="col-md-2">
+                            <div class="border-0 text-center  ">
+                                @safeties.Name
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    // أول 3 + الأخير عليه الزر
+                    foreach (var safeties in Safeties.Take(3))
+                    {
+                        <div class="col-6">
+                            <div class="border-0 text-center ">
+                                @safeties.Name
+                            </div>
+                        </div>
+                    }
+
+                    <div class="col-6 ">
+                        <div class="border-0 text-center  ">
+                            @Safeties[3].Name
+                        </div>
+
+                        <div class=" bg-dark bg-opacity-50 text-white fw-bold rounded px-2 py-1 btn btnclass mt-5"
+                             data-bs-toggle="modal"
+                             data-bs-target="#moreSafetiesModal">
+                            +@extraSafeties More of Amenities
+                        </div>
+                    </div>
+                }
+
+            </div>
+
+        </div>
+    </div>
+
+    @if (Safeties.Count > 4)
+    {
+        <div class="modal fade" id="moreSafetiesModal" tabindex="-1" aria-labelledby="moreSafetiesModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="moreSafetiesModalLabel">More Safeties</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row g-2">
+                            @for (int i = 4; i < Safeties.Count; i++)
+                            {
+                                <div class="col-md-6">
+                                    <div class="border-0 text-center">
+                                        @Safeties[i].Name
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    }
+    
   @* ---------------------------- *@
     </div>
 

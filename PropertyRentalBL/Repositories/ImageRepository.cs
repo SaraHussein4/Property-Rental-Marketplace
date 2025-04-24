@@ -30,5 +30,10 @@ namespace PropertyRentalBL.Repositories
         {
             await _context.Images.Where(img => img.PropertyId == propertyId && img.IsPrimary == true).ExecuteDeleteAsync();
         }
+        //get image by id
+        public async Task<List<Image>> GetImageById(int propertyid)
+        {
+            return await _context.Images.Where(w => w.PropertyId == propertyid).ToListAsync();
+        }
     }
 }

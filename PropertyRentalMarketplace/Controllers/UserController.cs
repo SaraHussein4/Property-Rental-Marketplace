@@ -58,7 +58,7 @@ namespace PropertyRentalMarketplace.Controllers
             }
             var images= await _imageRepository.GetImageById(id);
             var imghost = await _propertyRepository.getimagehost(id);
-            //var safeties = await _amenityRepository.GetSafeties();
+            var safeties = await _amenityRepository.GetSafeties();
             var AllAmenities = await _amenityRepository.GetAmenities();
             var model = new PropertyViewModel
             {
@@ -83,7 +83,7 @@ namespace PropertyRentalMarketplace.Controllers
                  PhoneNumber = data.Host.PhoneNumber,
                  Email=data.Host.Email,
                 amenities = AllAmenities.ToList(),
-                //safeties = safeties
+                safeties = safeties.ToList()
             };
             
             

@@ -35,7 +35,7 @@ namespace PropertyRentalMarketplace.ViewModels
         public Property Property { get; set; }
         //Amenities 
         public List<Amenity> amenities {  get; set; }
-        //public List<Amenity>? safeties { get; set; }
+        public List<Amenity>? safeties { get; set; }
         // Navigation Properties
         public virtual PropertyType PropertyType { get; set; } //
         public virtual Location Location { get; set; } //
