@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.EntityFrameworkCore.Storage;
 using PropertyBL.Interfaces;
 using PropertyDAL.Contexts;
+using PropertyRentalDAL.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -50,7 +52,23 @@ namespace PropertyBL.Repositories
         {
             return await context.Set<T>().FindAsync(id);
         }
+        //get image by id
+        public async Task<List<Image>> GetImageById(int propertyid)
+        {
+            return await context.Images.Where(w => w.PropertyId == propertyid).ToListAsync();
+        }
+        // get image host
+        
+        public async Task<string> getimagehost(int propertyid)
+        {
+            return await context.Properties.Where(w =>w.Id == propertyid).Select(s => s.Host.Image).FirstOrDefaultAsync();
 
+        }
+        //Amenities 
+        public async Task<List<Amenity>> GetAllAmenitiesById(int propertyid)
+        {
+            return await context.Amenities.Where(w=>w.Id == propertyid).ToListAsync();
+        }
         public async Task<int> Save()
         {
             return await context.SaveChangesAsync();

@@ -22,13 +22,18 @@ namespace PropertyRentalMarketplace.Controllers
         private readonly IPropertyRepository _propertyRepository;
         private readonly IFavouriteRepository _favouriteRepository;
         private readonly IImageRepository _imageRepository;
+        private readonly IUserRepository _userRepository;
+        private readonly IAmenityRepository _amenityRepository;
 
         public UserController(IPropertyRepository propertyRepository
-            , IFavouriteRepository favouriteRepository ,IImageRepository imageRepository)
+            , IFavouriteRepository favouriteRepository ,IImageRepository imageRepository 
+            ,IUserRepository userRepository ,IAmenityRepository amenityRepository)
         {
             _propertyRepository = propertyRepository;
             _favouriteRepository = favouriteRepository;
             _imageRepository = imageRepository;
+            _userRepository = userRepository;
+            _amenityRepository = amenityRepository;
         }
         #region index
         public async Task<IActionResult> Index()
@@ -44,71 +49,45 @@ namespace PropertyRentalMarketplace.Controllers
         }
         #endregion
         #region details
-        public async Task<IActionResult> Details(int id)
+        public async Task<IActionResult> Details(int id, PropertyViewModel propertyViewModel ,UserProfileEditViewModel userProfileEditViewModel)
         {
-            //var images = new List<Image>
-            //{
-            //    new Image { Id = 1, Path = "https://i.pinimg.com/736x/c6/be/a0/c6bea0070d17659af2f8856e4a627e6c.jpg", PropertyId = 1 },
-            //    new Image { Id = 2, Path= "https://images.pexels.com/photos/265004/pexels-photo-265004.jpeg?auto=compress&cs=tinysrgb&w=600", PropertyId = 1 },
-            //    new Image { Id = 3, Path= "https://images.pexels.com/photos/271624/pexels-photo-271624.jpeg?auto=compress&cs=tinysrgb&w=600", PropertyId = 1 },
-            //    new Image { Id = 4, Path= "https://images.pexels.com/photos/1918291/pexels-photo-1918291.jpeg?auto=compress&cs=tinysrgb&w=600", PropertyId = 1 },
-            //    new Image { Id = 5, Path= "https://images.pexels.com/photos/1643384/pexels-photo-1643384.jpeg?auto=compress&cs=tinysrgb&w=600", PropertyId = 1 },
-            //    new Image { Id = 6, Path= "https://images.pexels.com/photos/259962/pexels-photo-259962.jpeg?auto=compress&cs=tinysrgb&w=600", PropertyId = 1 },
-            //    new Image { Id = 7, Path= "https://images.pexels.com/photos/1457847/pexels-photo-1457847.jpeg?auto=compress&cs=tinysrgb&w=600", PropertyId = 1 },
-            //    new Image { Id = 8, Path= "https://images.pexels.com/photos/1571453/pexels-photo-1571453.jpeg?auto=compress&cs=tinysrgb&w=600", PropertyId = 1 },
-            //    new Image { Id = 9, Path= "https://images.pexels.com/photos/265004/pexels-photo-265004.jpeg?auto=compress&cs=tinysrgb&w=600", PropertyId = 1 },
-            //    new Image { Id = 10, Path= "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRBU3UXoeGSiQtW0no3PdFq_g_rKEWKS9flyw&s", PropertyId = 1 }
-
-            //};
-            //var property = await _propertyRepository.GetById(1);
-            //if (property == null)
-            //{
-            //    return View("Error");
-            //}
-            //var images = await _imageRepository.GetAll();
-            //var imagesVM = images.Select(s => new ImageViewModel
-            //{
-            //    Id = s.Id,
-            //    Path = s.Path,
-            //    IsPrimary = s.IsPrimary,
-            //}).ToList();
-            //var imagesVM = new List<ImageViewModel>
-            //{
-            //    new ImageViewModel{
-            //    Id = images.Id,
-            //    Path = images.Path,
-            //    IsPrimary=images.IsPrimary,
-            //    }
-
-            //};
-
-            //var propertyVm = new PropertyViewModel()
-            //{
-            //    Id = property.Id,
-            //    Name = property.Name,
-            //    Address = property.Address,
-            //    Description = property.Description,
-            //    BedRooms = property.BedRooms,
-            //    BathRooms = property.BathRooms,
-            //    BetsAllowd = property.BetsAllowd,
-            //    GarageSlots = property.GarageSlots,
-            //    IsListed = property.IsListed,
-            //    IsFeatured = property.IsFeatured,
-            //    ListedAt = property.ListedAt,
-            //    UnListDate = property.UnListDate,
-            //    ListingType = property.ListingType,
-            //   Images= imagesVM
-
-            //};
-           
-
-
-           //var model = new List<PropertyViewModel> { propertyVm };
-           // if(model == null)
-           // {
-           //     return View("Error");
-           // }
-                return View("Details" );
+            var data = await _propertyRepository.GetById(id);
+            if (data == null)
+            {
+                return View("Error");
+            }
+            var images= await _imageRepository.GetImageById(id);
+            var imghost = await _propertyRepository.getimagehost(id);
+            //var safeties = await _amenityRepository.GetSafeties();
+            var AllAmenities = await _amenityRepository.GetAmenities();
+            var model = new PropertyViewModel
+            {
+                Property = data,
+                Address = data.Address,
+                Description=data.Description,
+                BedRooms = data.BedRooms,
+                BathRooms = data.BedRooms,
+                Name = data.Name,
+                Area = data.Area,
+                IsListed = data.IsListed,
+                IsFavourite =data.IsFeatured,
+                ListedAt = data.ListedAt,
+                UnListDate = data.UnListDate,
+                ListingType = data.ListingType,
+                //Amenities = data.Amenities,
+                BetsAllowd = data.BetsAllowd,
+                GarageSlots = data.GarageSlots,
+                FeesPerMonth = data.FeesPerMonth,
+                ImagesHost = imghost,
+                Images = images,
+                 PhoneNumber = data.Host.PhoneNumber,
+                 Email=data.Host.Email,
+                amenities = AllAmenities.ToList(),
+                //safeties = safeties
+            };
+            
+            
+            return View("Details",model);
         }
         #endregion
     }
