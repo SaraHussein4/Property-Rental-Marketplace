@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.EntityFrameworkCore.Storage;
 using PropertyBL.Interfaces;
 using PropertyDAL.Contexts;
+using PropertyRentalDAL.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -50,7 +52,6 @@ namespace PropertyBL.Repositories
         {
             return await context.Set<T>().FindAsync(id);
         }
-
         public async Task<int> Save()
         {
             return await context.SaveChangesAsync();

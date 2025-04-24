@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using PropertyRentalDAL.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,7 +16,6 @@ namespace PropertyBL.Interfaces
         Task Delete(T item);
         Task<int> Save();
         Task<T> GetById(int id);
-
         public  Task BeginTransactionAsync();
         public Task CommitAsync();
         public Task RollbackAsync();

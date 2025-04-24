@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.Elfie.Serialization;
 using Microsoft.EntityFrameworkCore;
 using PropertyBL.Interfaces;
 using PropertyDAL.Models;
@@ -9,124 +10,93 @@ using PropertyRentalDAL.Enumerates;
 using PropertyRentalDAL.Models;
 using PropertyRentalMarketplace.ViewModels;
 using System.Security.Claims;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace PropertyRentalMarketplace.Controllers
 {
 
-    [Authorize]
+    //[Authorize]
     public class UserController : Controller
     {
         // IUserRepository
         private readonly IPropertyRepository _propertyRepository;
         private readonly IFavouriteRepository _favouriteRepository;
-        public UserController(IPropertyRepository propertyRepository, IFavouriteRepository favouriteRepository)
+        private readonly IImageRepository _imageRepository;
+        private readonly IUserRepository _userRepository;
+        private readonly IAmenityRepository _amenityRepository;
+        private readonly IPropertyTypeRepository _propertyTypeRepository;
+
+        public UserController(IPropertyRepository propertyRepository
+            , IFavouriteRepository favouriteRepository ,IImageRepository imageRepository 
+            ,IUserRepository userRepository ,IAmenityRepository amenityRepository , IPropertyTypeRepository propertyTypeRepository)
         {
             _propertyRepository = propertyRepository;
             _favouriteRepository = favouriteRepository;
+            _imageRepository = imageRepository;
+            _userRepository = userRepository;
+            _amenityRepository = amenityRepository;
+            _propertyTypeRepository = propertyTypeRepository;
         }
+        #region index
         public async Task<IActionResult> Index()
         {
-            var images = new List<Image>
-            {
-                new Image { Id = 1, Path = "https://i.pinimg.com/736x/c6/be/a0/c6bea0070d17659af2f8856e4a627e6c.jpg", PropertyId = 1 },
-                new Image { Id = 2, Path= "https://i.pinimg.com/736x/c6/be/a0/c6bea0070d17659af2f8856e4a627e6c.jpg", PropertyId = 1 },
-                new Image { Id = 2, Path= "https://i.pinimg.com/736x/c6/be/a0/c6bea0070d17659af2f8856e4a627e6c.jpg", PropertyId = 1 },
-                new Image { Id = 2, Path= "https://i.pinimg.com/736x/c6/be/a0/c6bea0070d17659af2f8856e4a627e6c.jpg", PropertyId = 1 },
-             
-            };
-            var images2 = new List<Image>
-            {
-               new Image { Id = 2, Path= "https://i.pinimg.com/736x/c6/be/a0/c6bea0070d17659af2f8856e4a627e6c.jpg", PropertyId = 2},
-                new Image { Id = 2, Path= "https://i.pinimg.com/736x/c6/be/a0/c6bea0070d17659af2f8856e4a627e6c.jpg", PropertyId = 2}
-            };
-            var property = new PropertyViewModel()
-                {
-                    Id = 1,
-                    Name = "Name",
-                    Address = "LLL",
-                    BedRooms = 3,
-                    BathRooms = 2,
-                    BetsAllowd = 0,
-                    GarageSlots = 1,
-                    IsListed = true,
-                    IsFeatured = false,
-                    ListedAt = DateTime.Now,
-                    UnListDate = (DateTime.Now).AddDays(12),
-                    ListingType = ListingType.Rent,
-                    Images=images
-
-                };
-            var property1 = new PropertyViewModel()
-            {
-                Id = 2,
-                Name = "Name",
-                Address = "LLL",
-                BedRooms = 3,
-                BathRooms = 2,
-                BetsAllowd = 0,
-                GarageSlots = 1,
-                IsListed = true,
-                IsFeatured = true,
-                ListedAt = DateTime.Now,
-                UnListDate = (DateTime.Now).AddDays(12),
-                ListingType = ListingType.Rent,
-                Images = images2
-            };
-
-
-            var allProperities = new List<PropertyViewModel> { property ,property1};
-            var featuedModel = allProperities.Where(model=>model.IsFeatured==true).ToList();
+            var allProperities =(await _propertyRepository.GetAll()).OrderByDescending(p=>p.ListedAt).ToList();
+            var featuredModel = await _propertyRepository.GetAllFeatured();
             var model = new PropertyPageViewModel
             {
                 AllProperities = allProperities,
-                FeaturedProperities = featuedModel
+                FeaturedProperities = featuredModel
             };
             return View(model);
         }
-        public async Task<IActionResult> Details()
+        #endregion
+        #region details
+        public async Task<IActionResult> Details(int id, PropertyViewModel propertyViewModel ,UserProfileEditViewModel userProfileEditViewModel)
         {
-            var images = new List<Image>
-            {
-                new Image { Id = 1, Path = "https://i.pinimg.com/736x/c6/be/a0/c6bea0070d17659af2f8856e4a627e6c.jpg", PropertyId = 1 },
-                new Image { Id = 2, Path= "https://images.pexels.com/photos/265004/pexels-photo-265004.jpeg?auto=compress&cs=tinysrgb&w=600", PropertyId = 1 },
-                new Image { Id = 3, Path= "https://images.pexels.com/photos/271624/pexels-photo-271624.jpeg?auto=compress&cs=tinysrgb&w=600", PropertyId = 1 },
-                new Image { Id = 4, Path= "https://images.pexels.com/photos/1918291/pexels-photo-1918291.jpeg?auto=compress&cs=tinysrgb&w=600", PropertyId = 1 },
-                new Image { Id = 5, Path= "https://images.pexels.com/photos/1643384/pexels-photo-1643384.jpeg?auto=compress&cs=tinysrgb&w=600", PropertyId = 1 },
-                new Image { Id = 6, Path= "https://images.pexels.com/photos/259962/pexels-photo-259962.jpeg?auto=compress&cs=tinysrgb&w=600", PropertyId = 1 },
-                new Image { Id = 7, Path= "https://images.pexels.com/photos/1457847/pexels-photo-1457847.jpeg?auto=compress&cs=tinysrgb&w=600", PropertyId = 1 },
-                new Image { Id = 8, Path= "https://images.pexels.com/photos/1571453/pexels-photo-1571453.jpeg?auto=compress&cs=tinysrgb&w=600", PropertyId = 1 },
-                new Image { Id = 9, Path= "https://images.pexels.com/photos/265004/pexels-photo-265004.jpeg?auto=compress&cs=tinysrgb&w=600", PropertyId = 1 },
-                new Image { Id = 10, Path= "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRBU3UXoeGSiQtW0no3PdFq_g_rKEWKS9flyw&s", PropertyId = 1 }
-
-            };
-           
-            var property = new PropertyViewModel()
-            {
-                Id = 1,
-                Name = "Test",
-                Address = "LLL",
-                Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.  \r\nUt enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.  \r\nDuis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.  \r\nExcepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\r\n",
-                BedRooms = 3,
-                BathRooms = 2,
-                BetsAllowd = 0,
-                GarageSlots = 1,
-                IsListed = true,
-                IsFeatured = true,
-                ListedAt = DateTime.Now,
-                UnListDate = (DateTime.Now).AddDays(12),
-                ListingType = ListingType.Rent,
-                Images = images
-
-            };
-
-
-            var model = new List<PropertyViewModel> { property };
-           
-            if(model == null)
+            var data = await _propertyRepository.GetById(id);
+            if (data == null)
             {
                 return View("Error");
             }
-                return View("Details" , property);
+            var images= await _imageRepository.GetImageById(id);
+            var imghost = await _propertyRepository.getimagehost(id);
+            var AllAmenities = await _amenityRepository.GetAmenities();
+            var model = new PropertyViewModel
+            {
+                Property = data,
+                Address = data.Address,
+                Description=data.Description,
+                BedRooms = data.BedRooms,
+                BathRooms = data.BedRooms,
+                Name = data.Name,
+                Area = data.Area,
+                IsListed = data.IsListed,
+                IsFavourite =data.IsFeatured,
+                ListedAt = data.ListedAt,
+                UnListDate = data.UnListDate,
+                ListingType = data.ListingType,
+                //Amenities = data.Amenities,
+                BetsAllowd = data.BetsAllowd,
+                GarageSlots = data.GarageSlots,
+                FeesPerMonth = data.FeesPerMonth,
+                ImagesHost = imghost,
+                Images = images,
+                 PhoneNumber = data.Host.PhoneNumber,
+                 Email=data.Host.Email,
+                amenities = AllAmenities.ToList(),
+                //safeties = safeties
+            };
+            
+            
+            return View("Details",model);
+        }
+        #endregion
+
+
+        public async Task<IActionResult> FindProperty()
+        {
+            var model = await _propertyTypeRepository.GetAll();
+            return View(model);
         }
     }
 }

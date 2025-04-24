@@ -13,5 +13,13 @@ namespace PropertyRentalBL.Interfaces
         public Task DeletePrimaryImageForProperty(int propertyId);
 
         public Task DeleteNonPrimaryImagesForProperty(int propertyId);
+        public  Task<List<Image>> GetImageById(int propertyid);
+
+        //public  Task<string> getimagehost(int propertyid);
+
+        //Amenities 
+        public Task<List<Amenity>> GetAllAmenitiesById(int propertyid);
+      
+
     }
 }
