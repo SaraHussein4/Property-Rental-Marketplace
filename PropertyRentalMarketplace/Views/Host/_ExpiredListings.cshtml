@@ -4,7 +4,6 @@
 *@
 <h1>expired</h1>
 
-
 @foreach (var property in Model)
 {
     <div class="col-md-6 col-lg-4 mb-4">
@@ -60,6 +59,12 @@
                         <i class="fas fa-ruler-combined text-primary me-1"></i> @property.Area sqft
                     </span>
                 </div>
+            </div>
+            <div class="card-footer bg-transparent border-top-0 d-flex justify-content-between">
+                <a href="@Url.Action("RelistProperity", new { propertyId = property.Id })"
+                   class="btn btn-sm btn-outline-primary">
+                    <i class="fas fa-edit me-1"></i> Relist Properity
+                </a>
             </div>
         </div>
     </div>

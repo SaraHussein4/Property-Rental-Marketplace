@@ -4,13 +4,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace PropertyRentalMarketplace.ViewModels
 {
-    public class HostAddPropertyViewModel
+    public class HostAddPropertyViewModel : HostParentViewModel
     {
-        public IEnumerable<PropertyType>? propertyTypes { get; set; }
-        public IEnumerable<Amenity>? amenities {  get; set; }
-        public IEnumerable<Amenity>? safeties {  get; set; }
-        public IEnumerable<Country>? countries {  get; set; }
-        public IEnumerable<ListingTypeViewModel>? listingTypes {  get; set; }
+
 
         [Required(ErrorMessage = "Listing type is required")]
         [Range(1, 4, ErrorMessage = "Please enter between 0-4 pets")]
@@ -65,7 +61,6 @@ namespace PropertyRentalMarketplace.ViewModels
         public double Longitude { get; set; }
         public string Address { get; set; }
 
-        public List<ServiceViewModel> Services { get; set; }
 
         public IEnumerable<int>? Amenities { get; set; }
         public IEnumerable<int>? Safeties { get; set; }
