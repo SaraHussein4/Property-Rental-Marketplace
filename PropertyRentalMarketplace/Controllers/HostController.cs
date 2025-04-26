@@ -91,6 +91,7 @@ namespace PropertyRentalMarketplace.Controllers
                     model.Safeties.Add(amenity.AmenityId);
                 }
             }
+
             int i = 0;
             foreach(Service service in property.Services)
             {
@@ -469,6 +470,29 @@ namespace PropertyRentalMarketplace.Controllers
             }
             return Json("Sucesss");
 
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EndRental(int bookingId)
+        {
+            try
+            {
+                await _bookingRepository.BeginTransactionAsync();
+                Booking booking = await _bookingRepository.GetById(bookingId);
+                booking.EndDate = DateTime.Now;
+                await _bookingRepository.Save();
+                Property property = booking.Property;
+                property.IsListed = true;
+                await _propertyRepository.Save();
+                await _bookingRepository.CommitAsync();
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                await _bookingRepository.RollbackAsync();
+                return Json(new { success = false });
+
+            }
         }
         public async Task<IActionResult> LoadTab(string tab)
         {

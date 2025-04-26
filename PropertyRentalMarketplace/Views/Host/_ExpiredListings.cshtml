@@ -4,6 +4,63 @@
 *@
 <h1>expired</h1>
 
-@foreach(var prop in Model){
-    <h1>@prop.Name</h1>
+
+@foreach (var property in Model)
+{
+    <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card property-card h-100 border-0 shadow-sm">
+    
+            <!-- Property Image Placeholder -->
+            <div class="card-img-top bg-light" style="height: 180px; background-color: #eee;">
+                <div class="d-flex justify-content-center align-items-center h-100">
+                    @if (property.Images.Any(img => img.IsPrimary))
+                    {
+                        <img src="~/images/@property.Images.First(img => img.IsPrimary).Path"
+                             alt="@property.Name property image"
+                             class="img-fluid h-100 w-100 object-fit-cover"
+                             onerror="this.onerror=null;this.src='/images/default-property.jpg';this.alt='Default property image'">
+                    }
+                    else
+                    {
+                        <!-- Fallback Icon -->
+                        <div class="d-flex justify-content-center align-items-center h-100 text-muted">
+                            <i class="fas fa-home fa-3x opacity-25"></i>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <div class="card-body">
+                <!-- Title and Status -->
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                    <h5 class="card-title mb-0">@property.Name</h5>
+                    @* <span class="badge @(property.IsListed ? "bg-success" : "bg-secondary")"> *@
+                    @*     @(property.IsListed ? "Active" : "Inactive") *@
+                    @* </span> *@
+                </div>
+
+                <!-- Address -->
+                <p class="card-text text-muted small mb-2">
+                    <i class="fas fa-map-marker-alt text-danger me-1"></i>
+                    @property.Address
+                </p>
+
+                <!-- Key Features -->
+                <div class="d-flex flex-wrap gap-2 mb-3">
+                    <span class="badge bg-light text-dark border">
+                        <i class="fas fa-bed text-primary me-1"></i> @property.BedRooms
+                    </span>
+                    <span class="badge bg-light text-dark border">
+                        <i class="fas fa-bath text-primary me-1"></i> @property.BathRooms
+                    </span>
+                    <span class="badge bg-light text-dark border">
+                        <i class="fas fa-car text-primary me-1"></i> @property.GarageSlots
+                    </span>
+                    <span class="badge bg-light text-dark border">
+                        <i class="fas fa-ruler-combined text-primary me-1"></i> @property.Area sqft
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
 }
