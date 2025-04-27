@@ -38,14 +38,12 @@ namespace PropertyRentalMarketplace.ViewModels
         public List<Amenity>? safeties { get; set; }
         //services
         public List<Service> services { get; set; }
-        //map
-        //public IEnumerable<Country>? countries { get; set; }
-        //public string CountryCode { get; set; }
-        ////public string CityCode { get; set; }
-        //public string StateCode { get; set; }
+        //fav
 
-        //public double Latitude { get; set; }
-        //public double Longitude { get; set; }
+        //map
+
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
 
         // Navigation Properties
         public virtual PropertyType PropertyType { get; set; } //

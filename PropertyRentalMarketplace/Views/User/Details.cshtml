@@ -6,9 +6,13 @@
 
 @section Styles {
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
     <link rel="stylesheet" href="~/css/userStyle.css">
 }
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
 <div class="hero-section" style=" background:url('@Url.Content("~/images/hero_bg_2.jpg")') no-repeat center;">
 
     <div class="container d-flex align-items-center justify-content-center fs-1 text-white flex-column">
@@ -28,7 +32,7 @@
     var safetiesList = Safeties != null ? Safeties.ToList() : new List<Amenity>();
     int extraSafeties = Safeties.Count - 5 + number;
     var services = Model.services?.ToList();
-    // var Country = Model.countries;
+    int propertyid = Model.Property.Id;
 }   
 @* <h2>details</h2> *@
 @* <h2>@extraPhoto</h2> *@
@@ -105,9 +109,10 @@
 
 <div class="container mt-5">
     <div class="d-flex gap-5">
-        <h2 style="color: #484848 ;">Well furnished Apartment</h2> 
-        <i class="fa-regular fa-heart  fs-1" style="margin-left : 210px; margin-top :7px;"></i>
-        @* <i class="fa-solid fa-share-nodes"></i> *@
+        <h2 style="color: #484848 ;">Well furnished Apartment</h2>
+        <a href="javascript:void(0);" onclick="addToFavourite('@User.Identity.Name', @propertyid)">
+            <i class="fa-regular fa-heart fs-1" style="margin-left: 210px; margin-top:7px;"></i>
+        </a>
     </div>
     <p style="color: #bcbcbc;">@Model.Address</p>
 
@@ -345,12 +350,24 @@
     }
 
     @* ---------------------------- *@
-    @*     <div class="mb-3 col-md-8" id="map" style="height: 400px; width: 50%;"></div> *@
 
-    @*     <input type="hidden" asp-for="Latitude"> *@
-    @*     <span asp-validation-for="Latitude" class="text-danger"></span> *@
-    @*     <input type="hidden" asp-for="Longitude"> *@
-    @* </div> *@
+    <div id="map" style="height: 400px; width:50%"></div>
+
+    <script>
+        // إعداد الخريطة
+        var map = L.map('map').setView([@Model.Latitude, @Model.Longitude], 13);
+
+        // إضافة طبقة الخريطة (مثلاً OpenStreetMap)
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // إضافة علامة لموقع معين (يمكنك تخصيصها حسب البيانات)
+        L.marker([@Model.Latitude, @Model.Longitude]).addTo(map)
+            .bindPopup("<b>@Model.Name</b><br/>@Model.Address")
+            .openPopup();
+    </script>
+
     <div class="container mt-5">
         <h2 class="mb-5" style="color: #484848 ;">Nearby Services</h2>
 
@@ -379,4 +396,24 @@
        
 </div>
 
- 
+    <script>
+        function addToFavourite(userName, propertyId) {
+            $.ajax({
+                url: '@Url.Action("AddToFavourite", "Property")',  
+                type: 'POST',
+                data: { userName: userName, propertyId: propertyId },  
+                success: function(response) {
+                    if (response.success) {
+                        alert('Added to favourites!');
+                        $('i.fa-heart').toggleClass('fa-solid fa-regular');
+                    } else {
+                        alert('Error adding to favourites');
+                    }
+                },
+                error: function() {
+                    alert('Error processing your request');
+                }
+            });
+        }
+    </script>
+  
