@@ -1,4 +1,5 @@
-﻿using PropertyBL.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using PropertyBL.Interfaces;
 using PropertyBL.Repositories;
 using PropertyRentalDAL.Models;
 using System;
@@ -14,6 +15,6 @@ namespace PropertyRentalBL.Interfaces
         Task<IEnumerable<Property>> GetAllFeatured();
         public Task<string> getimagehost(int propertyid); //
 
-
+        
     }
 }

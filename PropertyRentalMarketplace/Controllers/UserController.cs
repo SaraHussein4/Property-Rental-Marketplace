@@ -24,16 +24,24 @@ namespace PropertyRentalMarketplace.Controllers
         private readonly IImageRepository _imageRepository;
         private readonly IUserRepository _userRepository;
         private readonly IAmenityRepository _amenityRepository;
+        private readonly IPropertyAmenityRepository _propertyAmenityRepository;
+        private readonly IServiceRepository _serviceRepository;
+        private readonly ICountryRepository _countryRepository;
 
         public UserController(IPropertyRepository propertyRepository
             , IFavouriteRepository favouriteRepository ,IImageRepository imageRepository 
-            ,IUserRepository userRepository ,IAmenityRepository amenityRepository)
+            ,IUserRepository userRepository ,IAmenityRepository amenityRepository
+            ,IPropertyAmenityRepository propertyAmenityRepository
+            ,IServiceRepository serviceRepository ,ICountryRepository countryRepository)
         {
             _propertyRepository = propertyRepository;
             _favouriteRepository = favouriteRepository;
             _imageRepository = imageRepository;
             _userRepository = userRepository;
             _amenityRepository = amenityRepository;
+            _propertyAmenityRepository = propertyAmenityRepository;
+            _serviceRepository = serviceRepository;
+            _countryRepository = countryRepository;
         }
         #region index
         public async Task<IActionResult> Index()
@@ -58,8 +66,11 @@ namespace PropertyRentalMarketplace.Controllers
             }
             var images= await _imageRepository.GetImageById(id);
             var imghost = await _propertyRepository.getimagehost(id);
-            var safeties = await _amenityRepository.GetSafeties();
-            var AllAmenities = await _amenityRepository.GetAmenities();
+            var safeties = await _amenityRepository.GetSafetyById(id);
+            var AllAmenities = await _amenityRepository.GetAllAmenitiesById(id);
+            var allServices =await _serviceRepository.GetAllServicesById(id);
+            //var countries = await _countryRepository.GetAll();
+
             var model = new PropertyViewModel
             {
                 Property = data,
@@ -74,7 +85,6 @@ namespace PropertyRentalMarketplace.Controllers
                 ListedAt = data.ListedAt,
                 UnListDate = data.UnListDate,
                 ListingType = data.ListingType,
-                //Amenities = data.Amenities,
                 BetsAllowd = data.BetsAllowd,
                 GarageSlots = data.GarageSlots,
                 FeesPerMonth = data.FeesPerMonth,
@@ -83,7 +93,9 @@ namespace PropertyRentalMarketplace.Controllers
                  PhoneNumber = data.Host.PhoneNumber,
                  Email=data.Host.Email,
                 amenities = AllAmenities.ToList(),
-                safeties = safeties.ToList()
+                safeties = safeties.ToList(),
+                services=allServices.ToList(),
+                //countries=countries,
             };
             
             

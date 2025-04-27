@@ -3,7 +3,10 @@
     ViewData["Title"] = "Details";
     Layout = "_UserLayout";
 }
+
 @section Styles {
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
     <link rel="stylesheet" href="~/css/userStyle.css">
 }
 <div class="hero-section" style=" background:url('@Url.Content("~/images/hero_bg_2.jpg")') no-repeat center;">
@@ -14,19 +17,23 @@
 </div>
 @{
     //بحسب العدد الذيادة للصور 
+    int number = 1;
+
     var Images = Model.Images?.ToList() ; 
-    int extraPhoto = Images.Count - 5;
+    int extraPhoto = Images.Count - 5 ;
     var Amentites = Model.amenities;
     var amentitesList = Amentites != null ? Amentites.ToList() : new List<Amenity>();
-    int extraAmentites = Amentites.Count - 5;
+    int extraAmentites = Amentites.Count - 5 + number;
     var Safeties = Model.safeties;
     var safetiesList = Safeties != null ? Safeties.ToList() : new List<Amenity>();
-    int extraSafeties = Safeties.Count - 5;
-} 
+    int extraSafeties = Safeties.Count - 5 + number;
+    var services = Model.services?.ToList();
+    // var Country = Model.countries;
+}   
 @* <h2>details</h2> *@
 @* <h2>@extraPhoto</h2> *@
 
-  
+
 <div class="container mt-5">
     <div class="row">
         <div class="col-md-6 mt-5 ">
@@ -34,27 +41,27 @@
         </div>
         <div class="col-md-6 mt-5">
             <div class="row g-2">
-                 
-                 @foreach(var i in Images.Take(3))
-                 {
+
+                @foreach(var i in Images.Take(3))
+                {
                     <img src="~/images/@i.Path" class="img-fluid rounded mb-2 " style="height: 192px;width : 320px; object-fit: cover;" />
                 } 
-               
-                 <div class="position-relative" style="height: 192px; width: 320px;">
+
+                <div class="position-relative" style="height: 192px; width: 320px;">
                     <img src="~/images/@Images[4].Path" class="img-fluid rounded mb-2" style="height: 192px;width: 320px; object-fit: cover;" />
                     @if(extraPhoto>0){ 
-                     <div class="position-absolute top-50 start-50 translate-middle bg-dark bg-opacity-50 text-white fw-bold rounded px-2 py-1 btn btnclass" 
-                             data-bs-toggle="modal" 
-                             data-bs-target="#moreImagesModal"> 
-                         +@extraPhoto More Photos 
-                     </div> 
-                   } 
-                   
+                        <div class="position-absolute top-50 start-50 translate-middle bg-dark bg-opacity-50 text-white fw-bold rounded px-2 py-1 btn btnclass" 
+                        data-bs-toggle="modal" 
+                        data-bs-target="#moreImagesModal"> 
+                            +@extraPhoto More Photos 
+                        </div> 
+                    } 
+
                 </div>
             </div>
         </div>
-      </div>
-  </div>
+    </div>
+</div>
 <div class="modal fade" id="moreImagesModal" tabindex="-1" aria-labelledby="moreImagesModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-xl">
         <div class="modal-content">
@@ -64,46 +71,46 @@
             </div>
             <div class="modal-body">
                 <div class="row g-3">
-                      @for (var i = 5; i < Images.Count; i++)   
-                     
-                   {  
-                       <div class="col-md-4">
+                    @for (var i = 5; i < Images.Count; i++)   
+
+                    {  
+                        <div class="col-md-4">
                             <img src="~/images/@Images[i].Path" class="img-fluid rounded" style="height: 250px; width: 100%; object-fit: cover;" />
                         </div>  
-                      } 
-                    
+                    } 
+
                 </div>
             </div>
         </div>
     </div>
 </div>
 <div class="container">
-<div class="card border-0 bg-transparent m-3  col-md-8 " style="width: 880px; height : 140px ;">
-    <div class="row g-0">
-           <div class="col-md-3 ">
+    <div class="card border-0 bg-transparent m-3  col-md-8 " style="width: 880px; height : 140px ;">
+        <div class="row g-0">
+            <div class="col-md-3 ">
                 <img src="~/images/@Model.ImagesHost" class="img-fluid rounded-circle ms-4 mt-1" style="width : 170px ; height :150px" alt="...">
             </div>  
-          
-        <div class="col-md-9 p-2">
-            <div class="card-body">
-                <p class="card-text">Listed by</p>
-                <h5 class="card-title">@Model.Name</h5>
 
-                <p class="card-text">@($"{@Model.FeesPerMonth}$")</p>
+            <div class="col-md-9 p-2">
+                <div class="card-body">
+                    <p class="card-text">Listed by</p>
+                    <h5 class="card-title">@Model.Name</h5>
+
+                    <p class="card-text">@($"{@Model.FeesPerMonth}$")</p>
+                </div>
             </div>
         </div>
     </div>
 </div>
-</div>
 
-  <div class="container mt-5">
-      <div class="d-flex gap-5">
+<div class="container mt-5">
+    <div class="d-flex gap-5">
         <h2 style="color: #484848 ;">Well furnished Apartment</h2> 
         <i class="fa-regular fa-heart  fs-1" style="margin-left : 210px; margin-top :7px;"></i>
         @* <i class="fa-solid fa-share-nodes"></i> *@
     </div>
     <p style="color: #bcbcbc;">@Model.Address</p>
-    
+
     <div class="col-md-4 gap-2 d-flex">
         <div class="col">
             <div class="card text-center shadow-sm" style="width: 170px; height: 130px;">
@@ -116,7 +123,7 @@
         <div class="col">
             <div class="card text-center shadow-sm" style="width: 170px; height: 130px;">
                 <i class="fa-solid fa-sink fs-3 mt-4"></i>
-              
+
                 <div class="card-body">
                     <h5 class="card-title d-flex justify-content-center  align-items-center">@($"{@Model.BathRooms} BathRooms")</h5>
                 </div>
@@ -138,7 +145,7 @@
                 </div>
             </div>
         </div>
- 
+
         @* ------------------------contact---------------------------- *@
         <div class="card shadow rounded-4 p-4 border-0 col-md-8 " style="width: 400px; margin-left:100px;  ">
             <div class="mb-3">
@@ -158,9 +165,9 @@
 
                 <li class="list-group-item border-0 px-0 pt-2">
                     <a href="https://wa.me/@Model.PhoneNumber?text=Welcome%21%20Thank%20you%20for%20choosing%20our%20company.%20We%27re%20here%20to%20help%20you%20with%20any%20inquiries%20you%20may%20have.%20If%20you%20need%20more%20details%2C%20feel%20free%20to%20ask%21"
-                       target="_blank"
-                       class="btn btn-success btn-sm rounded-pill px-4 py-2 shadow-sm"
-                       style="background: linear-gradient(to right, #25D366, #128C7E); border: none; transition: transform 0.2s;">
+                    target="_blank"
+                    class="btn btn-success btn-sm rounded-pill px-4 py-2 shadow-sm"
+                    style="background: linear-gradient(to right, #25D366, #128C7E); border: none; transition: transform 0.2s;">
                         <i class="bi bi-whatsapp me-1"></i> Chat on WhatsApp
                     </a>
                 </li>
@@ -168,10 +175,10 @@
         </div>
 
     </div>
-  <div class="mt-3">
+    <div class="mt-3">
         <h2 class="mb-2" style="color: #484848 ;">Apartment Description</h2>
-    <div class="col-md-6">
-        <p> @Model.Description</p>
+        <div class="col-md-6">
+            <p> @Model.Description</p>
         </div>
     </div>
     <div class="container mt-5">
@@ -185,9 +192,11 @@
                 {
                     foreach (var amenity in Amentites)
                     {
-                            <div class="col-md-2">
-                                <div class="border-0 text-center  ">
+                        <div class="col-md-2">
+                            <div class="border-0 text-center  ">
+                                <i class="@amenity.IconClass m-2"></i>
                                 @amenity.Name
+
                             </div>
                         </div>
                     }
@@ -198,58 +207,64 @@
                     foreach (var amenity in Amentites.Take(3))
                     {
                         <div class="col-6">
-                                <div class="border-0 text-center ">
+                            <div class="border-0 text-center ">
+                                <i class=" @amenity.IconClass m-2"></i>
                                 @amenity.Name
+
                             </div>
                         </div>
                     }
 
                     <div class="col-6 ">
                         <div class="border-0 text-center  ">
+                            <i class=" @Amentites[3].IconClass m-2"></i>
+
                             @Amentites[3].Name
                         </div>
 
                         <div class=" bg-dark bg-opacity-50 text-white fw-bold rounded px-2 py-1 btn btnclass mt-5"
-                             data-bs-toggle="modal"
-                             data-bs-target="#moreAmenitiesModal">
-                                +@extraAmentites More of Amenities
+                        data-bs-toggle="modal"
+                        data-bs-target="#moreAmenitiesModal">
+                            +@extraAmentites More of Amenities
                         </div>
                     </div>
                 }
 
             </div>
-    
-    </div>
-</div>
 
-       @if (Amentites.Count > 4)
-        {
-    <div class="modal fade" id="moreAmenitiesModal" tabindex="-1" aria-labelledby="moreAmenitiesModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="moreAmenitiesModalLabel">More Amenities</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="row g-2">
-                        @for (int i = 4; i < Amentites.Count; i++)
-                        {
-                            <div class="col-md-4">
+        </div>
+    </div>
+
+    @if (Amentites.Count > 4)
+    {
+        <div class="modal fade" id="moreAmenitiesModal" tabindex="-1" aria-labelledby="moreAmenitiesModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="moreAmenitiesModalLabel">More Amenities</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row g-2">
+                            @for (int i = 4; i < Amentites.Count; i++)
+                            {
+                                <div class="col-md-4">
                                     <div class="border-0 text-center">
-                                    @Amentites[i].Name
+                                        <i class="@Amentites[i].IconClass m-2"></i>
+
+                                        @Amentites[i].Name
+                                    </div>
                                 </div>
-                            </div>
-                        }
+                            }
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-    </div>
+        </div>
     }
     <div class="container mt-5">
-        <div class="col-md-6 mt-5">
+        <div class="col-md-4 mt-5">
             <h2 class="mb-5" style="color: #484848 ;">Safety and Hygiene</h2>
 
             <div class="row g-2">
@@ -258,8 +273,9 @@
                 {
                     foreach (var safeties in Safeties)
                     {
-                        <div class="col-md-2">
+                        <div class="col-md-6">
                             <div class="border-0 text-center  ">
+                                <i class="@safeties.IconClass m-2"></i>
                                 @safeties.Name
                             </div>
                         </div>
@@ -272,6 +288,8 @@
                     {
                         <div class="col-6">
                             <div class="border-0 text-center ">
+                                <i class="@safeties.IconClass m-2"></i>
+
                                 @safeties.Name
                             </div>
                         </div>
@@ -279,12 +297,14 @@
 
                     <div class="col-6 ">
                         <div class="border-0 text-center  ">
+                            <i class="@Safeties[3].IconClass m-2"></i>
+
                             @Safeties[3].Name
                         </div>
 
                         <div class=" bg-dark bg-opacity-50 text-white fw-bold rounded px-2 py-1 btn btnclass mt-5"
-                             data-bs-toggle="modal"
-                             data-bs-target="#moreSafetiesModal">
+                        data-bs-toggle="modal"
+                        data-bs-target="#moreSafetiesModal">
                             +@extraSafeties More of Amenities
                         </div>
                     </div>
@@ -310,6 +330,8 @@
                             {
                                 <div class="col-md-6">
                                     <div class="border-0 text-center">
+                                        <i class="@Safeties[i].IconClass m-2"></i>
+
                                         @Safeties[i].Name
                                     </div>
                                 </div>
@@ -321,8 +343,40 @@
 
         </div>
     }
+
+    @* ---------------------------- *@
+    @*     <div class="mb-3 col-md-8" id="map" style="height: 400px; width: 50%;"></div> *@
+
+    @*     <input type="hidden" asp-for="Latitude"> *@
+    @*     <span asp-validation-for="Latitude" class="text-danger"></span> *@
+    @*     <input type="hidden" asp-for="Longitude"> *@
+    @* </div> *@
+    <div class="container mt-5">
+        <h2 class="mb-5" style="color: #484848 ;">Nearby Services</h2>
+
+        <div class="d-flex flex-wrap gap-5">
     
-  @* ---------------------------- *@
-    </div>
+        @foreach (var s in services)
+        {
+                    <div class="card col-md-4 mt-3 " style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title">@s.Name</h5>
+                    <h6 class="card-subtitle mb-2 text-body-secondary">Card subtitle</h6>
+                    <p class="card-text">@($"{@s.Distance} meters away")</p>
+                    <p class="card-text">
+                    
+                    <i class="fa-solid fa-star @(s.StarRating >= 1 ? "text-warning" : "")"></i>
+                    <i class="fa-solid fa-star @(s.StarRating >= 2 ? "text-warning" : "")"></i>
+                    <i class="fa-solid fa-star @(s.StarRating >= 3 ? "text-warning" : "")"></i>
+                    <i class="fa-solid fa-star @(s.StarRating >= 4 ? "text-warning" : "")"></i>
+                    <i class="fa-solid fa-star @(s.StarRating >= 5 ? "text-warning" : "")"></i>
+                    </p>
+                </div>
+            </div>
+
+        }
+        </div>
+       
+</div>
 
  

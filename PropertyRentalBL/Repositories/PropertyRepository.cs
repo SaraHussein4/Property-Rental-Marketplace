@@ -30,6 +30,7 @@ namespace PropertyRentalBL.Repositories
             return await _context.Properties.Where(w => w.Id == propertyid).Select(s => s.Host.Image).FirstOrDefaultAsync();
 
         }
+       
     }
     
 }
