@@ -35,8 +35,19 @@ namespace PropertyRentalBL.Repositories
 
         public async Task<List<Property>> GetExpiredPropertiesHostedBySpecificHost(string hostId)
         {
-            return await _context.Properties.AsNoTracking().Where(p => p.UserId == hostId && p.IsListed == true && p.UnListDate <= DateTime.Now).ToListAsync();
+            var wasListed = await _context.Properties
+                .Where(p => p.UserId == hostId && p.IsListed == true && p.UnListDate <= DateTime.Now)
+                .ToListAsync();
 
+            var wasBooked = await _context.Properties
+                .Include(p => p.Bookings)
+                .Where(p => p.UserId == hostId &&
+                            p.IsListed == false &&
+                            p.Bookings.Any() && 
+                            p.Bookings.OrderByDescending(b => b.EndDate).First().EndDate <= DateTime.Now)
+                .ToListAsync();
+
+            return wasListed.Union(wasBooked).ToList();
         }
     }
     
