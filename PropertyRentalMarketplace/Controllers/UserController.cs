@@ -11,11 +11,13 @@ using PropertyRentalDAL.Models;
 using PropertyRentalMarketplace.ViewModels;
 using System.Security.Claims;
 using static System.Net.Mime.MediaTypeNames;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace PropertyRentalMarketplace.Controllers
 {
 
-    //[Authorize]
+ 
+    [Authorize(Roles = AppRoles.User)]
     public class UserController : Controller
     {
         // IUserRepository
@@ -92,11 +94,72 @@ namespace PropertyRentalMarketplace.Controllers
         }
         #endregion
 
-
         public async Task<IActionResult> FindProperty()
         {
-            var model = await _propertyTypeRepository.GetAll();
+            var types = (await _propertyTypeRepository.GetAll()).ToList();
+            var defaultId = types.FirstOrDefault()?.Id ?? 0;
+            var props = await _propertyRepository.GetPropertyTypeById(defaultId);
+
+            var model = new FindPropertyViewModel
+            {
+                PropertyTypes = types,
+                InitialProperties = props
+            };
+
             return View(model);
         }
+
+        public async Task<JsonResult> GetPropertiesByType(int typeId)
+        {
+            var props = await _propertyRepository.GetPropertyTypeById(typeId);
+            return Json(props.Select(p => new {
+                id = p.Id,
+                name = p.Name,
+                address = p.Address,
+                bedRooms = p.BedRooms,
+                bathRooms = p.BathRooms, // Fixed typo from your original code
+                petsAllowed = p.BetsAllowd,
+                garageSlots = p.GarageSlots,
+                images = p.Images.Select(i => new {
+                    path = i.Path.StartsWith("http") ? i.Path : $"/images/{i.Path}"
+                }).ToList()
+            }));
+        }
+
+
+
+        [HttpPost]
+        public async Task<IActionResult> GetFilteredProperties([FromBody] PropertyFilters filters)
+        {
+            try
+            {
+                // Implement your filtering logic here based on the filters object
+                var filteredProperties = await _propertyRepository.GetFilteredProperties(
+                    filters.TypeId,
+                    filters.PriceRanges,
+                    filters.Countries,
+                    filters.Bedrooms);
+
+                return Ok(filteredProperties.Select(p => new {
+                    id = p.Id,
+                    name = p.Name,
+                    address = p.Address,
+                    bedRooms = p.BedRooms,
+                    bathRooms = p.BathRooms,
+                    garageSlots = p.GarageSlots,
+                    petsAllowed = p.BetsAllowd,
+                    images = p.Images.Select(i => new {
+                        path = i.Path.StartsWith("http") ? i.Path : $"/images/{i.Path}"
+                    })
+                }));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = ex.Message });
+            }
+        }
+
+
+
     }
 }

@@ -15,7 +15,9 @@ using System.Threading;
 
 namespace PropertyRentalMarketplace.Controllers
 {
-    //[Authorize("Host")]
+    [Authorize(Roles = AppRoles.Host)]
+
+
     public class HostController : Controller
     {
         private readonly IPropertyTypeRepository _propertyTypeRepository;

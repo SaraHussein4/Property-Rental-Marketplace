@@ -49,6 +49,93 @@ namespace PropertyRentalBL.Repositories
 
             return wasListed.Union(wasBooked).ToList();
         }
+
+        public async Task<List<Property>> GetPropertyTypeById(int id)
+        {
+            var properties = await _context.Properties
+                .Where(p => p.PropertyTypeId == id)
+                .Include(p => p.Images)
+                .ToListAsync();
+            return properties;
+        }
+
+
+
+        public async Task<List<Property>> GetFilteredProperties(
+int typeId,
+List<string> priceRanges,
+List<string> countries,
+List<string> bedrooms)
+        {
+            
+            var query = _context.Properties
+                .Include(p => p.Images)
+                .Include(p => p.Location) 
+                .Where(p => p.PropertyTypeId == typeId && p.IsListed)
+                .AsQueryable();
+
+           
+            if (priceRanges != null && priceRanges.Any())
+            {
+                var priceFilterQueries = new List<IQueryable<Property>>();
+
+                foreach (var range in priceRanges)
+                {
+                    if (range.Contains("+"))
+                    {
+                        var minPrice = decimal.Parse(range.Replace("+", ""));
+                        priceFilterQueries.Add(query.Where(p => p.FeesPerMonth >= minPrice));
+                    }
+                    else if (range.Contains("-"))
+                    {
+                        var parts = range.Split('-');
+                        var minPrice = decimal.Parse(parts[0]);
+                        var maxPrice = decimal.Parse(parts[1]);
+                        priceFilterQueries.Add(query.Where(p => p.FeesPerMonth >= minPrice && p.FeesPerMonth <= maxPrice));
+                    }
+                }
+
+                query = priceFilterQueries.Aggregate((current, next) => current.Union(next));
+            }
+
+            if (countries != null && countries.Any())
+            {
+                query = query.Where(p => p.Location != null && countries.Contains(p.Location.Country));
+            }
+
+           
+            if (bedrooms != null && bedrooms.Any())
+            {
+                var bedroomFilterQueries = new List<IQueryable<Property>>();
+
+                foreach (var bed in bedrooms)
+                {
+                    if (bed.EndsWith("+"))
+                    {
+                        var minBeds = int.Parse(bed.Replace("+", ""));
+                        bedroomFilterQueries.Add(query.Where(p => p.BedRooms >= minBeds));
+                    }
+                    else
+                    {
+                        var bedCount = int.Parse(bed);
+                        bedroomFilterQueries.Add(query.Where(p => p.BedRooms == bedCount));
+                    }
+                }
+
+               
+                query = bedroomFilterQueries.Aggregate((current, next) => current.Union(next));
+            }
+
+            
+            query = query.Where(p => p.UnListDate > DateTime.Now);
+
+            return await query
+                .OrderByDescending(p => p.IsFeatured) 
+                .ThenByDescending(p => p.ListedAt)    
+                .ToListAsync();
+        }
+
+
     }
-    
+
 }
