@@ -22,21 +22,29 @@ namespace PropertyRentalMarketplace.Controllers
     {
         // IUserRepository
         private readonly IPropertyRepository _propertyRepository;
-        private readonly IFavouriteRepository _favouriteRepository;
         private readonly IImageRepository _imageRepository;
         private readonly IUserRepository _userRepository;
         private readonly IAmenityRepository _amenityRepository;
+        private readonly IPropertyAmenityRepository _propertyAmenityRepository;
+        private readonly IServiceRepository _serviceRepository;
+        private readonly ICountryRepository _countryRepository;
+        private readonly IFavouriteRepository _favouriteRepository1;
         private readonly IPropertyTypeRepository _propertyTypeRepository;
-
         public UserController(IPropertyRepository propertyRepository
-            , IFavouriteRepository favouriteRepository ,IImageRepository imageRepository 
-            ,IUserRepository userRepository ,IAmenityRepository amenityRepository , IPropertyTypeRepository propertyTypeRepository)
+             ,IImageRepository imageRepository 
+            ,IUserRepository userRepository ,IAmenityRepository amenityRepository
+            ,IPropertyAmenityRepository propertyAmenityRepository
+            ,IServiceRepository serviceRepository ,ICountryRepository countryRepository
+            ,IFavouriteRepository favouriteRepository1 , IPropertyTypeRepository propertyTypeRepository)    
         {
             _propertyRepository = propertyRepository;
-            _favouriteRepository = favouriteRepository;
             _imageRepository = imageRepository;
             _userRepository = userRepository;
             _amenityRepository = amenityRepository;
+            _propertyAmenityRepository = propertyAmenityRepository;
+            _serviceRepository = serviceRepository;
+            _countryRepository = countryRepository;
+            _favouriteRepository1 = favouriteRepository1;
             _propertyTypeRepository = propertyTypeRepository;
         }
         #region index
@@ -62,7 +70,9 @@ namespace PropertyRentalMarketplace.Controllers
             }
             var images= await _imageRepository.GetImageById(id);
             var imghost = await _propertyRepository.getimagehost(id);
-            var AllAmenities = await _amenityRepository.GetAmenities();
+            var safeties = await _amenityRepository.GetSafetyById(id);
+            var AllAmenities = await _amenityRepository.GetAllAmenitiesById(id);
+            var allServices =await _serviceRepository.GetAllServicesById(id);
             var model = new PropertyViewModel
             {
                 Property = data,
@@ -77,7 +87,6 @@ namespace PropertyRentalMarketplace.Controllers
                 ListedAt = data.ListedAt,
                 UnListDate = data.UnListDate,
                 ListingType = data.ListingType,
-                //Amenities = data.Amenities,
                 BetsAllowd = data.BetsAllowd,
                 GarageSlots = data.GarageSlots,
                 FeesPerMonth = data.FeesPerMonth,
@@ -86,12 +95,45 @@ namespace PropertyRentalMarketplace.Controllers
                  PhoneNumber = data.Host.PhoneNumber,
                  Email=data.Host.Email,
                 amenities = AllAmenities.ToList(),
-                //safeties = safeties
+                safeties = safeties.ToList(),
+                services=allServices.ToList(),
             };
             
             
             return View("Details",model);
         }
+        #endregion
+
+        #region add to favourite
+        [HttpPost]
+        public async Task<IActionResult> AddToFavourite(string userId, int propertyId)
+        {
+            try
+            {
+                // إضافة العقار إلى المفضلة
+                await _favouriteRepository.AddToFavourite(userId, propertyId);
+
+                // إرسال استجابة ناجحة
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                // في حالة حدوث خطأ
+                return Json(new { success = false, message = ex.Message });
+            }
+        }
+        //public async Task<IActionResult> AddToFavourite(string userid,int propid)
+        //{
+        //    await _favouriteRepository.AddToFavourite(userid, propid);
+        //    return View("AddToFavourite");
+        //}
+        #endregion
+        #region remove from  favourite
+        //public async Task<IActionResult> RemoveFromFavourite(string userid, int propid)
+        //{
+        //    await _favouriteRepository.AddToFavourite(userid, propid);
+        //    return RedirectToAction("AddToFavourite");
+        //}
         #endregion
 
         public async Task<IActionResult> FindProperty()
@@ -158,8 +200,5 @@ namespace PropertyRentalMarketplace.Controllers
                 return StatusCode(500, new { message = ex.Message });
             }
         }
-
-
-
     }
 }

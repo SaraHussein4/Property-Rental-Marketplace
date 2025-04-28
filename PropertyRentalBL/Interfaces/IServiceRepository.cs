@@ -1,4 +1,5 @@
-﻿using PropertyBL.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using PropertyBL.Interfaces;
 using PropertyRentalDAL.Models;
 using System;
 using System.Collections.Generic;
@@ -10,5 +11,7 @@ namespace PropertyRentalBL.Interfaces
 {
     public interface IServiceRepository: IGenericRepository<Service>
     {
+        public  Task<List<Service>> GetAllServicesById(int id);
+        
     }
 }

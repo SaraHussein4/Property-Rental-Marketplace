@@ -23,11 +23,14 @@ namespace PropertyRentalBL.Repositories
         {
             return await _context.Properties.Where(p=>p.IsFeatured==true).ToListAsync();
         }
+
+        // get image host
+
         public async Task<string> getimagehost(int propertyid)
         {
             return await _context.Properties.Where(w => w.Id == propertyid).Select(s => s.Host.Image).FirstOrDefaultAsync();
-        }
 
+        }
         public async Task<List<Property>> GetActiveListedPropertiesHostedBySpecificHost(string hostId)
         {
             return await _context.Properties.AsNoTracking().Where(p => p.UserId == hostId && p.IsListed == true && p.UnListDate > DateTime.Now).ToListAsync();
@@ -134,8 +137,6 @@ List<string> bedrooms)
                 .ThenByDescending(p => p.ListedAt)    
                 .ToListAsync();
         }
-
-
     }
 
 }

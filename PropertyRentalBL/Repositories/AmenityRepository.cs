@@ -26,5 +26,17 @@ namespace PropertyRentalBL.Repositories
         {
             return await _context.Amenities.Where(a => a.AmenityCategory.Name == "Safety").ToListAsync();
         }
+        //Amenities 
+        public async Task<List<Amenity>> GetAllAmenitiesById(int propertyid)
+        {
+            return await _context.PropertyAmenities.Where(w=>w.PropertyId == propertyid)
+                .Select(s=>s.Amenity).Where(d=>d.AmenityCategoryId == 1).ToListAsync();
+        }
+        //Safety
+        public async Task<List<Amenity>> GetSafetyById(int propertyid)
+        {
+            return await _context.PropertyAmenities.Where(w => w.PropertyId == propertyid)
+                .Select(s => s.Amenity).Where(d => d.AmenityCategoryId == 2).ToListAsync();
+        }
     }
 }

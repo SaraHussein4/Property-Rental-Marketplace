@@ -1,0 +1,104 @@
+﻿/* ------- start first section--------------- */
+.p {
+    font-weight: 900px;
+    font-size: 20px;
+}
+
+.title {
+    font-size: 22px;
+    font-weight: bold;
+}
+
+h1 {
+    font-family: "Boldonse", system-ui;
+    font-weight: 400;
+    font-style: normal;
+}
+
+/* ------- end first section--------------- */
+/* ------------start section2---------------- */
+.section2 {
+    background-color: #f8f8f8;
+}
+
+h2 {
+    font-family: "Boldonse", system-ui;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.work {
+    padding-top: 100px;
+}
+
+.site-card {
+    margin-top: 50px;
+}
+
+h6 {
+    font-family: "Boldonse", system-ui;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.pcard {
+    font-size: 17px;
+    font-family: "Inter", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-style: normal;
+}
+/* --------------end setion2----------- */
+/* ------------------------start section3------------------------- */
+
+.links {
+    color: black;
+    font-size: 25px;
+    font-weight: bold;
+    margin-bottom: 30px;
+}
+
+.a {
+    color: black;
+    font-size: 20px;
+    font-weight: 900;
+    margin-bottom: 30px;
+    display: inline-block;
+    transition: all 0.3s ease-in-out;
+}
+
+    .a:hover {
+        color: green;
+        transform: scale(1.1);
+    }
+
+.hsection3 {
+    color: black;
+    font-size: 25px;
+    font-weight: bold;
+    margin-bottom: 30px;
+}
+
+.psection3 {
+    font-size: 17px;
+    font-family: "Inter", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+}
+
+/* ------------------------end section3------------------------- */
+/* ---------------------------start section4---------------------- */
+.icon {
+    font-size: 25px;
+    color: green;
+}
+
+.hsection4 {
+    color: #c64e4e;
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 30px;
+}
+
+/* ---------------------------start section4---------------------- */

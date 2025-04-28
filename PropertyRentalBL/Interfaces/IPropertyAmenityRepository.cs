@@ -11,5 +11,6 @@ namespace PropertyRentalBL.Interfaces
     public interface IPropertyAmenityRepository:IGenericRepository<PropertyAmenity>
     {
         public Task DeleteAmenitiesForProperty(int propertyId);
+
     }
 }

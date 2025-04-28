@@ -10,6 +10,9 @@ namespace PropertyRentalBL.Interfaces
 {
     public interface IFavouriteRepository:IGenericRepository<Favourite>
     {
-       
+        public  Task AddToFavourite(string UId, int PropId);
+        public Task RemoveFromFavourite(string UId, int PropId);
+
+
     }
 }
