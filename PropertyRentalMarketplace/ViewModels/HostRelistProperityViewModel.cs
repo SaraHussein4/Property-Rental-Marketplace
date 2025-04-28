@@ -1,13 +1,14 @@
 ﻿using PropertyRentalDAL.Models;
 using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
 
 namespace PropertyRentalMarketplace.ViewModels
 {
-    public class HostEditPropertyViewModel : HostParentViewModel
-    {    
+    public class HostRelistProperityViewModel:HostParentViewModel
+    {
+
+
         public int Id { get; set; }
-        
+
         [Required(ErrorMessage = "Listing type is required")]
         [Range(1, 4, ErrorMessage = "Please enter between 0-4 pets")]
 
@@ -76,5 +77,8 @@ namespace PropertyRentalMarketplace.ViewModels
         public List<IFormFile>? Images { get; set; }
         public List<string>? ImagesUrls { get; set; }
 
+
+        public int ListingPlan { get; set; }
+        public string PaymentMethod { get; set; }
     }
 }

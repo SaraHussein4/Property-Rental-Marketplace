@@ -8,6 +8,7 @@
 <div class="main-agileinfo">
 	<div class="agileits-top">
 		<form asp-controller="Account" asp-action="Register" enctype="multipart/form-data" method="post">
+			<input type="hidden" name="role" value="@ViewBag.Role" />
 			<input class="text" asp-for="Name"  placeholder="Username" required="">
 			<span asp-validation-for="Name" class="text-danger"></span>
 			<br/>

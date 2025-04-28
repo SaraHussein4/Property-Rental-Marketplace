@@ -1,0 +1,104 @@
+﻿@model List<Booking>
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+<h1>booked</h1>
+
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">
+        You don't have any bookings yet.
+    </div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead class="table-light">
+                <tr>
+                    <th>Property</th>
+                    <th>Client</th>
+                    <th>Booking Period</th>
+                    <th>Monthly Fee</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var booking in Model.OrderByDescending(b => b.StartDate))
+                {
+                    <tr>
+                        <td>
+                            @* <a asp-controller="Property" asp-action="Details" asp-route-id="@booking.PropertyId"> *@
+                                @booking.Property?.Name
+                            @* </a> *@
+                            <div class="text-muted small">@booking.Property?.Address</div>
+                        </td>
+                        <td>
+                            @booking.User?.Name
+                            <div class="text-muted small">@booking.User?.Email</div>
+                        </td>
+                        <td>
+                            @booking.StartDate.ToString("d MMM yyyy") -
+                            @booking.EndDate.ToString("d MMM yyyy")
+                        </td>
+                        <td>@booking.FeePerMonth.ToString("C")</td>
+                        <td>
+                            @if (booking.EndDate > DateTime.Now)
+                            {
+                                <span class="badge bg-success">Active</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-secondary">Completed</span>
+                            }
+                        </td>
+                        <td>
+                            @if (booking.EndDate > DateTime.Now)
+                            {
+                                <button class="btn btn-danger" id="endRental" data-booking="@booking.Id">End Rental</button>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+@* @foreach(var b in Model){ *@
+@*     <h1>@b.FeePerMonth</h1> *@
+@* } *@
+
+
+<script>
+        console.log(document.getElementById("endRental"))
+    $('#endRental').click(function (e) {
+        // e.preventDefault(); Prevent default button behavior (if needed)
+
+        // Get the booking ID from data attribute
+        var bookingId = $(this).data('booking');
+
+        console.log("Booking ID:", bookingId);
+
+        // You can now use bookingId for AJAX calls or other logic
+        // Example AJAX call:
+        if (confirm("Are you sure you want to end this rental?")){
+            $.ajax({
+                url: '/Host/EndRental',
+                type: 'Post',
+                data: { bookingId: bookingId },
+                success: function(response) {
+                     if (typeof loadTab === 'function') {
+                        loadTab('booked');
+                    }
+                },
+                error: function(xhr) {
+                    alert('Error ending rental: ' + xhr.responseText);
+                }
+            });
+        }
+       
+    });
+</script>

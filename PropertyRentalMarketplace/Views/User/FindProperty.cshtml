@@ -1,0 +1,399 @@
+﻿@model FindPropertyViewModel
+@{
+    ViewData["Title"] = "FindProperty";
+    Layout = "_UserLayout";
+    bool isFirst = true;
+   
+}
+@section Styles {
+    <link rel="stylesheet" href="~/css/userStyle.css">
+}
+
+
+<div class="container-fluid tab-section" style="margin-top:130px;">
+    <div class="row">
+        <div class="col-12">
+            <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                @foreach (var item in Model.PropertyTypes)
+                {
+                    <button class="tab-btn @(isFirst?"active":"")" id="nav-@item.Id" data-bs-toggle="tab" data-bs-target="#nav-@item.Id" type="button" role="tab" aria-controls="nav-@item.Id" data-id="@item.Id" aria-selected="@(isFirst.ToString())">@item.Name</button>
+                    isFirst = false;
+                }
+            </div>
+        </div>
+    </div>
+
+=    <div class="row mt-3">
+        <div class="col-lg-8 order-lg-1 order-2">
+            <div class="tab-content" id="property-tab-content">
+                <div id="property-list" class="row">
+                    @foreach (var property in Model.InitialProperties)
+                    {
+                        var carouselId = "carousel_" + property.Id;
+                        var images = property.Images.ToList();
+
+                        <div class="col-lg-6 col-md-6 col-12 mb-4">
+                            <div class="property-card">
+                                <div id="@carouselId" class="carousel carousel-dark slide" data-bs-ride="carousel">
+                                    <div class="carousel-indicators">
+                                        @for (int i = 0; i < images.Count; i++)
+                                        {
+                                            <button type="button" data-bs-target="#@carouselId" data-bs-slide-to="@i"
+                                                    class="@(i == 0 ? "active" : "")" aria-current="@(i == 0 ? "true" : "false")" aria-label="Slide @(i + 1)">
+                                            </button>
+                                        }
+                                    </div>
+                                    <div class="carousel-inner">
+                                        @for (int i = 0; i < images.Count; i++)
+                                        {
+                                            var img = images[i];
+                                            var imagePath = img.Path.StartsWith("http") ? img.Path : Url.Content("~/images/" + img.Path);
+
+                                            <div class="carousel-item @(i == 0 ? "active" : "")" data-bs-interval="5000">
+                                                <img src="@imagePath" class="d-block w-100 property-image" alt="Property image" />
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+
+                                <div class="property-details">
+                                    <p class="p-card">@property.Name</p>
+                                    <p class="me-1">@property.Address</p>
+                                    <a asp-controller="User" asp-action="Details" asp-route-id="@property.Id">Details</a>
+
+                                    <div class="row px-3 mt-2">
+                                        <div class="col-3 p-0">
+                                            <i class="fa-solid fa-bed"></i> <span>@property.BedRooms</span>
+                                        </div>
+                                        <div class="col-3 p-0">
+                                            <i class="fa-solid fa-sink"></i> <span>@property.BathRooms</span>
+                                        </div>
+                                        <div class="col-3 p-0">
+                                            <i class="fa-solid fa-car"></i> <span>@property.GarageSlots</span>
+                                        </div>
+                                        <div class="col-3 p-0">
+                                            <i class="fa-solid fa-paw"></i> <span>@property.BetsAllowd</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+       
+        <div class="col-lg-4 order-lg-2 order-1 mb-4">
+            <div class="card filter-card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <button class="btn btn-link" data-bs-toggle="collapse" data-bs-target="#filtersCollapse">
+                            <i class="fa fa-filter"></i> Filter Properties
+                        </button>
+                    </h5>
+                </div>
+                <div id="filtersCollapse" class="collapse show">
+                    <div class="card-body">
+                        <div class="accordion" id="filterAccordion">
+                           
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#priceCollapse">
+                                        Price Range
+                                    </button>
+                                </h2>
+                                <div id="priceCollapse" class="accordion-collapse collapse show" data-bs-parent="#filterAccordion">
+                                    <div class="accordion-body scrollable-accordion">
+                                        <div class="form-check">
+                                            <input class="form-check-input price-filter" type="checkbox" value="1000-2000" id="price1">
+                                            <label class="form-check-label" for="price1">
+                                                $1000 - $2000
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input price-filter" type="checkbox" value="2000-3000" id="price2">
+                                            <label class="form-check-label" for="price2">
+                                                $2000 - $3000
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input price-filter" type="checkbox" value="4000-5000" id="price3">
+                                            <label class="form-check-label" for="price3">
+                                                $4000 - $5000
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input price-filter" type="checkbox" value="6000+" id="price4">
+                                            <label class="form-check-label" for="price4">
+                                                $6000 and more
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#countryCollapse">
+                                        Country
+                                    </button>
+                                </h2>
+                                <div id="countryCollapse" class="accordion-collapse collapse" data-bs-parent="#filterAccordion">
+                                    <div class="accordion-body scrollable-accordion" id="countryFilters">
+                                      
+                                        <div class="text-center">
+                                            <div class="spinner-border" role="status">
+                                                <span class="visually-hidden">Loading...</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                           
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#bedroomsCollapse">
+                                        Number of Bedrooms
+                                    </button>
+                                </h2>
+                                <div id="bedroomsCollapse" class="accordion-collapse collapse" data-bs-parent="#filterAccordion">
+                                    <div class="accordion-body scrollable-accordion">
+                                        <div class="form-check">
+                                            <input class="form-check-input bedroom-filter" type="checkbox" value="1" id="bed1">
+                                            <label class="form-check-label" for="bed1">
+                                                1
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input bedroom-filter" type="checkbox" value="2" id="bed2">
+                                            <label class="form-check-label" for="bed2">
+                                                2
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input bedroom-filter" type="checkbox" value="3" id="bed3">
+                                            <label class="form-check-label" for="bed3">
+                                                3
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input bedroom-filter" type="checkbox" value="4" id="bed4">
+                                            <label class="form-check-label" for="bed4">
+                                                4
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input bedroom-filter" type="checkbox" value="5" id="bed5">
+                                            <label class="form-check-label" for="bed5">
+                                                5
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input bedroom-filter" type="checkbox" value="6+" id="bed6">
+                                            <label class="form-check-label" for="bed6">
+                                                5+
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-grid gap-2 d-md-block mt-3">
+                            <button id="applyFilters" class="btn btn-primary">Apply Filters</button>
+                            <button id="resetFilters" class="btn btn-outline-secondary ms-md-2 mt-2 mt-md-0">Reset</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            loadCountries();
+
+            let currentFilters = {
+                priceRanges: [],
+                countries: [],
+                bedrooms: [],
+                propertyType: $('.tab-btn.active').data('id')
+            };
+
+            function loadCountries() {
+                $.ajax({
+                    url: 'https://api.countrystatecity.in/v1/countries',
+                    headers: {
+                        "X-CSCAPI-KEY": "WndlbUtKQVNRbm5tdnMyd2NQWWlpUFgyTkJ3YkNMbkpJeFF2c1Q1aA=="
+                    },
+                    success: function(countries) {
+                        let countryHtml = '';
+                        countries.forEach(country => {
+                            countryHtml += `
+                                <div class="form-check">
+                                    <input class="form-check-input country-filter" type="checkbox" value="${country.iso2}" id="country-${country.iso2}">
+                                    <label class="form-check-label" for="country-${country.iso2}">
+                                        ${country.name}
+                                    </label>
+                                </div>`;
+                        });
+                        $('#countryFilters').html(countryHtml);
+                    },
+                    error: function(xhr, status, error) {
+                        $('#countryFilters').html('<div class="alert alert-danger">Failed to load countries.</div>');
+                    }
+                });
+            }
+
+            function loadProperties() {
+                const filters = {
+                    typeId: currentFilters.propertyType,
+                    priceRanges: currentFilters.priceRanges,
+                    countries: currentFilters.countries,
+                    bedrooms: currentFilters.bedrooms
+                };
+
+                $.ajax({
+                    url: '/User/GetFilteredProperties',
+                    method: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(filters),
+                    success: function(data) {
+                        renderProperties(data);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("Error:", status, error);
+                        $('#property-list').html(
+                            `<div class="alert alert-danger">
+                                Failed to load properties.
+                                ${xhr.responseJSON ? xhr.responseJSON.message : ''}
+                            </div>`
+                        );
+                    }
+                });
+            }
+
+            function renderProperties(properties) {
+                let content = '';
+                if (properties.length === 0) {
+                    content = '<div class="alert alert-warning">No properties found matching your filters.</div>';
+                } else {
+                    properties.forEach(p => {
+                     
+                        let carouselItems = '';
+                        if (p.images && p.images.length > 0) {
+                            p.images.forEach((img, i) => {
+                                carouselItems += `
+                                    <div class="carousel-item ${i === 0 ? 'active' : ''}" data-bs-interval="5000">
+                                        <img src="${img.path}" class="d-block w-100" style="max-height: 200px;" />
+                                    </div>`;
+                            });
+                        }
+
+                        
+                          content += `
+        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12 mb-4">
+            <div class="property-card h-100">
+                <div id="carousel_${p.id}" class="carousel carousel-dark slide" data-bs-ride="carousel">
+                    <div class="carousel-indicators">
+                        ${p.images ? p.images.map((_, i) => `
+                            <button type="button" data-bs-target="#carousel_${p.id}"
+                                    data-bs-slide-to="${i}" class="${i === 0 ? 'active' : ''}"
+                                    aria-current="${i === 0 ? 'true' : 'false'}"
+                                    aria-label="Slide ${i + 1}"></button>
+                        `).join('') : ''}
+                    </div>
+                    <div class="carousel-inner ratio ratio-16x9">
+                        ${carouselItems}
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carousel_${p.id}" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carousel_${p.id}" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                </div>
+
+                <div class="card-body p-3">
+                    <h5 class="property-title mb-1">${p.name}</h5>
+                    <p class="property-address text-muted mb-2">${p.address}</p>
+                    <a href="/User/Details/${p.id}" class="btn btn-outline-primary btn-sm mb-3">View Details</a>
+
+                    <div class="property-features d-flex justify-content-between text-center">
+                        <div class="feature-item">
+                            <i class="fa-solid fa-bed d-block"></i>
+                            <span>${p.bedRooms || '0'}</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fa-solid fa-sink d-block"></i>
+                            <span>${p.bathRooms || '0'}</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fa-solid fa-car d-block"></i>
+                            <span>${p.garageSlots || '0'}</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fa-solid fa-paw d-block"></i>
+                            <span>${p.petsAllowed ? 'Yes' : 'No'}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>`;
+                    });
+                }
+                $('#property-list').html(content);
+            }
+
+          
+            $('.tab-btn').click(function() {
+                $('.tab-btn').removeClass('active');
+                $(this).addClass('active');
+                currentFilters.propertyType = $(this).data('id');
+                loadProperties();
+            });
+
+           
+            $('#applyFilters').click(function() {
+                currentFilters.priceRanges = [];
+                $('.price-filter:checked').each(function() {
+                    currentFilters.priceRanges.push($(this).val());
+                });
+
+               
+                currentFilters.countries = [];
+                $('.country-filter:checked').each(function() {
+                    currentFilters.countries.push($(this).val());
+                });
+
+             
+                currentFilters.bedrooms = [];
+                $('.bedroom-filter:checked').each(function() {
+                    currentFilters.bedrooms.push($(this).val());
+                });
+
+                loadProperties();
+            });
+
+         
+            $('#resetFilters').click(function() {
+                $('.price-filter, .country-filter, .bedroom-filter').prop('checked', false);
+                currentFilters = {
+                    priceRanges: [],
+                    countries: [],
+                    bedrooms: [],
+                    propertyType: $('.tab-btn.active').data('id')
+                };
+                loadProperties();
+            });
+
+        
+            loadProperties();
+        });
+    </script>
+}

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PropertyDAL.Contexts;
 
@@ -11,9 +12,11 @@ using PropertyDAL.Contexts;
 namespace PropertyRentalDAL.Migrations
 {
     [DbContext(typeof(PropertyDbContext))]
-    partial class PropertyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250422235844_v4")]
+    partial class v4
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -318,16 +321,15 @@ namespace PropertyRentalDAL.Migrations
                     b.Property<decimal>("FeePerMonth")
                         .HasColumnType("decimal(12,2)");
 
-                    b.Property<string>("HostId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<bool>("IsActive")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
                         .HasDefaultValue(true);
 
                     b.Property<int>("PropertyId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RatingId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("StartDate")
@@ -339,9 +341,10 @@ namespace PropertyRentalDAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("HostId");
-
                     b.HasIndex("PropertyId");
+
+                    b.HasIndex("RatingId")
+                        .IsUnique();
 
                     b.HasIndex("UserId");
 
@@ -621,9 +624,6 @@ namespace PropertyRentalDAL.Migrations
                     b.Property<int>("AmenitiesRating")
                         .HasColumnType("int");
 
-                    b.Property<int>("BookingId")
-                        .HasColumnType("int");
-
                     b.Property<int>("CommunicationRating")
                         .HasColumnType("int");
 
@@ -640,9 +640,6 @@ namespace PropertyRentalDAL.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("BookingId")
-                        .IsUnique();
 
                     b.ToTable("Ratings");
                 });
@@ -740,27 +737,27 @@ namespace PropertyRentalDAL.Migrations
 
             modelBuilder.Entity("PropertyRentalDAL.Models.Booking", b =>
                 {
-                    b.HasOne("PropertyDAL.Models.User", "Host")
-                        .WithMany("BookingsHost")
-                        .HasForeignKey("HostId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("PropertyRentalDAL.Models.Property", "Property")
                         .WithMany("Bookings")
                         .HasForeignKey("PropertyId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("PropertyRentalDAL.Models.Rating", "Rating")
+                        .WithOne("Booking")
+                        .HasForeignKey("PropertyRentalDAL.Models.Booking", "RatingId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("PropertyDAL.Models.User", "User")
-                        .WithMany("BookingsUser")
+                        .WithMany("Bookings")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("Host");
-
                     b.Navigation("Property");
+
+                    b.Navigation("Rating");
 
                     b.Navigation("User");
                 });
@@ -852,17 +849,6 @@ namespace PropertyRentalDAL.Migrations
                     b.Navigation("Property");
                 });
 
-            modelBuilder.Entity("PropertyRentalDAL.Models.Rating", b =>
-                {
-                    b.HasOne("PropertyRentalDAL.Models.Booking", "Booking")
-                        .WithOne("Rating")
-                        .HasForeignKey("PropertyRentalDAL.Models.Rating", "BookingId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Booking");
-                });
-
             modelBuilder.Entity("PropertyRentalDAL.Models.Service", b =>
                 {
                     b.HasOne("PropertyRentalDAL.Models.Property", "Property")
@@ -876,9 +862,7 @@ namespace PropertyRentalDAL.Migrations
 
             modelBuilder.Entity("PropertyDAL.Models.User", b =>
                 {
-                    b.Navigation("BookingsHost");
-
-                    b.Navigation("BookingsUser");
+                    b.Navigation("Bookings");
 
                     b.Navigation("Favourites");
 
@@ -895,12 +879,6 @@ namespace PropertyRentalDAL.Migrations
             modelBuilder.Entity("PropertyRentalDAL.Models.AmenityCategory", b =>
                 {
                     b.Navigation("Amenities");
-                });
-
-            modelBuilder.Entity("PropertyRentalDAL.Models.Booking", b =>
-                {
-                    b.Navigation("Rating")
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("PropertyRentalDAL.Models.Location", b =>
@@ -925,6 +903,12 @@ namespace PropertyRentalDAL.Migrations
             modelBuilder.Entity("PropertyRentalDAL.Models.PropertyType", b =>
                 {
                     b.Navigation("Properties");
+                });
+
+            modelBuilder.Entity("PropertyRentalDAL.Models.Rating", b =>
+                {
+                    b.Navigation("Booking")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }
