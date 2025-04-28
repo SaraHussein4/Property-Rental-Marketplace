@@ -115,3 +115,101 @@
     background-color: var(--bs-nav-tabs-link-active-bg);
     border-color: var(--bs-nav-tabs-link-active-border-color);
 }
+
+/* Custom CSS for responsive layout */
+.property-card {
+    border: 1px solid #dee2e6;
+    border-radius: 0.25rem;
+    padding: 15px;
+    height: 100%;
+}
+
+.property-image {
+    height: 200px;
+    object-fit: cover;
+}
+
+.property-details {
+    padding: 10px 0;
+}
+
+.p-card {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.filter-card {
+    position: sticky;
+    top: 20px;
+}
+
+.nav-tabs {
+    overflow-x: auto;
+    white-space: nowrap;
+    flex-wrap: nowrap;
+}
+
+    .nav-tabs .tab-btn {
+        display: inline-block;
+        float: none;
+    }
+
+/* Responsive adjustments */
+@media (max-width: 991.98px) {
+    .property-card {
+        margin-bottom: 20px;
+    }
+
+    .filter-card {
+        margin-bottom: 30px;
+        position: static;
+    }
+}
+
+.tab-section{
+    margin-top:130px;
+}
+
+@media (max-width: 767.98px) {
+    .property-image {
+        height: 150px;
+    }
+
+    .col-3.p-0 {
+        text-align: center;
+    }
+}
+
+.scrollable-accordion {
+    max-height: 200px; /* Fixed height */
+    overflow-y: auto; /* Enable vertical scrolling */
+    padding-right: 10px; /* Prevent content from touching scrollbar */
+    /* Custom scrollbar (optional) */
+    scrollbar-width: thin;
+    scrollbar-color: #888 #f1f1f1;
+}
+
+    /* Custom scrollbar for WebKit browsers */
+    .scrollable-accordion::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    .scrollable-accordion::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 4px;
+    }
+
+    .scrollable-accordion::-webkit-scrollbar-thumb {
+        background: #888;
+        border-radius: 4px;
+    }
+
+        .scrollable-accordion::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+/* Ensure form elements don't get cut off */
+.form-check {
+    margin-bottom: 8px;
+    padding-left: 1.8em; /* Adjust if needed */
+}
