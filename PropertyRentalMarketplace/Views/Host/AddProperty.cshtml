@@ -22,11 +22,11 @@
                     Property Details
                 </button>
             </h2>
-            <div id="collapseDetails" class="accordion-collapse collapse show" aria-labelledby="headingDetails" data-bs-parent="#propertyAccordion">
+            <div id="collapseDetails" class="accordion-collapse collapse" aria-labelledby="headingDetails" data-bs-parent="#propertyAccordion">
                 <div class="accordion-body">
                     <div class="row">
                         <div class="mb-3 col-md-6 col-lg-4">
-                            <label asp-for="ListingType" class="form-label fw-bold">Listing Type</label>
+                            <label asp-for="ListingType" class="form-label fw-bold">Listing Type<span class="text-danger">*</span></label>
                             <select class="form-select" asp-for="ListingType">
                                 <option value="">-- Select Listing Type --</option>
                                 <option value="1">Rent</option>
@@ -37,7 +37,7 @@
                             <span asp-validation-for="ListingType" class="text-danger"></span>
                         </div>
                         <div class="mb-3 col-md-6 col-lg-4">
-                            <label asp-for="PropertyTypeId" class="form-label fw-bold">Property Type</label>
+                            <label asp-for="PropertyTypeId" class="form-label fw-bold">Property Type<span class="text-danger">*</span></label>
                             <select class="form-select" asp-for="PropertyTypeId">
                                 <option value="">-- Select Property Type --</option>
                                 @foreach (var p in Model.propertyTypes)
@@ -51,12 +51,12 @@
 
                     <div class="row">
                         <div class="mb-3 col-md-6 col-lg-4">
-                            <label asp-for="Name" class="form-label fw-bold">Title</label>
+                            <label asp-for="Name" class="form-label fw-bold">Title <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" asp-for="Name" placeholder="e.g., Luxury Apartment in Downtown">
                             <span asp-validation-for="Name" class="text-danger"></span>
                         </div>
                         <div class="mb-3 col-md-6 col-lg-4">
-                            <label asp-for="FeesPerMonth" class="form-label fw-bold">Monthly Rent</label>
+                            <label asp-for="FeesPerMonth" class="form-label fw-bold">Monthly Rent <span class="text-danger">*</span></label>
                             <div class="input-group mb-3">
                                 <span class="input-group-text">$</span>
                                 <input type="number" class="form-control" asp-for="FeesPerMonth" min="0" placeholder="0">
@@ -65,7 +65,7 @@
                             </div>
                         </div>
                         <div class="mb-3 col-md-6 col-lg-4">
-                            <label asp-for="Area" class="form-label fw-bold">Square footage</label>
+                            <label asp-for="Area" class="form-label fw-bold">Square footage <span class="text-danger">*</span></label>
                             <div class="input-group mb-3">
                                 <input type="number" class="form-control" asp-for="Area" min="0" placeholder="0">
                                 <span class="input-group-text">sq. ft.</span>
@@ -73,7 +73,7 @@
                             </div>
                         </div>
                         <div class="mb-3 col-12">
-                            <label asp-for="Description" class="form-label fw-bold">Description</label>
+                            <label asp-for="Description" class="form-label fw-bold">Description <span class="text-danger">*</span></label>
                             <textarea class="form-control" rows="6" asp-for="Description"
                                       placeholder="Describe the property features, amenities, and location..."></textarea>
                             <span asp-validation-for="Description" class="text-danger"></span>
@@ -82,7 +82,7 @@
 
                     <div class="row">
                         <div class="mb-3 col-sm-6 col-md-4 col-lg-3">
-                            <label asp-for="Bedrooms" class="form-label fw-bold">Bedrooms</label>
+                            <label asp-for="Bedrooms" class="form-label fw-bold">Bedrooms <span class="text-danger">*</span></label>
                             <select class="form-select" asp-for="Bedrooms">
                                 <option value="">-- select --</option>
                                 @for (var i = 1; i <= 10; ++i)
@@ -94,7 +94,7 @@
                             <span asp-validation-for="Bedrooms" class="text-danger"></span>
                         </div>
                         <div class="mb-3 col-sm-6 col-md-4 col-lg-3">
-                            <label asp-for="Bathrooms" class="form-label fw-bold">Bathrooms</label>
+                            <label asp-for="Bathrooms" class="form-label fw-bold">Bathrooms <span class="text-danger">*</span></label>
                             <select class="form-select" asp-for="Bathrooms">
                                 <option value="">-- select --</option>
                                 @for (var i = 1; i <= 10; ++i)
@@ -106,7 +106,7 @@
                             <span asp-validation-for="Bathrooms" class="text-danger"></span>
                         </div>
                         <div class="mb-3 col-sm-6 col-md-4 col-lg-3">
-                            <label asp-for="GarageSlots" class="form-label fw-bold">Parking</label>
+                            <label asp-for="GarageSlots" class="form-label fw-bold">Parking <span class="text-danger">*</span></label>
                             <select class="form-select" asp-for="GarageSlots">
                                 <option value="">-- select --</option>
                                 <option value="0">No Parking</option>
@@ -119,7 +119,7 @@
                             <span asp-validation-for="GarageSlots" class="text-danger"></span>
                         </div>
                         <div class="mb-3 col-sm-6 col-md-4 col-lg-3">
-                            <label asp-for="BetsAllowed" class="form-label fw-bold">Bets</label>
+                            <label asp-for="BetsAllowed" class="form-label fw-bold">Bets <span class="text-danger">*</span></label>
                             <select class="form-select" asp-for="BetsAllowed">
                                 <option value="" selected>-- Select --</option>
                                 <option value="0">No Pets</option>
@@ -147,26 +147,28 @@
                 <div class="accordion-body">
                     <div class="row">
                         <div class="mb-3 col-md-4">
-                            <label asp-for="CountryCode" class="form-label fw-bold">Country</label>
+                            <label asp-for="CountryCode" class="form-label fw-bold">Country <span class="text-danger">*</span></label>
                             <select class="form-select countries" asp-for="CountryCode" data-countrycode="@Model.CountryCode">
                                 <option value="" selected>--Select Countr--</option>
                             </select>
                             <span asp-validation-for="CountryCode" class="text-danger"></span>
                         </div>
                         <div class="mb-3 col-md-4">
-                            <label asp-for="StateCode" class="form-label fw-bold">State</label>
+                            <label asp-for="StateCode" class="form-label fw-bold">State <span class="text-danger">*</span></label>
                             <select class="form-select states" asp-for="StateCode" data-statecode="@Model.StateCode">
                                 <option value="" selected>--Select State--</option>
                             </select>
                             <span asp-validation-for="StateCode" class="text-danger"></span>
                         </div>
                         <div class="mb-3 col-md-4">
-                            <label asp-for="Address" class="form-label fw-bold">Address</label>
+                            <label asp-for="Address" class="form-label fw-bold">Address <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" asp-for="Address"
                                    placeholder="e.g., 15 Mohamed Mahmoud Street, Bab El Louk, Cairo, Egypt">
                             <span asp-validation-for="Address" class="text-danger"></span>
                         </div>
                         <div class="mb-3 col-md-8" id="map" style="height: 400px; width: 100%;"></div>
+
+
                         <input type="hidden" asp-for="Latitude">
                         <span asp-validation-for="Latitude" class="text-danger"></span>
                         <input type="hidden" asp-for="Longitude">
@@ -186,7 +188,7 @@
                 <div class="accordion-body">
                     <div class="amenities">
                         <div class="form-group row mb-3">
-                            <label class="col-form-label fw-bold">Amenities</label>
+                            <label class="col-form-label fw-bold">Amenities <span class="text-danger">*</span></label>
                             <div class="">
                                 @foreach (var amenity in Model.amenities)
                                 {
@@ -204,7 +206,7 @@
 
                     <div class="safeties">
                         <div class="form-group row mb-3">
-                            <label class="col-form-label fw-bold">Safeties</label>
+                            <label class="col-form-label fw-bold">Safeties <span class="text-danger">*</span></label>
                             <div class="">
                                 @foreach (var safety in Model.safeties)
                                 {
@@ -283,13 +285,13 @@
                 <div class="accordion-body">
                     <div class="row">
                         <div class="mb-3 col-md-3">
-                            <label asp-for="PrimaryImage" class="form-label">Cover Image</label>
+                            <label asp-for="PrimaryImage" class="form-label">Cover Image <span class="text-danger">*</span></label>
                             <input class="form-control propertyPrimaryImage" type="file" asp-for="PrimaryImage" accept="image/*">
                             <span asp-validation-for="PrimaryImage" class="text-danger"></span>
                             <div id="primaryImagesPreview" class="d-flex flex-wrap gap-2 mt-3"></div>
                         </div>
                         <div class="mb-3 col-md-9">
-                            <label asp-for="Images" class="form-label">Property Image</label>
+                            <label asp-for="Images" class="form-label">Property Image <span class="text-danger">*</span></label>
                             <input class="form-control propertyImages" type="file" asp-for="Images" accept="image/*" multiple>
                             <span asp-validation-for="Images" class="text-danger"></span>
                             <div id="imagesPreview" class="d-flex flex-wrap gap-2 mt-3"></div>
@@ -310,7 +312,7 @@
                 <div class="accordion-body">
                     <div class="row">
                         <div class="mb-3 col-sm-6 col-md-4">
-                            <label asp-for="ListingPlan" class="form-label fw-bold">Listing Plan</label>
+                            <label asp-for="ListingPlan" class="form-label fw-bold">Listing Plan <span class="text-danger">*</span></label>
                             <select class="form-select" asp-for="ListingPlan">
                                 <option value="" selected>--Select--</option>
                                 <option value="1">Standard Listing (15 Days Visibility)</option>
@@ -321,7 +323,7 @@
                             <span asp-validation-for="ListingPlan" class="text-danger"></span>
                         </div>
                         <div class="mb-3 col-md-6 col-lg-4">
-                            <label asp-for="PaymentMethod" class="form-label fw-bold">Payment Method</label>
+                            <label asp-for="PaymentMethod" class="form-label fw-bold">Payment Method <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" asp-for="PaymentMethod">
                             <span asp-validation-for="PaymentMethod" class="text-danger"></span>
                         </div>
@@ -331,7 +333,7 @@
         </div>
 
     </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
+    <button type="submit" class="submit-button mt-2">Add Property</button>
 </form>
 
 
@@ -339,34 +341,7 @@
 
 <!-- Script to add new services dynamically and toggle accordion sections -->
 <script>
-    // document.addEventListener('load', function () {
-    //     console.log("dfdfdf");
 
-    //     $("#addServiceBtn").click(function () {
-    //         var newService = `
-    //         <div class="service-row mb-4">
-    //             <div class="row align-items-end">
-    //                 <div class="col-md-4">
-    //                     <input type="text" name="ServiceNames" class="form-control" placeholder="Service Name">
-    //                 </div>
-    //                 <div class="col-md-4">
-    //                     <input type="number" name="ServiceDistances" class="form-control" placeholder="Distance (km)">
-    //                 </div>
-    //                 <div class="col-md-3">
-    //                     <input type="number" step="0.1" max="5" min="0" name="ServiceRatings" class="form-control" placeholder="Rating">
-    //                 </div>
-    //                 <div class="col-md-1">
-    //                     <button type="button" class="btn btn-danger remove-service-btn ms-2">X</button>
-    //                 </div>
-    //             </div>
-    //         </div>`;
-    //         $("#services-container").append(newService);
-    //     });
-
-    //     $(document).on('click', '.remove-service-btn', function () {
-    //         $(this).closest('.service-row').remove();
-    //     });
-    // });
 </script>
 
 @section Scripts {

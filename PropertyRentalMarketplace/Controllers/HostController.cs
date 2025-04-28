@@ -295,6 +295,8 @@ namespace PropertyRentalMarketplace.Controllers
             }
             try
             {
+                await _propertyRepository.BeginTransactionAsync();
+                
                 Property property = await _propertyRepository.GetById(model.Id);
                 
                 if(property.Host.Id != "23d1c943-494f-489b-acaf-5144c2fe2387")
@@ -302,7 +304,7 @@ namespace PropertyRentalMarketplace.Controllers
                     return Json("You Can't Edit Property of Another Host");
                 }
 
-                await _propertyRepository.BeginTransactionAsync();
+
 
                 property.Id = model.Id;
                 property.Name = model.Name;
