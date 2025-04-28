@@ -26,9 +26,11 @@ namespace PropertyRentalBL.Repositories
             //{
             //    return await host.sel
             //}
-             return  await _context.Users.Where(u => u.Id == hostid).SelectMany(u => u.BookingsHost).Where(a => a.Property.IsListed == false).ToListAsync();
+             return  await _context.Users.Where(u => u.Id == hostid).SelectMany(u => u.BookingsHost).ToListAsync();
 
             //throw new NotImplementedException();
         }
+
+        
     }
 }

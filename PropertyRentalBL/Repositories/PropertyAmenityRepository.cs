@@ -24,5 +24,6 @@ namespace PropertyRentalBL.Repositories
         {
             await _context.PropertyAmenities.Where(pa => pa.PropertyId == propertyId).ExecuteDeleteAsync();
         }
+        
     }
 }

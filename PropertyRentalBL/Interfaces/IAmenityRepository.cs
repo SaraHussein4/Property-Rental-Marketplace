@@ -1,4 +1,5 @@
-﻿using PropertyBL.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using PropertyBL.Interfaces;
 using PropertyRentalDAL.Models;
 using System;
 using System.Collections.Generic;
@@ -12,6 +13,8 @@ namespace PropertyRentalBL.Interfaces
     {
         public Task<IEnumerable<Amenity>> GetAmenities();
         public Task<IEnumerable<Amenity>> GetSafeties();
-        //public Task<List<Amenity>> GetAllAmenitiesById(int propertyid);
+        public Task<List<Amenity>> GetAllAmenitiesById(int propertyid);
+        public Task<List<Amenity>> GetSafetyById(int propertyid);
+        
     }
 }

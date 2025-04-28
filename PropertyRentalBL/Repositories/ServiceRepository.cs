@@ -1,4 +1,5 @@
-﻿using PropertyBL.Repositories;
+﻿using Microsoft.EntityFrameworkCore;
+using PropertyBL.Repositories;
 using PropertyDAL.Contexts;
 using PropertyRentalBL.Interfaces;
 using PropertyRentalDAL.Models;
@@ -12,6 +13,15 @@ namespace PropertyRentalBL.Repositories
 {
     public class ServiceRepository: GenericRepository<Service>, IServiceRepository  
     {
-        public ServiceRepository(PropertyDbContext context) :base(context) { }
+        private readonly PropertyDbContext _context;
+
+        public ServiceRepository(PropertyDbContext context) :base(context) {
+        _context = context;
+
+        }
+        public async Task<List<Service>> GetAllServicesById(int id)
+        {
+            return await _context.Services.Where(w=>w.PropertyId==id).ToListAsync();
+        }
     }
 }

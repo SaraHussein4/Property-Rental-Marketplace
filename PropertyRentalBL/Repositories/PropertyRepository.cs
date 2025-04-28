@@ -23,11 +23,14 @@ namespace PropertyRentalBL.Repositories
         {
             return await _context.Properties.Where(p=>p.IsFeatured==true).ToListAsync();
         }
+
+        // get image host
+
         public async Task<string> getimagehost(int propertyid)
         {
             return await _context.Properties.Where(w => w.Id == propertyid).Select(s => s.Host.Image).FirstOrDefaultAsync();
-        }
 
+        }
         public async Task<List<Property>> GetActiveListedPropertiesHostedBySpecificHost(string hostId)
         {
             return await _context.Properties.AsNoTracking().Where(p => p.UserId == hostId && p.IsListed == true && p.UnListDate > DateTime.Now).ToListAsync();
@@ -35,8 +38,19 @@ namespace PropertyRentalBL.Repositories
 
         public async Task<List<Property>> GetExpiredPropertiesHostedBySpecificHost(string hostId)
         {
-            return await _context.Properties.AsNoTracking().Where(p => p.UserId == hostId && p.IsListed == true && p.UnListDate <= DateTime.Now).ToListAsync();
+            var wasListed = await _context.Properties
+                .Where(p => p.UserId == hostId && p.IsListed == true && p.UnListDate <= DateTime.Now)
+                .ToListAsync();
 
+            var wasBooked = await _context.Properties
+                .Include(p => p.Bookings)
+                .Where(p => p.UserId == hostId &&
+                            p.IsListed == false &&
+                            p.Bookings.Any() && 
+                            p.Bookings.OrderByDescending(b => b.EndDate).First().EndDate <= DateTime.Now)
+                .ToListAsync();
+
+            return wasListed.Union(wasBooked).ToList();
         }
 
         public async Task<List<Property>> GetPropertyTypeById(int id)
@@ -123,8 +137,6 @@ List<string> bedrooms)
                 .ThenByDescending(p => p.ListedAt)    
                 .ToListAsync();
         }
-
-
     }
 
 }

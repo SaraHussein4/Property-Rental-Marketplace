@@ -1,0 +1,73 @@
+﻿/* ------- start first section--------------- */
+.p {
+    font-weight: 900px;
+    font-size: 20px;
+}
+
+.title {
+    font-size: 22px;
+    font-weight: bold;
+}
+
+h1 {
+    font-family: "Boldonse", system-ui;
+    font-weight: 400;
+    font-style: normal;
+}
+
+/* ------- end first section--------------- */
+/* ---------------------start section2--------------------- */
+.section2 {
+    background-color: #f8f8f8;
+    height: 600px;
+}
+
+.cards {
+    position: relative;
+}
+
+.icon {
+    font-size: 100px;
+    position: absolute;
+    left: 100px;
+    top: 130px;
+    color: #4f4e4e;
+}
+
+.hsection {
+    font-size: 30px;
+    padding-top: 280px;
+    color: #c64f4f;
+}
+
+.headersection {
+    padding-top: 100px;
+}
+/* ---------------------end section2--------------------- */
+/* --------------------------start section3--------------------- */
+h4 {
+    cursor: pointer;
+}
+
+    h4:hover {
+        color: var(--bs-green);
+    }
+
+.imagese3 {
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+    .imagese3:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+    }
+/* --------------------------end section3--------------------- */
+.hsection4 {
+    font-size: 25px;
+    /* position: absolute; */
+}
+
+.psection4 {
+    font-size: 22px;
+}
