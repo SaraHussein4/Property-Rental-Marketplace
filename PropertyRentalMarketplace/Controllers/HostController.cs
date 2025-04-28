@@ -15,7 +15,7 @@ using System.Threading;
 
 namespace PropertyRentalMarketplace.Controllers
 {
-    [Authorize(Roles = AppRoles.Host)]
+    //[Authorize(Roles = AppRoles.Host)]
 
 
     public class HostController : Controller
@@ -32,6 +32,8 @@ namespace PropertyRentalMarketplace.Controllers
         private readonly IPropertyAmenityRepository _propertyAmenityRepository;
         private readonly IUserRepository _userRepository;
         private readonly IBookingRepository _bookingRepository;
+        private readonly INotificationRepository _notificationRepository;
+
 
 
         public HostController(IPropertyTypeRepository propertyTypeRepository,
@@ -39,7 +41,7 @@ namespace PropertyRentalMarketplace.Controllers
             ILocationRepository locationRepository, IPropertyRepository propertyRepository, UserManager<User> userManager,
             RoleManager<IdentityRole> roleManager,
             IServiceRepository serviceRepository, IPropertyAmenityRepository propertyAmenityRepository
-            ,IUserRepository userRepository, IBookingRepository bookingRepository)
+            ,IUserRepository userRepository, IBookingRepository bookingRepository, INotificationRepository notificationRepository)
         {
             _propertyTypeRepository = propertyTypeRepository;
             _amenityRepository = amenityRepository;
@@ -53,6 +55,7 @@ namespace PropertyRentalMarketplace.Controllers
             _propertyAmenityRepository = propertyAmenityRepository;
             _userRepository = userRepository;
             _bookingRepository = bookingRepository;
+            _notificationRepository = notificationRepository;
         }
         public IActionResult Index()
         {
@@ -597,12 +600,12 @@ namespace PropertyRentalMarketplace.Controllers
         public async Task<IActionResult> DealClosed([FromBody] HostDealClosedViewModel model)
         {
             bool exist = await _userRepository.CheckUserByPhone(model.phoneNumber);
-            User client;
+            //User client;
             if (exist) {
                 try
                 {
                     await _bookingRepository.BeginTransactionAsync();
-                    client = await _userRepository.GetUserByPhone(model.phoneNumber);
+                    User client = await _userRepository.GetUserByPhone(model.phoneNumber);
 
                     Booking booking = new Booking()
                     {
@@ -620,6 +623,21 @@ namespace PropertyRentalMarketplace.Controllers
                     Property property = await _propertyRepository.GetById(model.PropertyId);
                     property.IsListed = false;
                     await _propertyRepository.Save();
+
+                    Notification notification = new Notification()
+                    {
+                        Title = "Congratulations! Your Deal Is Successfully Closed",
+                        Content = $"Your deal for the {property.Name} has been succesfully finalizes with the host.\n" +
+                        $"We would love to hear your feedback!",
+                        CreatedAt = DateTime.Now,
+                        type = "DealClosed",
+                        UserId = client.Id,
+                        BookingId = booking.Id,
+                        IsReaded = false
+                    };
+                    
+                    await _notificationRepository.Add(notification);
+                    await _notificationRepository.Save();
 
                     await _bookingRepository.CommitAsync();
                 }
