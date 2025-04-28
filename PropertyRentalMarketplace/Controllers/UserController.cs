@@ -138,22 +138,22 @@ namespace PropertyRentalMarketplace.Controllers
 
         #region add to favourite
         [HttpPost]
-        public async Task<IActionResult> AddToFavourite(string userId, int propertyId)
-        {
-            try
-            {
-                // إضافة العقار إلى المفضلة
-                await _favouriteRepository.AddToFavourite(userId, propertyId);
+        //public async Task<IActionResult> AddToFavourite(string userId, int propertyId)
+        //{
+        //    try
+        //    {
+        //        // إضافة العقار إلى المفضلة
+        //        await _favouriteRepository.AddToFavourite(userId, propertyId);
 
-                // إرسال استجابة ناجحة
-                return Json(new { success = true });
-            }
-            catch (Exception ex)
-            {
-                // في حالة حدوث خطأ
-                return Json(new { success = false, message = ex.Message });
-            }
-        }
+        //        // إرسال استجابة ناجحة
+        //        return Json(new { success = true });
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        // في حالة حدوث خطأ
+        //        return Json(new { success = false, message = ex.Message });
+        //    }
+        //}
         //public async Task<IActionResult> AddToFavourite(string userid,int propid)
         //{
         //    await _favouriteRepository.AddToFavourite(userid, propid);

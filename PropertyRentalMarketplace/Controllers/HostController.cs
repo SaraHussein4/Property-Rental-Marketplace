@@ -677,17 +677,17 @@ namespace PropertyRentalMarketplace.Controllers
         //    {
         //        var user = new User
         //        {
-        //            Name = "Mostafa Murad",
-        //            UserName = "MostafaMurad",
-        //            Email = "mostafa@gmail.com",
+        //            Name = "Salem",
+        //            UserName = "SalemGamal",
+        //            Email = "Salem@gmail.com",
         //            Gender = Gender.Male,
         //        };
-        //        var result = await _userManager.CreateAsync(user, "Mostafa$1");
-        //        var role = await _roleManager.FindByIdAsync("2");
+        //        var result = await _userManager.CreateAsync(user, "Salem$1");
+        //        var role = await _roleManager.FindByIdAsync("3");
         //        var roleResult = await _userManager.AddToRoleAsync(user, role.Name);
         //        return Json("Success");
         //    }
-        //    catch(Exception ex) 
+        //    catch (Exception ex)
         //    {
         //        return Json(ex);
         //    }
@@ -824,7 +824,7 @@ namespace PropertyRentalMarketplace.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> SaveChangePassword(ChangePasswordViewModel model)
+        public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
         {
             if (!ModelState.IsValid)
                 return View(model);
