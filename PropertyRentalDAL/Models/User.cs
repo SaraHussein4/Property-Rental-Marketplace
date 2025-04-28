@@ -24,5 +24,8 @@ namespace PropertyDAL.Models
         public virtual ICollection<Property>? HostedProperties { get; set; }  // For Host
         public virtual ICollection<Notification>? Notifications { get; set; } // For Both
 
+        public virtual ICollection<Rating>? Ratings { get; set; } // For Both
+
+
     }
 }
