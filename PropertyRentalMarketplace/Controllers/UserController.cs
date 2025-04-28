@@ -22,7 +22,7 @@ namespace PropertyRentalMarketplace.Controllers
     {
         // IUserRepository
         private readonly IPropertyRepository _propertyRepository;
-        private readonly IFavouriteRepository _favouriteRepository;
+        private readonly IFavouriteRepository _favouriteRepository1;
         private readonly IImageRepository _imageRepository;
         private readonly IUserRepository _userRepository;
         private readonly IAmenityRepository _amenityRepository;
@@ -33,7 +33,7 @@ namespace PropertyRentalMarketplace.Controllers
             ,IUserRepository userRepository ,IAmenityRepository amenityRepository , IPropertyTypeRepository propertyTypeRepository)
         {
             _propertyRepository = propertyRepository;
-            _favouriteRepository = favouriteRepository;
+            _favouriteRepository1 = favouriteRepository;
             _imageRepository = imageRepository;
             _userRepository = userRepository;
             _amenityRepository = amenityRepository;
