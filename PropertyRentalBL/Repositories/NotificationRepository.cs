@@ -1,4 +1,5 @@
-﻿using PropertyBL.Repositories;
+﻿using Microsoft.EntityFrameworkCore;
+using PropertyBL.Repositories;
 using PropertyDAL.Contexts;
 using PropertyRentalBL.Interfaces;
 using PropertyRentalDAL.Models;
@@ -12,6 +13,20 @@ namespace PropertyRentalBL.Repositories
 {
     public class NotificationRepository : GenericRepository<Notification>, INotificationRepository
     {
-        public NotificationRepository(PropertyDbContext context):base(context) { }
+        private readonly PropertyDbContext _context;
+
+        public NotificationRepository(PropertyDbContext context):base(context) { 
+            _context = context;
+        }
+
+        public async Task<Notification> GetNotificationForUserAndBooking(string userId, int bookingId)
+        {
+            return await _context.Notifications.Where(n => n.User.Id == userId && n.BookingId == bookingId).FirstOrDefaultAsync();
+        }
+
+        public async Task<List<Notification>> GetNotificationsForUser(string userId)
+        {
+            return await _context.Notifications.Where(n => n.User.Id == userId && !n.IsReaded).ToListAsync();
+        }
     }
 }

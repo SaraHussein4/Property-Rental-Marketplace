@@ -14,7 +14,7 @@ namespace PropertyRentalDAL.Models
         public string Content { get; set; }
         public DateTime CreatedAt { get; set; }
         public string type { get; set; }
-
+        public bool IsReaded { get; set; }
         // Foreign Key
         public string UserId { get; set; }
         public int? BookingId { get; set; }

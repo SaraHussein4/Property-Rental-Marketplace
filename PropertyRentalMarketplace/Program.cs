@@ -30,6 +30,8 @@ namespace PropertyRentalMarketplace
             builder.Services.AddScoped<IPropertyRepository, PropertyRepository>();
             builder.Services.AddScoped<IFavouriteRepository, FavouriteRepository>();
             builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
+            builder.Services.AddScoped<IRatingRepository, RatingRepository>();
+
 
             builder.Services.AddIdentity<User, IdentityRole>(Options =>
             {

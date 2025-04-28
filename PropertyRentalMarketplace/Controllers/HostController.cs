@@ -633,6 +633,7 @@ namespace PropertyRentalMarketplace.Controllers
                         type = "DealClosed",
                         UserId = client.Id,
                         BookingId = booking.Id,
+                        IsReaded = false
                     };
                     
                     await _notificationRepository.Add(notification);

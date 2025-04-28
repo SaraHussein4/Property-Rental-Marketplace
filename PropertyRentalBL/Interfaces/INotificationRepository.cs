@@ -10,5 +10,8 @@ namespace PropertyRentalBL.Interfaces
 {
     public interface INotificationRepository: IGenericRepository<Notification>
     {
+        public Task<List<Notification>> GetNotificationsForUser(string userId);
+        public Task<Notification> GetNotificationForUserAndBooking(string userId, int bookingId);
+
     }
 }

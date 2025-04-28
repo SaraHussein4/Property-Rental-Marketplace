@@ -1,0 +1,77 @@
+﻿@model List<Notification>
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Notification";
+}
+
+<style>
+    .notification-card {
+        border-radius: 10px;
+        overflow: hidden;
+        color: #484848;
+
+
+    }
+    .notification-card .card-header{
+            font-size: 20px;
+            font-weight: bold;
+            background-color: #E8EAEC;
+    }
+
+
+    .list-group-item {
+        padding: 1rem;
+    }
+
+        .list-group-item button {
+            font-size: 1.2rem;
+            border: none;
+            background: none;
+            cursor: pointer;
+        }
+
+            .list-group-item button:hover {
+                color: red;
+            }
+</style>
+
+<div class="container my-5">
+    <div class="card notification-card">
+        <div class="card-header bg-light fw-bold ps-4 py-4">
+            All Notifications
+        </div>
+        <ul class="list-group list-group-flush">
+            @foreach (var notification in Model)
+            {
+                <li class="list-group-item d-flex justify-content-between align-items-start">
+                    <div role="button" data-bs-toggle="modal" data-bs-target="#modal-@notification.Id">
+                        <div class="fw-semibold">@notification.Title</div>
+                        <small class="text-muted">@notification.CreatedAt.ToString("dd MMM yyyy")</small>
+                    </div>
+                    <button class="btn btn-link text-decoration-none text-muted p-0">
+                        ✕
+                    </button>
+                </li>
+
+                <!-- Modal -->
+                <div class="modal fade" id="modal-@notification.Id" tabindex="-1" aria-labelledby="modalLabel-@notification.Id" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="modalLabel-@notification.Id">@notification.Title</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                @notification.Content
+                                <a asp-action="Rate" asp-controller="User" asp-route-bookingId="@notification.BookingId">Click To Rate</a>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </ul>
+    </div>
+</div>
