@@ -62,7 +62,7 @@
             
             var carouselId = "carousel_" + item.Id;
             var images = item.Images.ToList();
-            <div class="col-lg-3 col-6 mb-4" style="position:relative">
+            <div class="col-lg-3 col-6 mb-4" >
 
                 <div id="@carouselId" class="carousel carousel-dark slide" data-bs-ride="carousel">
                     <div class="carousel-indicators">
@@ -90,13 +90,13 @@
                 <p class="p-card">@item.Name</p>
                 <p class="me-1">@item.Address</p>
                 <a asp-controller="User" asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-primary btn-sm mb-3" style="display:block;">Details</a>
-                <div class="topRatedDiv">
-                    <i class="fa-solid fa-star @(item.StarRating >= 1 ? "text-warning" : "")"></i>
-                    <i class="fa-solid fa-star @(item.StarRating >= 2 ? "text-warning" : "")"></i>
-                    <i class="fa-solid fa-star @(item.StarRating >= 3 ? "text-warning" : "")"></i>
-                    <i class="fa-solid fa-star @(item.StarRating >= 4 ? "text-warning" : "")"></i>
-                    <i class="fa-solid fa-star @(item.StarRating >= 5 ? "text-warning" : "")"></i>
-                </div>
+                <div class="topRatedDiv"> 
+                  <i class="fa-solid fa-star@(item.StarRating >= 1 ? "fa-solid fa-star text-white" : "fa-regular fa-star")"></i> 
+                     <i class="fa-solid fa-star @(item.StarRating >= 2 ? "fa-solid fa-star text-white" : "fa-regular fa-star")"></i> 
+                     <i class=" @(item.StarRating >= 3 ? "fa-solid fa-star text-white" : "fa-regular fa-star")"></i> 
+                     <i class=" @(item.StarRating >= 4 ? "fa-solid fa-star text-white" : "fa-regular fa-star")"></i> 
+                     <i class=" @(item.StarRating >= 5 ? "fa-solid fa-star text-white" : "fa-regular fa-star")"></i> 
+                 </div>
                    
             </div>
 
