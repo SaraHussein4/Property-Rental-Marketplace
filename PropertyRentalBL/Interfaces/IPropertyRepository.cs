@@ -14,8 +14,6 @@ namespace PropertyRentalBL.Interfaces
     {
         Task<IEnumerable<Property>> GetAllFeatured();
 
-        //public Task<string> getimagehost(int propertyid); //
-
         public Task<string> getimagehost(int propertyid);
         public Task<List<Property>> GetActiveListedPropertiesHostedBySpecificHost(string hostId);
         public Task<List<Property>> GetExpiredPropertiesHostedBySpecificHost(string hostId);
