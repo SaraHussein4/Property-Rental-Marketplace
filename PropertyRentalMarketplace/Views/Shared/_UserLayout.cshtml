@@ -16,15 +16,15 @@
             <a class="navbar-brand me-auto" href="#">Homelo</a>
 
             <div class="d-flex order-lg-3">
-              
+
                 <div class="dropdown user-login">
                     <button class="btn btn-link nav-link dropdown-toggle" type="button" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="fa-solid fa-bars"></i>
                         <i class="fa-solid fa-circle-user"></i>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
-                        <li><a class="dropdown-item" href="#">Profile</a></li>
-                        
+                        <li><a class="dropdown-item" asp-controller="Host" asp-action="Profile" asp-route-id="">Profile</a></li>
+
                         <li><a class="dropdown-item" asp-controller="Account" asp-action="SignOut">Log Out</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="#">Help</a></li>
@@ -63,7 +63,7 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-    
+
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>

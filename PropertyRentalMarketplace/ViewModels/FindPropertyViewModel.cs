@@ -6,5 +6,7 @@ namespace PropertyRentalMarketplace.ViewModels
     {
         public List<PropertyType> PropertyTypes { get; set; }
         public List<Property> InitialProperties { get; set; }
+
+        
     }
 }

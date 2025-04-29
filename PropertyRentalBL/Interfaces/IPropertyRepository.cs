@@ -28,6 +28,9 @@ namespace PropertyRentalBL.Interfaces
 
         public Task<double> GetStarRating(int propertyid);
 
-        
+        public  Task<IEnumerable<Property>> GetTopRating1();
+
+
+
     }
 }

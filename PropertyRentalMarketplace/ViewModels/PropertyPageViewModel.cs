@@ -7,5 +7,7 @@ namespace PropertyRentalMarketplace.ViewModels
         public IEnumerable<Property>? AllProperities { get; set; }
         public IEnumerable<Property>? FeaturedProperities { get; set; }
 
+        public IEnumerable<Property>? RatingProperty { get; set; }
+
     }
 }
