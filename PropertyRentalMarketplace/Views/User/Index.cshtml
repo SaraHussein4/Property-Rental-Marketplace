@@ -18,23 +18,117 @@
 
 
 <div class="container-fluid  LatestProperty-section">
-    <h2 class="LatestProperty-heading">Latest on the <br/> Property Listing </h2>
+    <h2 class="common-heading">Latest on the <br/> Property Listing </h2>
     <div class="row">
  
-        @foreach (var item in Model.AllProperities)
+        @foreach (var property in Model.AllProperities)
         {
-        <partial name="PartialViews/CardPartialView" model="item"/>
+
+            <div class="col-lg-3 col-6 mb-4 card-container" data-propertyId="@property.Id">
+
+                <div id="carousel_@property.Id" class="carousel carousel-dark slide" data-bs-ride="carousel">
+                    <div class="carousel-indicators">
+                        @for (int i = 0; i < property.Images.Count; i++)
+                        {
+                            <button type="button" data-bs-target="#carousel_@property.Id" data-bs-slide-to="@i"
+                                    class="@(i == 0 ? "active" : "")" aria-current="@(i == 0 ? "true" : "false")"
+                                    aria-label="Slide @(i + 1)"></button>
+                        }
+                    </div>
+                    <div class="carousel-inner">
+                        @for (int i = 0; i < property.Images.Count; i++)
+                        {
+                            var img = property.Images[i];
+                            var imagePath = img.Path.StartsWith("http") ? img.Path : Url.Content("~/images/" + img.Path);
+
+                            <div class="carousel-item @(i == 0 ? "active" : "") image-container" data-bs-interval="5000">
+                                <img src="@imagePath" class="d-block w-100" />
+                            </div>
+                        }
+                    </div>
+                    <div class="price">$ @property.FeesPerMonth USD</div>
+                    <div class="favourite"><i class="fa-regular fa-heart"></i></div>
+                </div>
+
+                <div class="body">
+                    <p class="card-title">@property.Name</p>
+                    <p class="card-address">@property.Address</p>
+
+
+                    <div class="row px-3 icons">
+                        <div class="col-lg-3 col-12 p-0 icon-container">
+                            <i class="fa-solid fa-bed "></i> <span class="m-1">@($"{@property.BedRooms}")</span>
+                        </div>
+                        <div class="col-lg-3 col-2 p-0 icon-container">
+                            <i class="fa-solid fa-sink "></i>  <span class="m-1">@($"{@property.BathRooms}")</span>
+                        </div>
+                        <div class="col-lg-3 col-2 p-0 icon-container">
+                            <i class="fa-solid fa-car "></i> <span class="m-1">@($"{@property.GarageSlots}")</span>
+                        </div>
+                        <div class="col-lg-3 col-2 p-0 icon-container">
+                            <i class="fa-solid fa-paw "></i> <span class="m-1">@($"{@property.BetsAllowd}")</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @* <partial name="PartialViews/CardPartialView" model="item"/> *@
         }
     </div>
 </div>
 
 
-<div class="container-fluid  LatestProperty-section">
-    <h2 class="FeaturedProperty-heading">Featured Properties<br/>on our Listing</h2>
+<div class="container-fluid  FeaturedProperty-section">
+    <h2 class="common-heading">Featured Properties<br/>on our Listing</h2>
     <div class="row">
-        @foreach (var item in Model.FeaturedProperities)
+        @foreach (var property in Model.FeaturedProperities)
         {
-            <partial name="PartialViews/CardPartialView" model="item" />
+            <div class="col-lg-3 col-6 mb-4 card-container" data-propertyId="@property.Id">
+
+                <div id="featured_@property.Id" class="carousel carousel-dark slide" data-bs-ride="carousel">
+                    <div class="carousel-indicators">
+                        @for (int i = 0; i < property.Images.Count; i++)
+                        {
+                            <button type="button" data-bs-target="#featured_@property.Id" data-bs-slide-to="@i"
+                                    class="@(i == 0 ? "active" : "")" aria-current="@(i == 0 ? "true" : "false")"
+                                    aria-label="Slide @(i + 1)"></button>
+                        }
+                    </div>
+                    <div class="carousel-inner">
+                        @for (int i = 0; i < property.Images.Count; i++)
+                        {
+                            var img = property.Images[i];
+                            var imagePath = img.Path.StartsWith("http") ? img.Path : Url.Content("~/images/" + img.Path);
+
+                            <div class="carousel-item @(i == 0 ? "active" : "") image-container" data-bs-interval="5000">
+                                <img src="@imagePath" class="d-block w-100" />
+                            </div>
+                        }
+                    </div>
+                    <div class="price">$ @property.FeesPerMonth USD</div>
+                    <div class="favourite"><i class="fa-regular fa-heart"></i></div>
+                </div>
+
+                <div class="body">
+                    <p class="card-title">@property.Name</p>
+                    <p class="card-address">@property.Address</p>
+
+
+                    <div class="row px-3 icons">
+                        <div class="col-lg-3 col-12 p-0 icon-container">
+                            <i class="fa-solid fa-bed "></i> <span class="m-1">@($"{@property.BedRooms}")</span>
+                        </div>
+                        <div class="col-lg-3 col-2 p-0 icon-container">
+                            <i class="fa-solid fa-sink "></i>  <span class="m-1">@($"{@property.BathRooms}")</span>
+                        </div>
+                        <div class="col-lg-3 col-2 p-0 icon-container">
+                            <i class="fa-solid fa-car "></i> <span class="m-1">@($"{@property.GarageSlots}")</span>
+                        </div>
+                        <div class="col-lg-3 col-2 p-0 icon-container">
+                            <i class="fa-solid fa-paw "></i> <span class="m-1">@($"{@property.BetsAllowd}")</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
         }
     </div>
 </div>
@@ -54,8 +148,8 @@
 
 
 
-<div class="container-fluid  LatestProperty-section">
-    <h2 class="FeaturedProperty-heading">Top Rated<br />Properties</h2>
+<div class="container-fluid  FeaturedProperty-section">
+    <h2 class="common-heading">Top Rated<br />Properties</h2>
     <div class="row">
         @foreach (var item in Model.RatingProperty)
         {
@@ -99,7 +193,10 @@
                  </div>
                    
             </div>
-
         }
     </div>
 </div>
+
+@section Scripts {
+    <script src="~/js/user/index.js"></script>
+}

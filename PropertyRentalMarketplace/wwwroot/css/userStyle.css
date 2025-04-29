@@ -2,26 +2,107 @@
     margin-top:60px;
     width:80%;
 }
-.LatestProperty-heading {
-    font-family: Montserrat ;
+.common-heading {
+    font-family: Montserrat;
     position: relative;
     margin-bottom: 30px;
-    width:339px;
-    height:103px;
-    font-weight:700;
-    font-size:40px;
+/*    width: 339px;*/
+/*    height: 103px;*/
+    font-weight: 700;
+    font-size: 40px;
 }
-    .LatestProperty-heading::after, .FeaturedProperty-heading::after {
-        content: "";
-        position: absolute;
-        top: 105px;
-        left: 0px;
-        bottom: 0px;
-        right: 0px;
-        width: 130px;
-        height: 3px;
-        background-color: black;
+.common-heading::after{
+    content: "";
+    position: absolute;
+    top: 105px;
+    left: 0px;
+    bottom: 0px;
+    right: 0px;
+    width: 130px;
+    height: 3px;
+    background-color: black;
+}
+/*featured Carda*/
+
+.FeaturedProperty-section {
+    margin-top: 60px;
+    width: 80%;
+}
+.FeaturedProperty-section .image-container {
+    border-radius: 10px;
+    margin-bottom: 15px;
+    overflow: hidden;
+}
+
+    .FeaturedProperty-section .image-container img {
+        background-size: cover;
+        height: 340px;
     }
+
+.FeaturedProperty-section .card-title {
+    font-size: 18px;
+    color: #484848;
+    font-weight: bold;
+}
+
+.FeaturedProperty-section .card-address {
+    font-size: 14px;
+    color: #9A9A9A;
+    font-weight: 600;
+}
+
+.FeaturedProperty-section .icons {
+    color: #484848;
+}
+
+.FeaturedProperty-section .icon-container {
+    width: 55px;
+}
+
+.FeaturedProperty-section .card-container .body {
+    cursor: pointer;
+}
+
+.FeaturedProperty-section .favourite {
+    cursor: pointer;
+    font-size: 35px;
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-weight: 300;
+}
+
+.FeaturedProperty-section .price {
+    color: white;
+    font-size: 18px;
+    font-weight: 600;
+    position: absolute;
+    bottom: 30px;
+    margin-left: 20px;
+}
+
+.FeaturedProperty-section .carousel-indicators {
+    justify-content: right !important;
+    margin-right: 20px;
+    margin-bottom: 30px;
+}
+
+    .FeaturedProperty-section .carousel-indicators [data-bs-target] {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background-color: #000; /* or customize */
+        opacity: 0.5;
+        transition: opacity 0.3s ease;
+        /* margin-right: 20px; */
+    }
+
+    .FeaturedProperty-section .carousel-indicators .active {
+        opacity: 1;
+        background-color: #0d6efd; /* Bootstrap primary or any color */
+    }
+
+/*Latest Carda*/
 
 .carousel-dark .carousel-indicators [data-bs-target] {
     background-color: #ffffff;
