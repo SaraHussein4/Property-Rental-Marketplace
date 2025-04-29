@@ -111,6 +111,7 @@ namespace PropertyRentalMarketplace.Controllers
             try
             {
                 // إضافة العقار إلى المفضلة
+
                 await _favouriteRepository1.AddToFavourite(userId, propertyId);
 
                 // إرسال استجابة ناجحة
@@ -126,45 +127,6 @@ namespace PropertyRentalMarketplace.Controllers
         //{
         //    await _favouriteRepository.AddToFavourite(userid, propid);
         //    return View("AddToFavourite");
-        //}
-        #endregion
-        #region remove from  favourite
-        //public async Task<IActionResult> RemoveFromFavourite(string userid, int propid)
-        //{
-        //    await _favouriteRepository.AddToFavourite(userid, propid);
-        //    return RedirectToAction("AddToFavourite");
-        //}
-        #endregion
-
-        #region add to favourite
-        [HttpPost]
-        public async Task<IActionResult> AddToFavourite(string userId, int propertyId)
-        {
-            try
-            {
-                // إضافة العقار إلى المفضلة
-                await _favouriteRepository.AddToFavourite(userId, propertyId);
-
-                // إرسال استجابة ناجحة
-                return Json(new { success = true });
-            }
-            catch (Exception ex)
-            {
-                // في حالة حدوث خطأ
-                return Json(new { success = false, message = ex.Message });
-            }
-        }
-        //public async Task<IActionResult> AddToFavourite(string userid,int propid)
-        //{
-        //    await _favouriteRepository.AddToFavourite(userid, propid);
-        //    return View("AddToFavourite");
-        //}
-        #endregion
-        #region remove from  favourite
-        //public async Task<IActionResult> RemoveFromFavourite(string userid, int propid)
-        //{
-        //    await _favouriteRepository.AddToFavourite(userid, propid);
-        //    return RedirectToAction("AddToFavourite");
         //}
         #endregion
 
