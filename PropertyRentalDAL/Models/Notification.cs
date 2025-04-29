@@ -13,11 +13,14 @@ namespace PropertyRentalDAL.Models
         public string Title { get; set; }
         public string Content { get; set; }
         public DateTime CreatedAt { get; set; }
-
+        public string type { get; set; }
+        public bool IsReaded { get; set; }
         // Foreign Key
         public string UserId { get; set; }
+        public int? BookingId { get; set; }
 
         // Navigation Property
         public virtual User User { get; set; } //
+        public virtual Booking Booking { get; set; }
     }
 }

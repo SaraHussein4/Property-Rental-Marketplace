@@ -17,7 +17,7 @@ namespace PropertyRentalMarketplace.Controllers
 {
 
  
-    [Authorize(Roles = AppRoles.User)]
+    //[Authorize(Roles = AppRoles.User)]
     public class UserController : Controller
     {
         // IUserRepository
@@ -30,12 +30,17 @@ namespace PropertyRentalMarketplace.Controllers
         private readonly ICountryRepository _countryRepository;
         private readonly IFavouriteRepository _favouriteRepository1;
         private readonly IPropertyTypeRepository _propertyTypeRepository;
+        private readonly INotificationRepository _notificationRepository;
+        private readonly IRatingRepository _ratingRepository;
+
+
         public UserController(IPropertyRepository propertyRepository
              ,IImageRepository imageRepository 
             ,IUserRepository userRepository ,IAmenityRepository amenityRepository
             ,IPropertyAmenityRepository propertyAmenityRepository
             ,IServiceRepository serviceRepository ,ICountryRepository countryRepository
-            ,IFavouriteRepository favouriteRepository1 , IPropertyTypeRepository propertyTypeRepository)    
+            ,IFavouriteRepository favouriteRepository1 , IPropertyTypeRepository propertyTypeRepository
+            , INotificationRepository notificationRepository, IRatingRepository ratingRepository)    
         {
             _propertyRepository = propertyRepository;
             _imageRepository = imageRepository;
@@ -46,6 +51,8 @@ namespace PropertyRentalMarketplace.Controllers
             _countryRepository = countryRepository;
             _favouriteRepository1 = favouriteRepository1;
             _propertyTypeRepository = propertyTypeRepository;
+            _notificationRepository = notificationRepository;
+            _ratingRepository = ratingRepository;
         }
         #region index
         public async Task<IActionResult> Index()
@@ -111,7 +118,6 @@ namespace PropertyRentalMarketplace.Controllers
             try
             {
                 // إضافة العقار إلى المفضلة
-
                 await _favouriteRepository1.AddToFavourite(userId, propertyId);
 
                 // إرسال استجابة ناجحة
@@ -123,10 +129,37 @@ namespace PropertyRentalMarketplace.Controllers
                 return Json(new { success = false, message = ex.Message });
             }
         }
+        #endregion
+
+        #region add to favourite
+        [HttpPost]
+        //public async Task<IActionResult> AddToFavourite(string userId, int propertyId)
+        //{
+        //    try
+        //    {
+        //        // إضافة العقار إلى المفضلة
+        //        await _favouriteRepository.AddToFavourite(userId, propertyId);
+
+        //        // إرسال استجابة ناجحة
+        //        return Json(new { success = true });
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        // في حالة حدوث خطأ
+        //        return Json(new { success = false, message = ex.Message });
+        //    }
+        //}
         //public async Task<IActionResult> AddToFavourite(string userid,int propid)
         //{
         //    await _favouriteRepository.AddToFavourite(userid, propid);
         //    return View("AddToFavourite");
+        //}
+        #endregion
+        #region remove from  favourite
+        //public async Task<IActionResult> RemoveFromFavourite(string userid, int propid)
+        //{
+        //    await _favouriteRepository.AddToFavourite(userid, propid);
+        //    return RedirectToAction("AddToFavourite");
         //}
         #endregion
 
@@ -194,5 +227,60 @@ namespace PropertyRentalMarketplace.Controllers
                 return StatusCode(500, new { message = ex.Message });
             }
         }
+        [HttpGet]
+        public async Task<IActionResult> Notification()
+        {
+            List<Notification> notifications = await _notificationRepository.GetNotificationsForUser("00083eec-d2e1-44f1-b6d1-e9d87946a505");
+            return View(notifications);
+        }
+
+
+
+        [HttpGet]
+        public async Task<IActionResult> Rate(int bookingId)
+        {
+            UserRateViewModel model = new UserRateViewModel
+            {
+                BookingId = bookingId
+            };
+            return View(model);
+        }
+
+
+        public async Task<IActionResult> Rate(UserRateViewModel model)
+        {
+            try
+            {
+                await _ratingRepository.BeginTransactionAsync();
+                Rating rating = new Rating
+                {
+                    OverallRating = model.OverallRating,
+                    AmenitiesRating = model.AmenitiesRating,
+                    CommunicationRating = model.CommunicationRating,
+                    ValueForMoneyRating = model.ValueForMoneyRating,
+                    HygieneRating = model.HygieneRating,
+                    LocationRating = model.LocationRating,
+                    Review = model.Review,
+                    CreatedAt = DateTime.Now,
+                    BookingId = model.BookingId,
+                    UserId = "00083eec-d2e1-44f1-b6d1-e9d87946a505"
+                };
+                await _ratingRepository.Add(rating);
+                await _ratingRepository.Save();
+
+                var notification = await _notificationRepository.GetNotificationForUserAndBooking("00083eec-d2e1-44f1-b6d1-e9d87946a505", model.BookingId);
+                notification.IsReaded = true;
+                await _notificationRepository.Save();
+
+                await _ratingRepository.CommitAsync();
+            }
+            catch (Exception ex) {
+                await _ratingRepository.RollbackAsync();
+            }
+
+            return RedirectToAction("notification");
+
+        }
+
     }
 }
