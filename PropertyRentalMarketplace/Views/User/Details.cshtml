@@ -10,8 +10,7 @@
 
     <link rel="stylesheet" href="~/css/userStyle.css">
 }
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
 
 <div class="hero-section" style=" background:url('@Url.Content("~/images/hero_bg_2.jpg")') no-repeat center;">
 
@@ -351,22 +350,22 @@
 
     @* ---------------------------- *@
 
-    <div id="map" style="height: 400px; width:50%"></div>
+    <div class="mb-3 col-md-8" id="map" style="height: 400px; width: 100%;" data-latitude="@Model.Latitude" data-longitude="@Model.Longitude"></div>
 
-    <script>
-        // إعداد الخريطة
-        var map = L.map('map').setView([@Model.Latitude, @Model.Longitude], 13);
+    @* <script> *@
+    @*     // إعداد الخريطة *@
+    @*     var map = L.map('map').setView([@Model.Latitude, @Model.Longitude], 13); *@
 
-        // إضافة طبقة الخريطة (مثلاً OpenStreetMap)
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        }).addTo(map);
+    @*     // إضافة طبقة الخريطة (مثلاً OpenStreetMap) *@
+    @*     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { *@
+    @*         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors' *@
+    @*     }).addTo(map); *@
 
-        // إضافة علامة لموقع معين (يمكنك تخصيصها حسب البيانات)
-        L.marker([@Model.Latitude, @Model.Longitude]).addTo(map)
-            .bindPopup("<b>@Model.Name</b><br/>@Model.Address")
-            .openPopup();
-    </script>
+    @*     // إضافة علامة لموقع معين (يمكنك تخصيصها حسب البيانات) *@
+    @*     L.marker([@Model.Latitude, @Model.Longitude]).addTo(map) *@
+    @*         .bindPopup("<b>@Model.Name</b><br/>@Model.Address") *@
+    @*         .openPopup(); *@
+    @* </script> *@
 
     <div class="container mt-5">
         <h2 class="mb-5" style="color: #484848 ;">Nearby Services</h2>
@@ -415,5 +414,64 @@
                 }
             });
         }
+
+     console.log("a;dkfja;d");
+
+    function initMap() {
+            // Initialize map
+                console.log(document.getElementById("map"));
+                    let defaultCoords = [document.getElementById("map").dataset.latitude, document.getElementById("map").dataset.longitude];
+            map = L.map('map').setView(defaultCoords, 5);
+
+            // Add tile layer (OpenStreetMap)
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+            }).addTo(map);
+
+            // Add initial marker
+            marker = L.marker(defaultCoords, { draggable: true }).addTo(map);
+
+            // Click event to move marker
+            map.on('click', function (e) {
+                const { lat, lng } = e.latlng;
+                marker.setLatLng([lat, lng]);
+                updateCoordinates(lat, lng);
+            });
+
+            // Marker drag event
+            marker.on('dragend', function () {
+                const { lat, lng } = marker.getLatLng();
+                updateCoordinates(lat, lng);
+            });
+        }
+
+    function updateMarkerPosition(lat, lng, zoomlevel = 5) {
+        marker.setLatLng([lat, lng]);
+        map.setView([lat, lng], zoomlevel);
+        updateCoordinates(lat, lng);
+    }
+
+    function updateCoordinates(lat, lng) {
+            // Update your form fields or display
+            document.getElementById('Latitude').value = lat;
+            document.getElementById('Longitude').value = lng;
+            console.log(`Coordinates: ${lat}, ${lng}`);
+       }
+
+            document.addEventListener('DOMContentLoaded', async function () {
+                initMap();
+            });
     </script>
-  
+
+
+
+    @* <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> *@
+    @* <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script> *@
+
+    @section Scripts {
+        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+        @* <script src="~/js/host/addProperty.js"></script> *@
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        @* <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script> *@
+        @* <script src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js"></script> *@
+    }
