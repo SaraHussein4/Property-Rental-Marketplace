@@ -98,6 +98,8 @@ namespace PropertyRentalMarketplace.Controllers
                 BetsAllowd = data.BetsAllowd,
                 GarageSlots = data.GarageSlots,
                 FeesPerMonth = data.FeesPerMonth,
+                Latitude = data.Location.Latitude,
+                Longitude = data.Location.Longitude,
                 ImagesHost = imghost,
                 Images = images,
                  PhoneNumber = data.Host.PhoneNumber,
