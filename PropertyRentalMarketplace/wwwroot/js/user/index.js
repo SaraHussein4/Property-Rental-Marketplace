@@ -24,4 +24,17 @@
             window.location.href = `/User/Details/${propertyId}`;
         });
     });
+
+
+    // Get all card containers
+    const topratedcardContainers = document.querySelectorAll('.TopReatedProperty-section .card-container');
+
+    // Add click event to each card
+    topratedcardContainers.forEach(card => {
+        card.addEventListener('click', function (e) {
+            const propertyId = card.dataset.propertyid;
+            console.log(propertyId)
+            window.location.href = `/User/Details/${propertyId}`;
+        });
+    });
 });
