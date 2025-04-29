@@ -67,7 +67,7 @@ namespace PropertyRentalMarketplace.Controllers
             return View(model);
         }
         #endregion
-        #region details
+        #region detailspublic async Task<string> getimagehost(int propertyid)
         public async Task<IActionResult> Details(int id, PropertyViewModel propertyViewModel ,UserProfileEditViewModel userProfileEditViewModel)
         {
             var data = await _propertyRepository.GetById(id);
@@ -129,18 +129,6 @@ namespace PropertyRentalMarketplace.Controllers
                 return Json(new { success = false, message = ex.Message });
             }
         }
-        //public async Task<IActionResult> AddToFavourite(string userid,int propid)
-        //{
-        //    await _favouriteRepository.AddToFavourite(userid, propid);
-        //    return View("AddToFavourite");
-        //}
-        #endregion
-        #region remove from  favourite
-        //public async Task<IActionResult> RemoveFromFavourite(string userid, int propid)
-        //{
-        //    await _favouriteRepository.AddToFavourite(userid, propid);
-        //    return RedirectToAction("AddToFavourite");
-        //}
         #endregion
 
         #region add to favourite
