@@ -34,19 +34,20 @@
 
     <p class="p-card">@Model.Name</p>
     <p class="me-1">@Model.Address</p>
-        <a asp-controller="User" asp-action="Details" asp-route-id="@Model.Id">Details</a>
+    <a asp-controller="User" asp-action="Details" asp-route-id="@Model.Id" class="btn btn-outline-primary btn-sm mb-3">Details</a>
+
 
     <div class="row px-3">
-        <div class="col-lg-3 col-2 p-0" style="width:19%">
+        <div class="col-lg-3 col-12 p-0" style="width:22%">
             <i class="fa-solid fa-bed " ></i> <span class="m-2">@($"{@Model.BedRooms} ")</span>
         </div>
-        <div class="col-lg-3 col-2 p-0" style="width:19%">
+        <div class="col-lg-3 col-2 p-0" style="width:22%">
             <i class="fa-solid fa-sink " ></i>  <span class="m-2">@($"{@Model.BathRooms} ")</span>
         </div>
-        <div class="col-lg-3 col-2 p-0" style="width:19%">
+        <div class="col-lg-3 col-2 p-0" style="width:22%">
             <i class="fa-solid fa-car " ></i> <span class="m-2">@($"{@Model.GarageSlots} ")</span>
         </div>
-        <div class="col-lg-3 col-2 p-0" style="width:19%">
+        <div class="col-lg-3 col-2 p-0" style="width:22%">
             <i class="fa-solid fa-paw " ></i> <span class="m-2">@($"{@Model.BetsAllowd} ")</span>
         </div>
     </div>
