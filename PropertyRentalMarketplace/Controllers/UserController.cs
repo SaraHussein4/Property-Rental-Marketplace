@@ -32,7 +32,7 @@ namespace PropertyRentalMarketplace.Controllers
         private readonly IPropertyTypeRepository _propertyTypeRepository;
         private readonly INotificationRepository _notificationRepository;
         private readonly IRatingRepository _ratingRepository;
-
+        private readonly IBookingRepository _bookingRepository;
 
         public UserController(IPropertyRepository propertyRepository
              ,IImageRepository imageRepository 
@@ -40,7 +40,7 @@ namespace PropertyRentalMarketplace.Controllers
             ,IPropertyAmenityRepository propertyAmenityRepository
             ,IServiceRepository serviceRepository ,ICountryRepository countryRepository
             ,IFavouriteRepository favouriteRepository1 , IPropertyTypeRepository propertyTypeRepository
-            , INotificationRepository notificationRepository, IRatingRepository ratingRepository)    
+            , INotificationRepository notificationRepository, IRatingRepository ratingRepository, IBookingRepository bookingRepository)    
         {
             _propertyRepository = propertyRepository;
             _imageRepository = imageRepository;
@@ -53,6 +53,7 @@ namespace PropertyRentalMarketplace.Controllers
             _propertyTypeRepository = propertyTypeRepository;
             _notificationRepository = notificationRepository;
             _ratingRepository = ratingRepository;
+            _bookingRepository = bookingRepository;
         }
         #region index
         public async Task<IActionResult> Index()
@@ -268,9 +269,15 @@ namespace PropertyRentalMarketplace.Controllers
                 await _ratingRepository.Add(rating);
                 await _ratingRepository.Save();
 
+
                 var notification = await _notificationRepository.GetNotificationForUserAndBooking("00083eec-d2e1-44f1-b6d1-e9d87946a505", model.BookingId);
                 notification.IsReaded = true;
                 await _notificationRepository.Save();
+
+                Booking booking = await _bookingRepository.GetById(rating.BookingId);
+                Property property = await _propertyRepository.GetById(booking.PropertyId);
+                property.StarRating = await _propertyRepository.GetStarRating(property.Id);
+                await _propertyRepository.Save();
 
                 await _ratingRepository.CommitAsync();
             }
