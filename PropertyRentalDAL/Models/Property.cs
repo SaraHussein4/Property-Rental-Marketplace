@@ -26,6 +26,8 @@ namespace PropertyRentalDAL.Models
         public DateTime UnListDate { get; set; }
         public ListingType ListingType { get; set; }
 
+        public double StarRating {  get; set; }
+
         // Foreign Key
         public int PropertyTypeId { get; set; }
         public int LocationId { get; set; }
