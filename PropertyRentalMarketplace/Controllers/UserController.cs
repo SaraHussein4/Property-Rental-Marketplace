@@ -60,10 +60,13 @@ namespace PropertyRentalMarketplace.Controllers
         {
             var allProperities =(await _propertyRepository.GetAll()).OrderByDescending(p=>p.ListedAt).Take(4).ToList();
             var featuredModel = await _propertyRepository.GetAllFeatured();
+            var topRating = (await _propertyRepository.GetTopRating1()).Take(4).ToList();
             var model = new PropertyPageViewModel
             {
                 AllProperities = allProperities,
-                FeaturedProperities = featuredModel
+                FeaturedProperities = featuredModel,
+                RatingProperty = topRating,
+
             };
             return View(model);
         }
