@@ -121,52 +121,91 @@
 
 
 
-<div class="container-fluid  FeaturedProperty-section">
+<div class="container-fluid  TopReatedProperty-section">
     <h2 class="common-heading">Top Rated<br />Properties</h2>
     <div class="row">
-        @foreach (var item in Model.RatingProperty)
+        @foreach (var property in Model.RatingProperty)
         {
-            
-            var carouselId = "carousel_" + item.Id;
-            var images = item.Images.ToList();
-            <div class="col-lg-3 col-6 mb-4" >
 
-                <div id="@carouselId" class="carousel carousel-dark slide" data-bs-ride="carousel">
-                    <div class="carousel-indicators">
-                        @for (int i = 0; i < images.Count; i++)
-                        {
-                            <button type="button" data-bs-target="#@carouselId" data-bs-slide-to="@i"
-                                    class="@(i == 0 ? "active" : "")" aria-current="@(i == 0 ? "true" : "false")" aria-label="Slide @(i + 1)">
-                            </button>
-                        }
-                    </div>
-                    <div class="carousel-inner">
-                        @for (int i = 0; i < images.Count; i++)
-                        {
-                            var img = images[i];
-                            var imagePath = img.Path.StartsWith("http") ? img.Path : Url.Content("~/images/" + img.Path);
+            <div class="col-lg-3 col-6 mb-4 card-container" data-propertyId="@property.Id">
 
-                            <div class="carousel-item @(i == 0 ? "active" : "")" data-bs-interval="5000">
-                                <img src="@imagePath" class="d-block w-100" style="max-height: 200px;" />
-                            </div>
-                        }
+                @{
+                    var primaryImage = property.Images.FirstOrDefault(img => img.IsPrimary);
+                    if (primaryImage != null)
+                    {
+                        var imagePath = primaryImage.Path.StartsWith("http")
+                        ? primaryImage.Path
+                        : Url.Content("~/images/" + primaryImage.Path);
+
+                        <div class="image-container">
+                            <img src="@imagePath" class="d-block w-100" />
+                            <div class="favourite"><i class="fa-regular fa-heart"></i></div>
+                        </div>
+                    }
+                }
+
+                <div class="body">
+                    <div class="host-img rounded-circle overflow-hidden">
+                        <img src="~/images/@property.Host.Image" class="w-100 h-100 object-fit-cover" alt="Profile" />
                     </div>
+
+                    <p class="card-title">@property.Name</p>
+                    <p class="card-address">@property.Address</p>
                 </div>
-
-
-                <p class="p-card">@item.Name</p>
-                <p class="me-1">@item.Address</p>
-                <a asp-controller="User" asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-primary btn-sm mb-3" style="display:block;">Details</a>
-                <div class="topRatedDiv"> 
-                  <i class="fa-solid fa-star@(item.StarRating >= 1 ? "fa-solid fa-star text-white" : "fa-regular fa-star")"></i> 
-                     <i class="fa-solid fa-star @(item.StarRating >= 2 ? "fa-solid fa-star text-white" : "fa-regular fa-star")"></i> 
-                     <i class=" @(item.StarRating >= 3 ? "fa-solid fa-star text-white" : "fa-regular fa-star")"></i> 
-                     <i class=" @(item.StarRating >= 4 ? "fa-solid fa-star text-white" : "fa-regular fa-star")"></i> 
-                     <i class=" @(item.StarRating >= 5 ? "fa-solid fa-star text-white" : "fa-regular fa-star")"></i> 
-                 </div>
-                   
+                <div class="topRatedDiv">  
+                    <i class="@(property.StarRating >= 1 ? "fa-solid fa-star" : "fa-regular fa-star")"></i>  
+                    <i class="@(property.StarRating >= 2 ? "fa-solid fa-star" : "fa-regular fa-star")"></i>
+                    <i class="@(property.StarRating >= 3 ? "fa-solid fa-star" : "fa-regular fa-star")"></i>
+                    <i class="@(property.StarRating >= 4 ? "fa-solid fa-star" : "fa-regular fa-star")"></i>
+                    <i class="@(property.StarRating >= 5 ? "fa-solid fa-star" : "fa-regular fa-star")"></i>
+                </div> 
             </div>
         }
+
+
+        @* @foreach (var item in Model.RatingProperty) *@
+        @* { *@
+            
+        @*     var carouselId = "carousel_" + item.Id; *@
+        @*     var images = item.Images.ToList(); *@
+        @*     <div class="col-lg-3 col-6 mb-4" > *@
+
+        @*         <div id="@carouselId" class="carousel carousel-dark slide" data-bs-ride="carousel"> *@
+        @*             <div class="carousel-indicators"> *@
+        @*                 @for (int i = 0; i < images.Count; i++) *@
+        @*                 { *@
+        @*                     <button type="button" data-bs-target="#@carouselId" data-bs-slide-to="@i" *@
+        @*                             class="@(i == 0 ? "active" : "")" aria-current="@(i == 0 ? "true" : "false")" aria-label="Slide @(i + 1)"> *@
+        @*                     </button> *@
+        @*                 } *@
+        @*             </div> *@
+        @*             <div class="carousel-inner"> *@
+        @*                 @for (int i = 0; i < images.Count; i++) *@
+        @*                 { *@
+        @*                     var img = images[i]; *@
+        @*                     var imagePath = img.Path.StartsWith("http") ? img.Path : Url.Content("~/images/" + img.Path); *@
+
+        @*                     <div class="carousel-item @(i == 0 ? "active" : "")" data-bs-interval="5000"> *@
+        @*                         <img src="@imagePath" class="d-block w-100" style="max-height: 200px;" /> *@
+        @*                     </div> *@
+        @*                 } *@
+        @*             </div> *@
+        @*         </div> *@
+
+
+        @*         <p class="p-card">@item.Name</p> *@
+        @*         <p class="me-1">@item.Address</p> *@
+        @*         <a asp-controller="User" asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-primary btn-sm mb-3" style="display:block;">Details</a> *@
+        @*         <div class="topRatedDiv">  *@
+        @*           <i class="fa-solid fa-star@(item.StarRating >= 1 ? "fa-solid fa-star text-white" : "fa-regular fa-star")"></i>  *@
+        @*              <i class="fa-solid fa-star @(item.StarRating >= 2 ? "fa-solid fa-star text-white" : "fa-regular fa-star")"></i>  *@
+        @*              <i class=" @(item.StarRating >= 3 ? "fa-solid fa-star text-white" : "fa-regular fa-star")"></i>  *@
+        @*              <i class=" @(item.StarRating >= 4 ? "fa-solid fa-star text-white" : "fa-regular fa-star")"></i>  *@
+        @*              <i class=" @(item.StarRating >= 5 ? "fa-solid fa-star text-white" : "fa-regular fa-star")"></i>  *@
+        @*          </div> *@
+                   
+        @*     </div> *@
+        @* } *@
     </div>
 </div>
 

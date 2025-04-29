@@ -24,59 +24,64 @@
 }
 
 /*latest card*/
-.LatestProperty-section .card-container{
+.TopReatedProperty-section .card-container,
+.LatestProperty-section .card-container {
     border-radius: 10px;
     position: relative;
     cursor: pointer;
 }
-.LatestProperty-section .image-container{
+.TopReatedProperty-section .image-container,
+.LatestProperty-section .image-container {
     position: relative;
 }
-
+.TopReatedProperty-section .body,
 .LatestProperty-section .body {
     position: absolute;
     bottom: 20px;
     margin: 0px 20px;
 }
-
+.TopReatedProperty-section .card-title,
 .LatestProperty-section .card-title {
     font-size: 18px;
     color: white;
     font-weight: bold;
 }
-
-.host-img{
+.TopReatedProperty-section .host-img,
+.LatestProperty-section .host-img {
     width: 60px;
     height: 60px;
     margin-bottom: 7px;
 }
-
+.TopReatedProperty-section .card-address,
 .LatestProperty-section .card-address {
     font-size: 14px;
     color: #e1e1e1;
     font-weight: 600;
 }
-
 /*latest card*/
+
 /*featured Carda*/
+.TopReatedProperty-section, /*TopRated*/
 .LatestProperty-section, /*latest*/
 .FeaturedProperty-section {
     margin-top: 60px;
     width: 80%;
 }
+    .TopReatedProperty-section .image-container, /*Top Rated*/
     .LatestProperty-section .image-container, /*latest*/
     .FeaturedProperty-section .image-container {
         border-radius: 10px;
         margin-bottom: 15px;
         overflow: hidden;
     }
-    .LatestProperty-section .image-container img, /*latest*/
-    .FeaturedProperty-section .image-container img {
-        width: 100%; /* Ensure full container width */
-        height: 340px; /* Fixed height as needed */
-        object-fit: cover; /* Prevents stretching (crops if needed) */
-        object-position: center; /* Centers the image in the frame */
-    }
+        .TopReatedProperty-section .image-container img, /*Top Rated*/
+        .LatestProperty-section .image-container img, /*latest*/
+        .FeaturedProperty-section .image-container img {
+            width: 100%; /* Ensure full container width */
+            height: 340px; /* Fixed height as needed */
+            object-fit: cover; /* Prevents stretching (crops if needed) */
+            object-position: center; /* Centers the image in the frame */
+        }
 
 .FeaturedProperty-section .card-title {
     font-size: 18px;
@@ -102,16 +107,16 @@
 .FeaturedProperty-section .card-container .body {
     cursor: pointer;
 }
-
-.LatestProperty-section .favourite, /*latest*/
-.FeaturedProperty-section .favourite {
-    cursor: pointer;
-    font-size: 35px;
-    position: absolute;
-    top: 15px;
-    right: 20px;
-    font-weight: 300;
-}
+    .TopReatedProperty-section .favourite, /*Top Rated*/
+    .LatestProperty-section .favourite, /*latest*/
+    .FeaturedProperty-section .favourite {
+        cursor: pointer;
+        font-size: 35px;
+        position: absolute;
+        top: 15px;
+        right: 20px;
+        font-weight: 300;
+    }
 
 .FeaturedProperty-section .price {
     color: white;
@@ -132,22 +137,29 @@
     width: 10px;
     height: 10px;
     border-radius: 50%;
-    background-color: #000; /* or customize */
+    background-color: #000;
     opacity: 0.5;
     transition: opacity 0.3s ease;
-    /* margin-right: 20px; */
 }
 
 .FeaturedProperty-section .carousel-indicators .active {
     opacity: 1;
-    background-color: #0d6efd; /* Bootstrap primary or any color */
-}
+    background-color: #0d6efd; 
 
+}
 /*featured Carda*/
 
-.carousel-dark .carousel-indicators [data-bs-target] {
-    background-color: #ffffff;
-}
+/*TopReated Card*/
+    .TopReatedProperty-section .topRatedDiv {
+        position: absolute;
+        top: 22px;
+        left: 35px;
+        color: rgb(222, 121, 33);
+    }
+    /*TopReated Card*/
+    .carousel-dark .carousel-indicators [data-bs-target] {
+        background-color: #ffffff;
+    }
 
 .FeaturedProperty-heading{
     font-family: Montserrat;
