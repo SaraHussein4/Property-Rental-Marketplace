@@ -52,9 +52,7 @@ namespace PropertyBL.Repositories
         {
             return await context.Set<T>().FindAsync(id);
         }
-        
 
-        
         public async Task<int> Save()
         {
             return await context.SaveChangesAsync();

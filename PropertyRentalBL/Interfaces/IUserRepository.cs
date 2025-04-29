@@ -7,9 +7,12 @@ using System.Threading.Tasks;
 
 namespace PropertyBL.Interfaces
 {
+    
     public interface IUserRepository: IGenericRepository<User>
     {
-        //public Task<Property> GetImgHostById(int id); //
-        //public Task<string> getimagehost(int propertyid); //
+
+        public Task<bool> CheckUserByPhone(string phone);
+        public Task<User> GetUserByPhone(string phone);
+
     }
 }

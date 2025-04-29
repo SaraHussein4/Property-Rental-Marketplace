@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PropertyDAL.Contexts;
 
@@ -11,9 +12,11 @@ using PropertyDAL.Contexts;
 namespace PropertyRentalDAL.Migrations
 {
     [DbContext(typeof(PropertyDbContext))]
-    partial class PropertyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250423000121_v5")]
+    partial class v5
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -318,10 +321,6 @@ namespace PropertyRentalDAL.Migrations
                     b.Property<decimal>("FeePerMonth")
                         .HasColumnType("decimal(12,2)");
 
-                    b.Property<string>("HostId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<bool>("IsActive")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
@@ -338,8 +337,6 @@ namespace PropertyRentalDAL.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("HostId");
 
                     b.HasIndex("PropertyId");
 
@@ -740,12 +737,6 @@ namespace PropertyRentalDAL.Migrations
 
             modelBuilder.Entity("PropertyRentalDAL.Models.Booking", b =>
                 {
-                    b.HasOne("PropertyDAL.Models.User", "Host")
-                        .WithMany("BookingsHost")
-                        .HasForeignKey("HostId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("PropertyRentalDAL.Models.Property", "Property")
                         .WithMany("Bookings")
                         .HasForeignKey("PropertyId")
@@ -753,12 +744,10 @@ namespace PropertyRentalDAL.Migrations
                         .IsRequired();
 
                     b.HasOne("PropertyDAL.Models.User", "User")
-                        .WithMany("BookingsUser")
+                        .WithMany("Bookings")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.Navigation("Host");
 
                     b.Navigation("Property");
 
@@ -876,9 +865,7 @@ namespace PropertyRentalDAL.Migrations
 
             modelBuilder.Entity("PropertyDAL.Models.User", b =>
                 {
-                    b.Navigation("BookingsHost");
-
-                    b.Navigation("BookingsUser");
+                    b.Navigation("Bookings");
 
                     b.Navigation("Favourites");
 

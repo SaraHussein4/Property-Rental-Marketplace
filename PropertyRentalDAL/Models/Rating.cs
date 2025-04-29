@@ -15,6 +15,9 @@ namespace PropertyRentalDAL.Models
         public int ValueForMoneyRating { get; set; }
         public int HygieneRating { get; set; }
         public int LocationRating { get; set; }
+        
+        // Foreign Key
+        public int BookingId { get; set; }
 
         // Navigation Property
         public virtual Booking Booking { get; set; } //

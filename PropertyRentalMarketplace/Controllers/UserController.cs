@@ -11,16 +11,17 @@ using PropertyRentalDAL.Models;
 using PropertyRentalMarketplace.ViewModels;
 using System.Security.Claims;
 using static System.Net.Mime.MediaTypeNames;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace PropertyRentalMarketplace.Controllers
 {
 
-    //[Authorize]
+ 
+    [Authorize(Roles = AppRoles.User)]
     public class UserController : Controller
     {
         // IUserRepository
         private readonly IPropertyRepository _propertyRepository;
-        private readonly IFavouriteRepository _favouriteRepository;
         private readonly IImageRepository _imageRepository;
         private readonly IUserRepository _userRepository;
         private readonly IAmenityRepository _amenityRepository;
@@ -28,16 +29,15 @@ namespace PropertyRentalMarketplace.Controllers
         private readonly IServiceRepository _serviceRepository;
         private readonly ICountryRepository _countryRepository;
         private readonly IFavouriteRepository _favouriteRepository1;
-
+        private readonly IPropertyTypeRepository _propertyTypeRepository;
         public UserController(IPropertyRepository propertyRepository
-            , IFavouriteRepository favouriteRepository ,IImageRepository imageRepository 
+             ,IImageRepository imageRepository 
             ,IUserRepository userRepository ,IAmenityRepository amenityRepository
             ,IPropertyAmenityRepository propertyAmenityRepository
             ,IServiceRepository serviceRepository ,ICountryRepository countryRepository
-            ,IFavouriteRepository favouriteRepository1)
+            ,IFavouriteRepository favouriteRepository1 , IPropertyTypeRepository propertyTypeRepository)    
         {
             _propertyRepository = propertyRepository;
-            _favouriteRepository = favouriteRepository;
             _imageRepository = imageRepository;
             _userRepository = userRepository;
             _amenityRepository = amenityRepository;
@@ -45,6 +45,7 @@ namespace PropertyRentalMarketplace.Controllers
             _serviceRepository = serviceRepository;
             _countryRepository = countryRepository;
             _favouriteRepository1 = favouriteRepository1;
+            _propertyTypeRepository = propertyTypeRepository;
         }
         #region index
         public async Task<IActionResult> Index()
@@ -102,6 +103,7 @@ namespace PropertyRentalMarketplace.Controllers
             return View("Details",model);
         }
         #endregion
+
         #region add to favourite
         [HttpPost]
         public async Task<IActionResult> AddToFavourite(string userId, int propertyId)
@@ -133,5 +135,70 @@ namespace PropertyRentalMarketplace.Controllers
         //    return RedirectToAction("AddToFavourite");
         //}
         #endregion
+
+        public async Task<IActionResult> FindProperty()
+        {
+            var types = (await _propertyTypeRepository.GetAll()).ToList();
+            var defaultId = types.FirstOrDefault()?.Id ?? 0;
+            var props = await _propertyRepository.GetPropertyTypeById(defaultId);
+
+            var model = new FindPropertyViewModel
+            {
+                PropertyTypes = types,
+                InitialProperties = props
+            };
+
+            return View(model);
+        }
+
+        public async Task<JsonResult> GetPropertiesByType(int typeId)
+        {
+            var props = await _propertyRepository.GetPropertyTypeById(typeId);
+            return Json(props.Select(p => new {
+                id = p.Id,
+                name = p.Name,
+                address = p.Address,
+                bedRooms = p.BedRooms,
+                bathRooms = p.BathRooms, // Fixed typo from your original code
+                petsAllowed = p.BetsAllowd,
+                garageSlots = p.GarageSlots,
+                images = p.Images.Select(i => new {
+                    path = i.Path.StartsWith("http") ? i.Path : $"/images/{i.Path}"
+                }).ToList()
+            }));
+        }
+
+
+
+        [HttpPost]
+        public async Task<IActionResult> GetFilteredProperties([FromBody] PropertyFilters filters)
+        {
+            try
+            {
+                // Implement your filtering logic here based on the filters object
+                var filteredProperties = await _propertyRepository.GetFilteredProperties(
+                    filters.TypeId,
+                    filters.PriceRanges,
+                    filters.Countries,
+                    filters.Bedrooms);
+
+                return Ok(filteredProperties.Select(p => new {
+                    id = p.Id,
+                    name = p.Name,
+                    address = p.Address,
+                    bedRooms = p.BedRooms,
+                    bathRooms = p.BathRooms,
+                    garageSlots = p.GarageSlots,
+                    petsAllowed = p.BetsAllowd,
+                    images = p.Images.Select(i => new {
+                        path = i.Path.StartsWith("http") ? i.Path : $"/images/{i.Path}"
+                    })
+                }));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = ex.Message });
+            }
+        }
     }
 }

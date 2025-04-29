@@ -14,23 +14,28 @@ namespace PropertyRentalMarketplace.Controllers
     {
         private readonly UserManager<User> userManager;
         private readonly SignInManager<User> signInManager;
+        private readonly RoleManager<IdentityRole> roleManager;
 
         public AccountController(UserManager<User> userManager ,
-            SignInManager<User> signInManager)
+            SignInManager<User> signInManager, RoleManager<IdentityRole> roleManager)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
+            this.roleManager = roleManager;
         }
 
         [HttpGet]
-        public IActionResult Register()
+        public IActionResult Register(string role)
         {
+            var allowedRoles = new[] { AppRoles.Host, AppRoles.User };
+            ViewBag.Role = allowedRoles.Contains(role) ? role : AppRoles.User;
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> Register(RegisterViewModel model)
+        public async Task<IActionResult> Register(RegisterViewModel model, string role)
         {
+            Console.WriteLine($"DEBUG: Received role parameter: {role}");
             if (ModelState.IsValid) {
                 var User = new User()
                 {
@@ -44,6 +49,14 @@ namespace PropertyRentalMarketplace.Controllers
            var Result = await userManager.CreateAsync(User , model.Password);
                 if (Result.Succeeded)
                 {
+                  
+                    if (!await roleManager.RoleExistsAsync(role))
+                    {
+                        await roleManager.CreateAsync(new IdentityRole(role));
+                    }
+                    await userManager.AddToRoleAsync(User, role);
+
+                    await signInManager.SignInAsync(User, isPersistent: false);
                     return RedirectToAction("Login");
                 }
                 else
@@ -90,30 +103,45 @@ namespace PropertyRentalMarketplace.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(LoginViewModel loginViewModel)
+        public async Task<IActionResult> Login(LoginViewModel model)
         {
-            if (ModelState.IsValid) { 
-              User userFromDb = await userManager.FindByEmailAsync(loginViewModel.Email);
-                if (userFromDb != null)
+            if (ModelState.IsValid)
+            {
+                var user = await userManager.FindByEmailAsync(model.Email);
+
+                if (user != null)
                 {
-                    bool found = await userManager.CheckPasswordAsync(userFromDb, loginViewModel.Password);
-                    if (found)
+                    var result = await signInManager.PasswordSignInAsync(
+                        user.UserName,
+                        model.Password,
+                        model.RememberMe,
+                        lockoutOnFailure: false);
+
+                    if (result.Succeeded)
                     {
-                     var LoginResult =   await signInManager.PasswordSignInAsync(userFromDb, loginViewModel.Password,loginViewModel.RememberMe,false);
-                        if (LoginResult.Succeeded)
+                      
+                        var roles = await userManager.GetRolesAsync(user);
+
+           
+                        if (roles.Contains(AppRoles.Admin))
+                        {
+                            return RedirectToAction("Index", "Admin");
+                        }
+                        else if (roles.Contains(AppRoles.Host))
+                        {
+                            return RedirectToAction("AddProperty", "Host");
+                        }
+                        else
                         {
                             return RedirectToAction("Index", "User");
                         }
                     }
-                    else
-                    {
-                        ModelState.AddModelError(string.Empty, "Password Is Incorrect");
-                    }
                 }
-                else
-                ModelState.AddModelError(string.Empty,"Email is not Exists");
+
+                ModelState.AddModelError(string.Empty, "Invalid login attempt");
             }
-            return View("Login",loginViewModel);
+
+            return View(model);
         }
         public new async Task<IActionResult> SignOut()
         {
