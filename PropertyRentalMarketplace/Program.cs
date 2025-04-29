@@ -36,7 +36,8 @@ namespace PropertyRentalMarketplace
             })
             .AddEntityFrameworkStores<PropertyDbContext>()
             .AddDefaultTokenProviders();
-
+            //
+           
             builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(Options =>
                 {

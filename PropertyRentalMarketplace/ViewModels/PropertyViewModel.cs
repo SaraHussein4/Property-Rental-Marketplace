@@ -39,7 +39,8 @@ namespace PropertyRentalMarketplace.ViewModels
         //services
         public List<Service> services { get; set; }
         //fav
-
+        public string CurrentUserId { get; set; }
+        public List<Favourite> favourites { get; set; }
         //map
 
         public double Latitude { get; set; }

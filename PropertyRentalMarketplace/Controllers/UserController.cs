@@ -12,12 +12,14 @@ using PropertyRentalMarketplace.ViewModels;
 using System.Security.Claims;
 using static System.Net.Mime.MediaTypeNames;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.Security.Claims;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace PropertyRentalMarketplace.Controllers
 {
 
  
-    [Authorize(Roles = AppRoles.User)]
+    //[Authorize(Roles = AppRoles.User)]
     public class UserController : Controller
     {
         // IUserRepository
@@ -73,6 +75,8 @@ namespace PropertyRentalMarketplace.Controllers
             var safeties = await _amenityRepository.GetSafetyById(id);
             var AllAmenities = await _amenityRepository.GetAllAmenitiesById(id);
             var allServices =await _serviceRepository.GetAllServicesById(id);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+           
             var model = new PropertyViewModel
             {
                 Property = data,
@@ -97,6 +101,7 @@ namespace PropertyRentalMarketplace.Controllers
                 amenities = AllAmenities.ToList(),
                 safeties = safeties.ToList(),
                 services=allServices.ToList(),
+                CurrentUserId = userId
             };
             
             
@@ -105,35 +110,49 @@ namespace PropertyRentalMarketplace.Controllers
         #endregion
 
         #region add to favourite
-        [HttpPost]
+        [HttpPost]  
         public async Task<IActionResult> AddToFavourite(string userId, int propertyId)
         {
+            if (string.IsNullOrEmpty(userId) || propertyId <= 0)
+            {
+                return Json(new { success = false, message = "المعطيات غير صحيحة" });
+            }
             try
             {
-                // إضافة العقار إلى المفضلة
-                await _favouriteRepository.AddToFavourite(userId, propertyId);
+                await _favouriteRepository1.AddToFavourite(userId, propertyId);
 
-                // إرسال استجابة ناجحة
                 return Json(new { success = true });
             }
             catch (Exception ex)
             {
-                // في حالة حدوث خطأ
                 return Json(new { success = false, message = ex.Message });
             }
         }
-        //public async Task<IActionResult> AddToFavourite(string userid,int propid)
-        //{
-        //    await _favouriteRepository.AddToFavourite(userid, propid);
-        //    return View("AddToFavourite");
-        //}
+        
+        public async Task<IActionResult> ShowFav( PropertyViewModel propertyViewModel)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var allfav = await _favouriteRepository1.getallfav(userId);
+            return View("ShowFav",allfav);
+        }
         #endregion
         #region remove from  favourite
-        //public async Task<IActionResult> RemoveFromFavourite(string userid, int propid)
-        //{
-        //    await _favouriteRepository.AddToFavourite(userid, propid);
-        //    return RedirectToAction("AddToFavourite");
-        //}
+        [HttpPost]
+        public async Task<IActionResult> RemoveFromFavourite(string userId, int propertyId)
+        {
+            try
+            {
+                await _favouriteRepository1.RemoveToFavourite(userId, propertyId);
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message });
+            }
+          
+        }
+
+
         #endregion
 
         public async Task<IActionResult> FindProperty()

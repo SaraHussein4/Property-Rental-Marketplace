@@ -6,6 +6,7 @@ using PropertyRentalDAL.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -22,22 +23,44 @@ namespace PropertyRentalBL.Repositories
         }
         public async Task AddToFavourite(string UId, int PropId)
         {
-            var favourute = new Favourite
+            var exist = await _context.Favourites.Where(w => w.UserId == UId && w.PropertyId == PropId).FirstOrDefaultAsync();
+            if (exist == null)
             {
-                UserId = UId,
-                PropertyId = PropId,
-            };
-            await _context.AddAsync(favourute);
-            await _context.SaveChangesAsync();
-        }
-        public async Task RemoveFromFavourite(string UId, int PropId)
-        {
-            var fav= await _context.Favourites.Where(w=>w.UserId == UId && w.PropertyId == PropId).FirstOrDefaultAsync();
-            if (fav != null)
-            {
-                 _context.Favourites.Remove(fav);
+                var favourute = new Favourite
+                {
+                    UserId = UId,
+                    PropertyId = PropId,
+                };
+                await _context.AddAsync(favourute);
                 await _context.SaveChangesAsync();
             }
         }
+        public async Task<List<Favourite>> getallfav(string id)
+        {
+            return await _context.Favourites.Where(w => w.UserId == id).ToListAsync();
+        }
+        public async Task RemoveToFavourite(string UId, int PropId)
+        {
+            var exist = await _context.Favourites.FirstOrDefaultAsync(w => w.UserId == UId && w.PropertyId == PropId);
+            if (exist != null)
+            {
+                _context.Remove(exist);
+                    await _context.SaveChangesAsync();
+               
+            }
+           
+        }
+        public async Task<Favourite> removefav(string id, int propid)
+        {
+            return await _context.Favourites.Where(w => w.UserId == id && w.PropertyId == propid).FirstOrDefaultAsync();
+        }
+       
+        public async Task<List<Favourite>> getallfavtoremove(string id, int propid)
+        {
+            return await _context.Favourites.Where(w => w.UserId == id && w.PropertyId == propid).ToListAsync();
+        }
+
+       
+        
     }
 }
