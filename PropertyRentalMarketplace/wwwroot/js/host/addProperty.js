@@ -151,7 +151,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     let hasBeenOpened = false;
     accordionItem.addEventListener('shown.bs.collapse', async function () {
         if (!hasBeenOpened) {
-
+            console.log("Entered");
             initMap();
             
             hasBeenOpened = true; // Mark as opened
@@ -160,12 +160,18 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     await handleCountries()
 
-    let defaultCoords = [document.getElementById('Latitude').value, document.getElementById('Longitude').value];
+    //let defaultCoords;
+    //if (document.getElementById('Latitude').value != 0) {
+    //}
+    //else {
+    //    defaultCoords =[0,0]
+    //}
 
 
 
     function initMap() {
         // Initialize map
+        let defaultCoords = [document.getElementById('Latitude').value, document.getElementById('Longitude').value];
         map = L.map('map').setView(defaultCoords, 5);
 
         // Add tile layer (OpenStreetMap)

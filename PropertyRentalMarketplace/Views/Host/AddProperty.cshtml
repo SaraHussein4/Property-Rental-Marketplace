@@ -26,7 +26,7 @@
                 <div class="accordion-body">
                     <div class="row">
                         <div class="mb-3 col-md-6 col-lg-4">
-                            <label asp-for="ListingType" class="form-label fw-bold">Listing Type<span class="text-danger">*</span></label>
+                            <label asp-for="ListingType" class="form-label fw-bold">Listing Type <span class="text-danger">*</span></label>
                             <select class="form-select" asp-for="ListingType">
                                 <option value="">-- Select Listing Type --</option>
                                 <option value="1">Rent</option>
@@ -37,7 +37,7 @@
                             <span asp-validation-for="ListingType" class="text-danger"></span>
                         </div>
                         <div class="mb-3 col-md-6 col-lg-4">
-                            <label asp-for="PropertyTypeId" class="form-label fw-bold">Property Type<span class="text-danger">*</span></label>
+                            <label asp-for="PropertyTypeId" class="form-label fw-bold">Property Type <span class="text-danger">*</span></label>
                             <select class="form-select" asp-for="PropertyTypeId">
                                 <option value="">-- Select Property Type --</option>
                                 @foreach (var p in Model.propertyTypes)
