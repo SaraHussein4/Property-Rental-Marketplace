@@ -60,11 +60,12 @@
 /*latest card*/
 
 /*featured Carda*/
-.TopReatedProperty-section, /*TopRated*/
-.LatestProperty-section, /*latest*/
+.hosted-banner,
+.TopReatedProperty-section,
+.LatestProperty-section,
 .FeaturedProperty-section {
     margin-top: 60px;
-    width: 80%;
+    /*    width: 80%;*/
 }
     .TopReatedProperty-section .image-container, /*Top Rated*/
     .LatestProperty-section .image-container, /*latest*/
@@ -180,7 +181,7 @@
 }
 
 .hosted-banner {
-    margin-top: 100px;
+/*    margin-top: 100px;*/
     background-image: url('/images/graybanner.jpg');
     height: 430px;
     background-repeat: no-repeat;

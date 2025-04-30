@@ -24,7 +24,7 @@
         @foreach (var property in Model.AllProperities)
         {
 
-            <div class="col-lg-3 col-6 mb-4 card-container" data-propertyId="@property.Id">
+            <div class="col-lg-3 col-6 card-container" data-propertyId="@property.Id">
 
                 @{
                     var primaryImage = property.Images.FirstOrDefault(img => img.IsPrimary);

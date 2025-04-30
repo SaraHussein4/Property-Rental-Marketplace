@@ -1,0 +1,82 @@
+﻿@model HostEditPropertyViewModel
+
+@{
+    ViewData["Title"] = "EditProperty";
+    Layout = "_HostLayout";
+}
+
+@section Styles {
+    @* <link rel="stylesheet" href="~/css/userStyle.css"> *@
+    <link rel="stylesheet" href="~/css/FooterStyleSheet.css">
+
+}
+
+<div class="hero-section" style=" background:url('@Url.Content("~/images/hero_bg_2.jpg")') no-repeat center;">
+
+    <div class="container d-flex align-items-center justify-content-center fs-1 text-white flex-column">
+        <h1>Home</h1>
+    </div>
+</div>
+
+
+<div class="container latest-section">
+    <div class="latest-heading text-center">
+        <h2>Stay Informed with Our Latest Blog</h2>
+        <p>
+            However you host, you’re protected
+        </p>
+    </div>
+    <div class="row">
+        <div class="col-lg-4 text-center col-12">
+            <div class="card latest-card">
+                <div class="top-img">
+                    <img class="card-img-top" src="~/images/latest.jpg" alt="Card image cap">
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">Real Estate</h5>
+                    <p class="card-text card-text1">Set up your listing</p>
+                    <div class="card-text">
+                        <i class="fa-solid fa-calendar pe-2"></i>
+                        <span>June 17, 2025</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4 text-center col-12">
+            <div class="card latest-card">
+                <div class="top-img">
+                    <img class="card-img-top" src="~/images/latest2.jpg" alt="Card image cap">
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">Real Estate</h5>
+                    <p class="card-text card-text1">Ensuring your guests sign a guest agreement</p>
+                    <div class="card-text">
+                        <i class="fa-solid fa-calendar pe-2"></i>
+                        <span>April 12, 2025</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4 text-center col-12">
+            <div class="card latest-card">
+                <div class="top-img">
+                    <img class="card-img-top" src="~/images/latest3.jpg" alt="Card image cap">
+                </div>
+                <div class="card-body text-left">
+                    <h5 class="card-title">Real Estate</h5>
+                    <p class="card-text card-text1">Provide them with contact numbers</p>
+                    <div class="card-text">
+                        <i class="fa-solid fa-calendar pe-2"></i>
+                        <span>May 14, 2025</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+@Html.Partial("FooterPartial");
