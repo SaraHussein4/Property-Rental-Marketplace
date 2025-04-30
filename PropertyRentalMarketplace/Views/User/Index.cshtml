@@ -17,7 +17,7 @@
 </div>
 
 
-<div class="container-fluid  LatestProperty-section">
+<div class="container LatestProperty-section">
     <h2 class="common-heading">Latest on the <br/> Property Listing </h2>
     <div class="row">
  
@@ -56,7 +56,7 @@
 
 
 
-<div class="container-fluid  TopReatedProperty-section">
+<div class="container  TopReatedProperty-section">
     <h2 class="common-heading">Top Rated<br />Properties</h2>
     <div class="row">
         @foreach (var property in Model.RatingProperty)
@@ -100,13 +100,15 @@
 </div>
 
 
-<div class="container-fluid hosted-section">
-    <h2>Try Hosting With Us</h2>
-    <p>Earn extra just by renting your property...</p>
-    <a class="host-button me-2">Become a Host</a>
+<div class="container hosted-banner">
+    <div class="banner-content">
+        <h2>Try Hosting<br/>With Us</h2>
+        <p>Earn extra just by renting your property...</p>
+        <a class="host-button me-2">Become a Host</a>
+    </div>
 </div>
 
-<div class="container-fluid  FeaturedProperty-section">
+<div class="container FeaturedProperty-section">
     <h2 class="common-heading">Featured Properties<br />on our Listing</h2>
     <div class="row">
         @foreach (var property in Model.FeaturedProperities)
