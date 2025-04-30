@@ -110,11 +110,12 @@ namespace PropertyRentalMarketplace.Controllers
                 Longitude = data.Location.Longitude,
                 ImagesHost = imghost,
                 Images = images,
-                 PhoneNumber = data.Host.PhoneNumber,
-                 Email=data.Host.Email,
+                PhoneNumber = data.Host.PhoneNumber,
+                Email=data.Host.Email,
                 amenities = AllAmenities.ToList(),
                 safeties = safeties.ToList(),
                 services=allServices.ToList(),
+                Host = data.Host
             };
             
             
