@@ -352,20 +352,6 @@
 
     <div class="mb-3 col-md-8" id="map" style="height: 400px; width: 100%;" data-latitude="@Model.Latitude" data-longitude="@Model.Longitude"></div>
 
-    @* <script> *@
-    @*     // إعداد الخريطة *@
-    @*     var map = L.map('map').setView([@Model.Latitude, @Model.Longitude], 13); *@
-
-    @*     // إضافة طبقة الخريطة (مثلاً OpenStreetMap) *@
-    @*     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { *@
-    @*         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors' *@
-    @*     }).addTo(map); *@
-
-    @*     // إضافة علامة لموقع معين (يمكنك تخصيصها حسب البيانات) *@
-    @*     L.marker([@Model.Latitude, @Model.Longitude]).addTo(map) *@
-    @*         .bindPopup("<b>@Model.Name</b><br/>@Model.Address") *@
-    @*         .openPopup(); *@
-    @* </script> *@
 
     <div class="container mt-5">
         <h2 class="mb-5" style="color: #484848 ;">Nearby Services</h2>
@@ -421,7 +407,7 @@
             // Initialize map
                 console.log(document.getElementById("map"));
                     let defaultCoords = [document.getElementById("map").dataset.latitude, document.getElementById("map").dataset.longitude];
-            map = L.map('map').setView(defaultCoords, 5);
+            map = L.map('map').setView(defaultCoords, 10);
 
             // Add tile layer (OpenStreetMap)
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {

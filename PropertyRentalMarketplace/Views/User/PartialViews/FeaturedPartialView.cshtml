@@ -3,6 +3,8 @@
 @model Property
 
 @{
+    ViewData["Title"] = "FeaturedPartialView";
+
     var carouselId = "carousel_" + Model.Id;
     var images = Model.Images.ToList();
 }
@@ -10,7 +12,14 @@
 
 <style>
 
-
+    .favourite {
+        cursor: pointer;
+        font-size: 35px;
+        position: absolute;
+        top: 15px;
+        right: 20px;
+        font-weight: 300;
+    }
 </style>
 <div class="col-lg-3 col-6 mb-4 card-container" data-propertyId="@Model.Id">
 
@@ -30,7 +39,7 @@
                 var imagePath = img.Path.StartsWith("http") ? img.Path : Url.Content("~/images/" + img.Path);
 
                 <div class="carousel-item @(i == 0 ? "active" : "") image-container" data-bs-interval="5000">
-                    <img src="@imagePath" class="d-block w-100"/>
+                    <img src="@imagePath" class="d-block w-100" />
                 </div>
             }
         </div>
@@ -45,16 +54,16 @@
 
         <div class="row px-3 icons">
             <div class="col-lg-3 col-12 p-0 icon-container">
-                <i class="fa-solid fa-bed " ></i> <span class="m-1">@($"{@Model.BedRooms}")</span>
+                <i class="fa-solid fa-bed "></i> <span class="m-1">@($"{@Model.BedRooms}")</span>
             </div>
             <div class="col-lg-3 col-2 p-0 icon-container">
-                <i class="fa-solid fa-sink " ></i>  <span class="m-1">@($"{@Model.BathRooms}")</span>
+                <i class="fa-solid fa-sink "></i>  <span class="m-1">@($"{@Model.BathRooms}")</span>
             </div>
             <div class="col-lg-3 col-2 p-0 icon-container">
-                <i class="fa-solid fa-car " ></i> <span class="m-1">@($"{@Model.GarageSlots}")</span>
+                <i class="fa-solid fa-car "></i> <span class="m-1">@($"{@Model.GarageSlots}")</span>
             </div>
             <div class="col-lg-3 col-2 p-0 icon-container">
-                <i class="fa-solid fa-paw " ></i> <span class="m-1">@($"{@Model.BetsAllowd}")</span>
+                <i class="fa-solid fa-paw "></i> <span class="m-1">@($"{@Model.BetsAllowd}")</span>
             </div>
         </div>
     </div>

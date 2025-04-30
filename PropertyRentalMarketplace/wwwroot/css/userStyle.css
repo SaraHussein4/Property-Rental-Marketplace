@@ -1,31 +1,165 @@
-﻿.LatestProperty-section{
+﻿/*.LatestProperty-section{
     margin-top:60px;
     width:80%;
-}
-.LatestProperty-heading {
-    font-family: Montserrat ;
+}*/
+.common-heading {
     position: relative;
-    margin-bottom: 30px;
-    width:339px;
-    height:103px;
-    font-weight:700;
-    font-size:40px;
+    margin-bottom: 90px;
+    font-weight: bold;
+    font-size: 36px;
+    color: #484848;
 }
-    .LatestProperty-heading::after, .FeaturedProperty-heading::after {
+    .common-heading::after {
         content: "";
         position: absolute;
-        top: 105px;
+        top: 115px;
         left: 0px;
-        bottom: 0px;
-        right: 0px;
-        width: 130px;
-        height: 3px;
-        background-color: black;
+/*        bottom: 0px;*/
+/*        right: 0px;*/
+        width: 140px;
+        height: 6px;
+        background-color: #484848;
+        border-radius: 3px;
     }
 
-.carousel-dark .carousel-indicators [data-bs-target] {
-    background-color: #ffffff;
+/*latest card*/
+.TopReatedProperty-section .card-container,
+.LatestProperty-section .card-container {
+    border-radius: 10px;
+    position: relative;
+    cursor: pointer;
 }
+.TopReatedProperty-section .image-container,
+.LatestProperty-section .image-container {
+    position: relative;
+}
+.TopReatedProperty-section .body,
+.LatestProperty-section .body {
+    position: absolute;
+    bottom: 20px;
+    margin: 0px 20px;
+}
+.TopReatedProperty-section .card-title,
+.LatestProperty-section .card-title {
+    font-size: 18px;
+    color: white;
+    font-weight: bold;
+}
+.TopReatedProperty-section .host-img,
+.LatestProperty-section .host-img {
+    width: 60px;
+    height: 60px;
+    margin-bottom: 7px;
+}
+.TopReatedProperty-section .card-address,
+.LatestProperty-section .card-address {
+    font-size: 14px;
+    color: #e1e1e1;
+    font-weight: 600;
+}
+/*latest card*/
+
+/*featured Carda*/
+.hosted-banner,
+.TopReatedProperty-section,
+.LatestProperty-section,
+.FeaturedProperty-section {
+    margin-top: 60px;
+    /*    width: 80%;*/
+}
+    .TopReatedProperty-section .image-container, /*Top Rated*/
+    .LatestProperty-section .image-container, /*latest*/
+    .FeaturedProperty-section .image-container {
+        border-radius: 10px;
+        margin-bottom: 15px;
+        overflow: hidden;
+    }
+        .TopReatedProperty-section .image-container img, /*Top Rated*/
+        .LatestProperty-section .image-container img, /*latest*/
+        .FeaturedProperty-section .image-container img {
+            width: 100%; /* Ensure full container width */
+            height: 340px; /* Fixed height as needed */
+            object-fit: cover; /* Prevents stretching (crops if needed) */
+            object-position: center; /* Centers the image in the frame */
+        }
+
+.FeaturedProperty-section .card-title {
+    font-size: 18px;
+    color: #484848;
+    font-weight: bold;
+}
+
+.FeaturedProperty-section .card-address {
+    font-size: 14px;
+    color: #9A9A9A;
+    font-weight: 600;
+}
+
+.FeaturedProperty-section .icons {
+    color: #484848;
+}
+
+.FeaturedProperty-section .icon-container {
+    width: 55px;
+}
+
+.LatestProperty-section .card-container .body,
+.FeaturedProperty-section .card-container .body {
+    cursor: pointer;
+}
+    .TopReatedProperty-section .favourite, /*Top Rated*/
+    .LatestProperty-section .favourite, /*latest*/
+    .FeaturedProperty-section .favourite {
+        cursor: pointer;
+        font-size: 35px;
+        position: absolute;
+        top: 15px;
+        right: 20px;
+        font-weight: 300;
+    }
+
+.FeaturedProperty-section .price {
+    color: white;
+    font-size: 18px;
+    font-weight: 600;
+    position: absolute;
+    bottom: 30px;
+    margin-left: 20px;
+}
+
+.FeaturedProperty-section .carousel-indicators {
+    justify-content: right !important;
+    margin-right: 20px;
+    margin-bottom: 30px;
+}
+
+.FeaturedProperty-section .carousel-indicators [data-bs-target] {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #000;
+    opacity: 0.5;
+    transition: opacity 0.3s ease;
+}
+
+.FeaturedProperty-section .carousel-indicators .active {
+    opacity: 1;
+    background-color: #0d6efd; 
+
+}
+/*featured Carda*/
+
+/*TopReated Card*/
+    .TopReatedProperty-section .topRatedDiv {
+        position: absolute;
+        top: 22px;
+        left: 35px;
+        color: rgb(222, 121, 33);
+    }
+    /*TopReated Card*/
+    .carousel-dark .carousel-indicators [data-bs-target] {
+        background-color: #ffffff;
+    }
 
 .FeaturedProperty-heading{
     font-family: Montserrat;
@@ -46,47 +180,53 @@
     font-size:16px
 }
 
-.hosted-section {
-    margin-top: 100px;
-    background-image: url('/images/hosted3.jpg');
-    height: 400px;
+.hosted-banner {
+/*    margin-top: 100px;*/
+    background-image: url('/images/graybanner.jpg');
+    height: 430px;
     background-repeat: no-repeat;
     background-size: cover;
     background-attachment: fixed;
+    padding: 0px 0px 0px 70px;
+    border-radius: 20px;
+    position: relative;
 }
 
-    .hosted-section h2 {
-        width: 328px;
-        height: 103px;
-        padding-top: 60px;
-        margin-left: 70px;
-        font-family: Montserrat;
-        font-weight: 700;
-        font-size: 48px;
-        line-height: 64px;
-    }
+.hosted-banner .banner-content {
+    position: absolute;
+    top:50%;
+    transform: translateY(-50%);
+}
+.hosted-banner h2 {
+    font-family: Montserrat;
+    font-weight: 700;
+    font-size: 48px;
+    line-height: 64px;
+    color: #484848;
+    font-weight: bold;
+}
 
-    .hosted-section p {
-        margin-top: 90px;
-        margin-left: 70px;
-        margin-bottom: 40px;
-    }
+.hosted-banner p {
+    color: #9A9A9A;
+}
 
 .host-button {
-    background-color: #664e2b;
+    display: inline-block;
+    background-color: #484848;
     color: #fff;
-    font-size: 18px;
-    padding: 8px 20px;
+    font-size: 15px;
+    font-weight: bold;
+    padding: 14px 40px;
     border-radius: 50px;
     text-decoration: none;
     transition: 0.3s background-color;
     text-transform: capitalize;
-    margin-left: 70px;
+    cursor: pointer;
 }
 
-    .host-button:hover {
-        background-color: #a16934;
-    }
+.host-button:hover {
+    background-color: #484848;
+}
 
 .tab-btn {
     margin-bottom: calc(-1 * var(--bs-nav-tabs-border-width));
