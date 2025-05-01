@@ -17,8 +17,8 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 namespace PropertyRentalMarketplace.Controllers
 {
 
- 
-    //[Authorize(Roles = AppRoles.User)]
+
+    [Authorize(Roles = AppRoles.User)]
     public class UserController : Controller
     {
         // IUserRepository
