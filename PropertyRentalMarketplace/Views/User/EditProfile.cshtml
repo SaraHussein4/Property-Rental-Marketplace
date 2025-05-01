@@ -2,7 +2,7 @@
 
 @{
     ViewData["Title"] = "Edit Profile";
-    Layout = "_HostLayout";
+    Layout = "_UserLayout";
 }
 @section Styles {
     <link rel="stylesheet" href="~/css/FormFormat.css" />
@@ -13,7 +13,7 @@
         <!-- Profile Image Column -->
         <div class="col-md-4" >
             <div class="card text-center p-3 shadow-sm" style="background-color: #eff0f2;">
-                <img id="profileImage"
+                <img id="profileImage" 
                      src="~/images/@(string.IsNullOrEmpty(Model.Image) ? "default-profile.jpg" : Model.Image)"
                      class="rounded-circle mx-auto mb-3"
                      alt="Profile Photo"

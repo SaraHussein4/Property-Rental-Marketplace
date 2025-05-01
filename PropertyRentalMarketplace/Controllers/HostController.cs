@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using PropertyBL.Interfaces;
 using PropertyDAL.Models;
 using PropertyRentalBL.Interfaces;
@@ -721,7 +722,6 @@ namespace PropertyRentalMarketplace.Controllers
             {
                 return NotFound("User not found.");
             }
-
             var viewModel = new UserProfileEditViewModel
             {
                 Name = user.Name,
@@ -736,27 +736,27 @@ namespace PropertyRentalMarketplace.Controllers
             return View(viewModel);
         }
         public async Task<IActionResult> EditProfile(string id)
-        {
-            var user =  await _userManager.FindByIdAsync(id);
-
-            if (user == null)
             {
-                return NotFound("User not found.");
-            }
+                var user =  await _userManager.FindByIdAsync(id);
 
+                if (user == null)
+                {
+                    return NotFound("User not found.");
+                }
+    
             var viewModel = new UserProfileEditViewModel
-            {
-                Name = user.Name,
-                Gender = user.Gender,
-                PhoneNumber = user.PhoneNumber,
-                Image = user.Image,
-                Email = user.Email,
-                Id = user.Id,
+                {
+                    Name = user.Name,
+                    Gender = user.Gender,
+                    PhoneNumber = user.PhoneNumber,
+                    Image = user.Image,
+                    Email = user.Email,
+                    Id = user.Id,
 
-            };
+                };
 
-            return View(viewModel);
-        }
+                return View(viewModel);
+            }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -854,7 +854,6 @@ namespace PropertyRentalMarketplace.Controllers
                 return NotFound();
 
             var result = await _userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
-
             if (result.Succeeded)
             {
                 TempData["Success"] = "Password changed successfully.";
