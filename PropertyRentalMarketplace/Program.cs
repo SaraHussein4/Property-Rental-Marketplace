@@ -7,6 +7,7 @@ using PropertyDAL.Contexts;
 using PropertyDAL.Models;
 using PropertyRentalBL.Interfaces;
 using PropertyRentalBL.Repositories;
+using PropertyRentalDAL.Models;
 
 namespace PropertyRentalMarketplace
 {
@@ -47,7 +48,7 @@ namespace PropertyRentalMarketplace
                     Options.LoginPath = "Account/Login";
                 });
 
-builder.Services.AddControllersWithViews();
+            builder.Services.AddControllersWithViews();
             builder.Services.AddDbContext<PropertyDbContext>(
                   optionBuilder =>
                   {
