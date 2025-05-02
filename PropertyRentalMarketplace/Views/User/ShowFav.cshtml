@@ -1,0 +1,38 @@
+﻿@model List<Favourite>
+@{
+    ViewData["Title"] = "ShowFav";
+
+    Layout = "_UserLayout";
+
+}
+@section Styles {
+    <link rel="stylesheet" href="~/css/userStyle.css">
+}
+
+<div class="hero-section" style=" background:url('@Url.Content("~/images/hero_bg_2.jpg")') no-repeat center;">
+
+    <div class="container d-flex align-items-center justify-content-center fs-1 text-white flex-column">
+        <h1>Favourie Property</h1>
+    </div>
+</div>
+
+@* <h1 class="text-center">My Favourites</h1> *@
+
+<div class="container mt-5">
+    <div class="row g-4">
+
+        @foreach (var fav in Model)
+        {
+            <div class="col-md-5">
+                <div class="card text-center shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title" style="color:dimgrey">@fav.Property.Name</h5>
+                        <p class="card-text">@fav.Property.Address</p>
+                        <p class="card-text">Price: @fav.Property.FeesPerMonth $ </p>
+                    </div>
+                </div>
+            </div>
+        }
+
+    </div>
+</div>
