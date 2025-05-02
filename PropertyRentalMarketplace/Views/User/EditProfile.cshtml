@@ -1,0 +1,102 @@
+﻿ @model PropertyRentalMarketplace.ViewModels.UserProfileEditViewModel
+
+@{
+    ViewData["Title"] = "Edit Profile";
+    Layout = "_UserLayout";
+}
+@section Styles {
+    <link rel="stylesheet" href="~/css/FormFormat.css" />
+}
+
+<div class="container mt-5">
+    <div class="row">
+        <!-- Profile Image Column -->
+        <div class="col-md-4" >
+            <div class="card text-center p-3 shadow-sm" style="background-color: #eff0f2;">
+                <img id="profileImage" 
+                     src="~/images/@(string.IsNullOrEmpty(Model.Image) ? "default-profile.jpg" : Model.Image)"
+                     class="rounded-circle mx-auto mb-3"
+                     alt="Profile Photo"
+                     style="width: 120px; height: 120px; object-fit: cover;" />
+
+
+                <!-- File Upload Input -->
+                <form id="uploadForm" enctype="multipart/form-data">
+                    <input type="hidden" id="userId" value="@Model.Id" />
+                    <input type="file" id="imageInput" name="ImgUrl" accept="image/*" class="form-control mb-2" required />
+                    <button type="submit" class="btn btn-outline-secondary btn-sm">Upload Photo</button>
+                </form>
+
+                <hr />
+                <a asp-action="ChangePassword" asp-route-id="@Model.Id" class="btn btn-secondary ms-2">Change Password</a>
+            </div>
+        </div>
+
+        <!-- Profile Edit Form Column -->
+        <div class="col-md-8">
+            <h3 class="mb-4">Edit Profile</h3>
+            <form asp-action="SaveEdit" asp-controller="Host" method="post" enctype="multipart/form-data">
+                <input type="hidden" asp-for="Id" />
+
+                <div class="mb-3">
+                    <label asp-for="Name" class="form-label">Name</label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="PhoneNumber" class="form-label">Phone Number</label>
+                    <input asp-for="PhoneNumber" class="form-control" />
+                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Gender" class="form-label">Gender</label>
+                    <select asp-for="Gender" class="form-select">
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                    </select>
+                    <span asp-validation-for="Gender" class="text-danger"></span>
+                </div>
+
+                <button type="submit" class="btn btn-success">Save Changes</button>
+                <a asp-action="Profile" asp-route-id="@Model.Id" class="btn btn-secondary ms-2">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    document.getElementById("uploadForm").addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        const formData = new FormData();
+        const imageInput = document.getElementById("imageInput");
+        const userId = document.getElementById("userId").value;
+
+        if (imageInput.files.length === 0) {
+            alert("Please select an image.");
+            return;
+        }
+
+        formData.append("id", userId);
+        formData.append("ImgUrl", imageInput.files[0]);
+
+        fetch('/Host/UploadPhoto', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json()) // we will return JSON from the action
+        .then(data => {
+            if (data.success) {
+                const imageUrl = '/images/' + data.imageFileName + '?t=' + new Date().getTime();
+                document.getElementById("profileImage").src = imageUrl;
+            } else {
+                alert("Upload failed.");
+            }
+        })
+        .catch(error => {
+            console.error("Error uploading image:", error);
+            alert("Something went wrong.");
+        });
+    });
+</script>

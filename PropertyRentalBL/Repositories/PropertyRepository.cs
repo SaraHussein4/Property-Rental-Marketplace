@@ -137,6 +137,20 @@ List<string> bedrooms)
                 .ThenByDescending(p => p.ListedAt)    
                 .ToListAsync();
         }
+
+        public async Task<double> GetStarRating(int propertyid)
+        {
+            Property property = await _context.Properties.FirstOrDefaultAsync(property => property.Id == propertyid);
+            return property.Bookings.Average(booking => booking.Rating.OverallRating);
+        }
+
+
+
+        public async Task<IEnumerable<Property>> GetTopRating1()
+        {
+            return await _context.Properties.OrderByDescending(p=>p.StarRating).ToListAsync();
+        }
+
     }
 
 }

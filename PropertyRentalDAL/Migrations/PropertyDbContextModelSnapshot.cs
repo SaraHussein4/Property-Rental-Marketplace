@@ -313,7 +313,7 @@ namespace PropertyRentalDAL.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("EndDate")
-                        .HasColumnType("date");
+                        .HasColumnType("DATETIME2");
 
                     b.Property<decimal>("FeePerMonth")
                         .HasColumnType("decimal(12,2)");
@@ -331,7 +331,7 @@ namespace PropertyRentalDAL.Migrations
                         .HasColumnType("int");
 
                     b.Property<DateTime>("StartDate")
-                        .HasColumnType("date");
+                        .HasColumnType("DATETIME2");
 
                     b.Property<string>("UserId")
                         .IsRequired()
@@ -462,6 +462,9 @@ namespace PropertyRentalDAL.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int?>("BookingId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Content")
                         .IsRequired()
                         .HasMaxLength(2000)
@@ -469,8 +472,11 @@ namespace PropertyRentalDAL.Migrations
 
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("date")
+                        .HasColumnType("DATETIME2")
                         .HasDefaultValueSql("GETDATE()");
+
+                    b.Property<bool>("IsReaded")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -481,7 +487,13 @@ namespace PropertyRentalDAL.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("BookingId");
 
                     b.HasIndex("UserId");
 
@@ -535,7 +547,7 @@ namespace PropertyRentalDAL.Migrations
                         .HasDefaultValue(false);
 
                     b.Property<DateTime>("ListedAt")
-                        .HasColumnType("date");
+                        .HasColumnType("DATETIME2");
 
                     b.Property<string>("ListingType")
                         .IsRequired()
@@ -553,8 +565,11 @@ namespace PropertyRentalDAL.Migrations
                     b.Property<int>("PropertyTypeId")
                         .HasColumnType("int");
 
+                    b.Property<double>("StarRating")
+                        .HasColumnType("float");
+
                     b.Property<DateTime>("UnListDate")
-                        .HasColumnType("date");
+                        .HasColumnType("DATETIME2");
 
                     b.Property<string>("UserId")
                         .IsRequired()
@@ -627,6 +642,9 @@ namespace PropertyRentalDAL.Migrations
                     b.Property<int>("CommunicationRating")
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("DATETIME2");
+
                     b.Property<int>("HygieneRating")
                         .HasColumnType("int");
 
@@ -636,6 +654,14 @@ namespace PropertyRentalDAL.Migrations
                     b.Property<int>("OverallRating")
                         .HasColumnType("int");
 
+                    b.Property<string>("Review")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<int>("ValueForMoneyRating")
                         .HasColumnType("int");
 
@@ -643,6 +669,8 @@ namespace PropertyRentalDAL.Migrations
 
                     b.HasIndex("BookingId")
                         .IsUnique();
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Ratings");
                 });
@@ -797,11 +825,17 @@ namespace PropertyRentalDAL.Migrations
 
             modelBuilder.Entity("PropertyRentalDAL.Models.Notification", b =>
                 {
+                    b.HasOne("PropertyRentalDAL.Models.Booking", "Booking")
+                        .WithMany()
+                        .HasForeignKey("BookingId");
+
                     b.HasOne("PropertyDAL.Models.User", "User")
                         .WithMany("Notifications")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("Booking");
 
                     b.Navigation("User");
                 });
@@ -860,7 +894,15 @@ namespace PropertyRentalDAL.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("PropertyDAL.Models.User", "User")
+                        .WithMany("Ratings")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.Navigation("Booking");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("PropertyRentalDAL.Models.Service", b =>
@@ -885,6 +927,8 @@ namespace PropertyRentalDAL.Migrations
                     b.Navigation("HostedProperties");
 
                     b.Navigation("Notifications");
+
+                    b.Navigation("Ratings");
                 });
 
             modelBuilder.Entity("PropertyRentalDAL.Models.Amenity", b =>

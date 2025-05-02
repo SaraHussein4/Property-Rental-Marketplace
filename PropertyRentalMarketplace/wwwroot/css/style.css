@@ -1,23 +1,23 @@
 ﻿.navbar-brand {
     font-weight: 500;
-    color: #664e2b;
+    color: #484848;
     font-size: 24px;
     transition: .3s color;
+    font-weight:700;
+    margin: 0 20px;
 }
 
 .navbar {
-    background-color: #fff;
+    background-color: #eff0f2;
     height: 80px;
-    margin: 20px  40px  20px  40px;
-    border-radius: 16px;
     padding: 0.5rem;
 }
 
 .host-button {
-    background-color: #664e2b;
+    background-color: #484848;
     color: #fff;
     font-size: 15px;
-    padding: 8px 20px;
+    padding: 10px 20px;
     border-radius: 50px;
     text-decoration: none;
     transition: 0.3s background-color;
@@ -27,6 +27,20 @@
     .host-button:hover {
         background-color: #a16934;
     }
+
+    .nav-item{
+        padding-left:20px;
+    }
+
+.dropdown-toggle::after {
+    display:none;
+    margin-left:0;
+    vertical-align:0;
+    border-top:0;
+    border-right:0;
+    border-bottom:0;
+    border-left:0;
+}
 
 .navbar-toggler {
     border: none;
@@ -72,10 +86,7 @@
 }
 
 @media (max-width: 991px) {
-    .navbar {
-        margin: 10px 0;
-        border-radius: 0;
-    }
+    
 
 
     .user-login {

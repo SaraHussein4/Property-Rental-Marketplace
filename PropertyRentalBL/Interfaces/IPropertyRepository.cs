@@ -14,19 +14,24 @@ namespace PropertyRentalBL.Interfaces
     {
         Task<IEnumerable<Property>> GetAllFeatured();
 
-        public Task<string> getimagehost(int propertyid); //
+        public Task<string> getimagehost(int propertyid);
+
         public Task<List<Property>> GetActiveListedPropertiesHostedBySpecificHost(string hostId);
         public Task<List<Property>> GetExpiredPropertiesHostedBySpecificHost(string hostId);
 
         public Task<List<Property>> GetPropertyTypeById(int id);
 
         public Task<List<Property>> GetFilteredProperties(
-int typeId,
-List<string> priceRanges,
-List<string> countries,
-List<string> bedrooms);
+            int typeId,
+            List<string> priceRanges,
+            List<string> countries,
+            List<string> bedrooms);
+
+        public Task<double> GetStarRating(int propertyid);
+
+        public  Task<IEnumerable<Property>> GetTopRating1();
 
 
-        
+
     }
 }

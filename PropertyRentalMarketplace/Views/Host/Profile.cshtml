@@ -2,15 +2,15 @@
 
 @{
     ViewData["Title"] = "Profile";
-    Layout = "_Layout";
+    Layout = "_HostLayout";
 }
-
 <div class="container mt-5">
     <div class="row">
         <!-- Left Card (User Sidebar) -->
         <div class="col-md-4">
             <div class="card text-center p-3 shadow-sm" style="background-color: #eff0f2;">
-                <img src="~/images/@Model.Image" class="rounded-circle mx-auto mb-3" alt="Profile Photo" style="width: 150px; height: 150px; object-fit: cover;">
+                <img src="~/images/@(string.IsNullOrEmpty(Model.Image) ? "default-profile.jpg" : Model.Image)"
+                class="rounded-circle mx-auto mb-3" alt="Profile Photo" style="width: 150px; height: 150px; object-fit: cover;">
             </div>
         </div>
 

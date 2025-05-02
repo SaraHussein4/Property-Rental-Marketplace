@@ -57,7 +57,7 @@ else
                         <td>
                             @if (booking.EndDate > DateTime.Now)
                             {
-                                <button class="btn btn-danger" id="endRental" data-booking="@booking.Id">End Rental</button>
+                                <button class="btn btn-danger endRental"  data-booking="@booking.Id">End Rental</button>
                             }
                         </td>
                     </tr>
@@ -73,32 +73,61 @@ else
 
 
 <script>
-        console.log(document.getElementById("endRental"))
-    $('#endRental').click(function (e) {
-        // e.preventDefault(); Prevent default button behavior (if needed)
+        var endRentalButtons = document.querySelectorAll(".endRental")
+        console.log(endRentalButtons)
 
-        // Get the booking ID from data attribute
-        var bookingId = $(this).data('booking');
+    endRentalButtons.forEach((button) => {
+        button.addEventListener('click', function(e) {
+            // e.preventDefault(); // Uncomment if needed
 
-        console.log("Booking ID:", bookingId);
+            // Get the booking ID from data attribute
+            var bookingId = button.getAttribute('data-booking');
+            console.log("Booking ID:", bookingId);
 
-        // You can now use bookingId for AJAX calls or other logic
-        // Example AJAX call:
-        if (confirm("Are you sure you want to end this rental?")){
-            $.ajax({
-                url: '/Host/EndRental',
-                type: 'Post',
-                data: { bookingId: bookingId },
-                success: function(response) {
-                     if (typeof loadTab === 'function') {
-                        loadTab('booked');
+            if (confirm("Are you sure you want to end this rental?")) {
+                $.ajax({
+                    url: '/Host/EndRental',
+                    type: 'POST',
+                    data: { bookingId: bookingId },
+                    success: function(response) {
+                        if (typeof loadTab === 'function') {
+                            loadTab('booked');
+                        }
+                    },
+                    error: function(xhr) {
+                        alert('Error ending rental: ' + xhr.responseText);
                     }
-                },
-                error: function(xhr) {
-                    alert('Error ending rental: ' + xhr.responseText);
-                }
-            });
-        }
-       
+                });
+            }
+        }); // Fixed: Properly closed click handler
     });
+    // $('#endRental').click(function (e) {
+    //     e.preventDefault(); Prevent default button behavior (if needed)
+
+    //     Get the booking ID from data attribute
+
+
+    //     var bookingId = $(this).data('booking');
+
+    //     console.log("Booking ID:", bookingId);
+
+    //     You can now use bookingId for AJAX calls or other logic
+    //     Example AJAX call:
+    //     if (confirm("Are you sure you want to end this rental?")){
+    //         $.ajax({
+    //             url: '/Host/EndRental',
+    //             type: 'Post',
+    //             data: { bookingId: bookingId },
+    //             success: function(response) {
+    //                  if (typeof loadTab === 'function') {
+    //                     loadTab('booked');
+    //                 }
+    //             },
+    //             error: function(xhr) {
+    //                 alert('Error ending rental: ' + xhr.responseText);
+    //             }
+    //         });
+    //     }
+       
+    // });
 </script>

@@ -193,7 +193,21 @@
 
 
 <script>
-        // Handle modal opening
+    async function loadTab(tabName) {
+        // Await the AJAX call
+        const response = await $.ajax({
+            url: '/Host/LoadTab',
+            type: 'GET',
+            data: { tab: tabName }
+        });
+
+        // Update UI
+        $('#tabContent').html(response);
+        $('[data-tab]').removeClass('active');
+        $(`[data-tab="${tabName}"]`).addClass('active');
+    }
+    console.log(document.querySelectorAll('#bookingModal'))
+    // Handle modal opening
     $('#bookingModal').on('show.bs.modal', function (event) {
 
         // Clear previous validation

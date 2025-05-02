@@ -7,15 +7,20 @@
     var images = Model.Images.ToList();
 }
 
-<div class="col-lg-3 col-6 mb-4">
+
+<style>
+
+
+</style>
+<div class="col-lg-3 col-6 mb-4 card-container" data-propertyId="@Model.Id">
 
     <div id="@carouselId" class="carousel carousel-dark slide" data-bs-ride="carousel">
         <div class="carousel-indicators">
             @for (int i = 0; i < images.Count; i++)
             {
                 <button type="button" data-bs-target="#@carouselId" data-bs-slide-to="@i"
-                        class="@(i == 0 ? "active" : "")" aria-current="@(i == 0 ? "true" : "false")" aria-label="Slide @(i + 1)">
-                </button>
+                        class="@(i == 0 ? "active" : "")" aria-current="@(i == 0 ? "true" : "false")"
+                        aria-label="Slide @(i + 1)"></button>
             }
         </div>
         <div class="carousel-inner">
@@ -24,30 +29,38 @@
                 var img = images[i];
                 var imagePath = img.Path.StartsWith("http") ? img.Path : Url.Content("~/images/" + img.Path);
 
-                <div class="carousel-item @(i == 0 ? "active" : "")" data-bs-interval="5000">
-                    <img src="@imagePath" class="d-block w-100" style="max-height: 200px;" />
+                <div class="carousel-item @(i == 0 ? "active" : "") image-container" data-bs-interval="5000">
+                    <img src="@imagePath" class="d-block w-100"/>
                 </div>
             }
         </div>
+        <div class="price">$ @Model.FeesPerMonth USD</div>
+        <div class="favourite"><i class="fa-regular fa-heart"></i></div>
     </div>
 
+    <div class="body">
+        <p class="card-title">@Model.Name</p>
+        <p class="card-address">@Model.Address</p>
 
-    <p class="p-card">@Model.Name</p>
-    <p class="me-1">@Model.Address</p>
-        <a asp-controller="User" asp-action="Details" asp-route-id="@Model.Id">Details</a>
 
-    <div class="row px-3">
-        <div class="col-lg-3 col-2 p-0" style="width:19%">
-            <i class="fa-solid fa-bed " ></i> <span class="m-2">@($"{@Model.BedRooms} ")</span>
-        </div>
-        <div class="col-lg-3 col-2 p-0" style="width:19%">
-            <i class="fa-solid fa-sink " ></i>  <span class="m-2">@($"{@Model.BathRooms} ")</span>
-        </div>
-        <div class="col-lg-3 col-2 p-0" style="width:19%">
-            <i class="fa-solid fa-car " ></i> <span class="m-2">@($"{@Model.GarageSlots} ")</span>
-        </div>
-        <div class="col-lg-3 col-2 p-0" style="width:19%">
-            <i class="fa-solid fa-paw " ></i> <span class="m-2">@($"{@Model.BetsAllowd} ")</span>
+        <div class="row px-3 icons">
+            <div class="col-lg-3 col-12 p-0 icon-container">
+                <i class="fa-solid fa-bed " ></i> <span class="m-1">@($"{@Model.BedRooms}")</span>
+            </div>
+            <div class="col-lg-3 col-2 p-0 icon-container">
+                <i class="fa-solid fa-sink " ></i>  <span class="m-1">@($"{@Model.BathRooms}")</span>
+            </div>
+            <div class="col-lg-3 col-2 p-0 icon-container">
+                <i class="fa-solid fa-car " ></i> <span class="m-1">@($"{@Model.GarageSlots}")</span>
+            </div>
+            <div class="col-lg-3 col-2 p-0 icon-container">
+                <i class="fa-solid fa-paw " ></i> <span class="m-1">@($"{@Model.BetsAllowd}")</span>
+            </div>
         </div>
     </div>
+
 </div>
+
+<script>
+
+</script>

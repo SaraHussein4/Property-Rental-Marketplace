@@ -6,23 +6,21 @@
 
 @{
     ViewData["Title"] = "Details";
-    Layout = "_UserLayout";
+    Layout = "_Layout";
 }
 
 @section Styles {
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
     <link rel="stylesheet" href="~/css/userStyle.css">
+
+
+<!--     <link rel="stylesheet" href="~/css/propertydetails.css"> -->
+
 }
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-<div class="hero-section" style=" background:url('@Url.Content("~/images/hero_bg_2.jpg")') no-repeat center;">
 
-    <div class="container d-flex align-items-center justify-content-center fs-1 text-white flex-column">
-        <h1>Home</h1>
-    </div>
-</div>
 @{
     //بحسب العدد الذيادة للصور 
     int number = 1;
@@ -40,16 +38,17 @@
 }   
 
 <div class="container mt-5">
-    <div class="row">
-        <div class="col-md-6 mt-5 ">
-            <img src="~/images/@Images[0].Path" class="img-fluid rounded mb-2 " style="height: 400px;width : 800px; object-fit: cover;" />
+    <div class="row  images-overview g-2">
+        <div class="col-md-6 mt-5 primary-image">
+            <img src="~/images/@Images[0].Path" class="img-fluid rounded mb-2 " style="height: 400px;width : 800px; object-fit: cover;" />    
         </div>
+
         <div class="col-md-6 mt-5">
             <div class="row g-2">
 
                 @foreach(var i in Images.Take(3))
                 {
-                    <img src="~/images/@i.Path" class="img-fluid rounded mb-2 " style="height: 192px;width : 320px; object-fit: cover;" />
+                    <img src="~/images/@i.Path" class="img-fluid rounded" style="height: 192px;width : 320px; object-fit: cover;" />
                 } 
 
                 <div class="position-relative" style="height: 192px; width: 320px;">
@@ -65,6 +64,24 @@
                 </div>
             </div>
         </div>
+        
+        <div class="listedby-card">
+            <div class="row">
+                <div class="image-container">
+                    <img src="~/images/@Model.ImagesHost" class="img-fluid rounded-circle">
+                </div>
+
+                <div class=" ">
+                    <div class="ncard-body">
+                        <div class="ncard-text">Listed by</div>
+                        <div class="ncard-title">@Model.Host.Name</div>
+
+                        <div class="ncard-price">For: @($"{@Model.FeesPerMonth}$")</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
     </div>
 </div>
 <div class="modal fade" id="moreImagesModal" tabindex="-1" aria-labelledby="moreImagesModalLabel" aria-hidden="true">
@@ -89,27 +106,13 @@
         </div>
     </div>
 </div>
+
 <div class="container">
-    <div class="card border-0 bg-transparent m-3  col-md-8 " style="width: 880px; height : 140px ;">
-        <div class="row g-0">
-            <div class="col-md-3 ">
-                <img src="~/images/@Model.ImagesHost" class="img-fluid rounded-circle ms-4 mt-1" style="width : 170px ; height :150px" alt="...">
-            </div>  
-
-            <div class="col-md-9 p-2">
-                <div class="card-body">
-                    <p class="card-text">Listed by</p>
-                    <h5 class="card-title">@Model.Name</h5>
-
-                    <p class="card-text">@($"{@Model.FeesPerMonth}$")</p>
-                </div>
-            </div>
-        </div>
-    </div>
 </div>
 
 <div class="container mt-5">
     <div class="d-flex gap-5">
+
         <h2 style="color: #484848 ;">Well furnished Apartment</h2>
         <i class="fa-heart fa-regular " style="font-size: 30px;margin-left:200px"
            data-property-id="@Model.Property.Id"
@@ -118,12 +121,18 @@
        
         <a asp-controller="User" asp-action="ShowFav" asp-route-id="@Model.Property.Id">ShowFav</a>
 
+
+        <div style="color: #484848; font-size: 28px">Well furnished Apartment</div>
+        <a href="javascript:void(0);" onclick="addToFavourite('@User.Identity.Name', @propertyid)">
+            <i class="fa-regular fa-heart fs-1" style="margin-left: 210px; margin-top:7px;"></i>
+        </a>
+
     </div>
-    <p style="color: #bcbcbc;">@Model.Address</p>
+    <p style="color: #bcbcbc; font-size: 18px; margin-top: -9px;">@Model.Address</p>
 
     <div class="col-md-4 gap-2 d-flex">
         <div class="col">
-            <div class="card text-center shadow-sm" style="width: 170px; height: 130px;">
+            <div class="card text-center shadow-sm" style="width: 170px; height: 130px; background-color: #EFF0F2; border-width: 0px;">
                 <i class="fa-solid fa-bed fs-3 mt-4"></i>
                 <div class="card-body">
                     <h5 class="card-title d-flex justify-content-center  align-items-center">@($"{@Model.BedRooms} BedRooms")</h5>
@@ -131,7 +140,7 @@
             </div>
         </div>
         <div class="col">
-            <div class="card text-center shadow-sm" style="width: 170px; height: 130px;">
+            <div class="card text-center shadow-sm" style="width: 170px; height: 130px; background-color: #EFF0F2; border-width: 0px;">
                 <i class="fa-solid fa-sink fs-3 mt-4"></i>
 
                 <div class="card-body">
@@ -140,7 +149,7 @@
             </div>
         </div>
         <div class="col">
-            <div class="card text-center shadow-sm" style="width: 170px; height: 130px;">
+            <div class="card text-center shadow-sm" style="width: 170px; height: 130px; background-color: #EFF0F2; border-width: 0px;">
                 <i class="fa-solid fa-car fs-3 mt-4"></i>
                 <div class="card-body">
                     <h5 class="card-title d-flex justify-content-center  align-items-center">@($"{@Model.GarageSlots} Garage Slots")</h5>
@@ -148,7 +157,7 @@
             </div>
         </div>
         <div class="col">
-            <div class="card text-center shadow-sm" style="width: 170px; height: 130px;">
+            <div class="card text-center shadow-sm" style="width: 170px; height: 130px; background-color: #EFF0F2; border-width: 0px;">
                 <i class="fa-solid fa-paw fs-3 mt-4"></i>
                 <div class="card-body">
                     <h5 class="card-title d-flex justify-content-center  align-items-center">@($"{@Model.BetsAllowd} Bets")</h5>
@@ -356,22 +365,8 @@
 
     @* ---------------------------- *@
 
-    <div id="map" style="height: 400px; width:50%"></div>
+    <div class="mb-3 col-md-8" id="map" style="height: 400px; width: 100%;" data-latitude="@Model.Latitude" data-longitude="@Model.Longitude"></div>
 
-    <script>
-        // إعداد الخريطة
-        var map = L.map('map').setView([@Model.Latitude, @Model.Longitude], 13);
-
-        // إضافة طبقة الخريطة (مثلاً OpenStreetMap)
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        }).addTo(map);
-
-        // إضافة علامة لموقع معين (يمكنك تخصيصها حسب البيانات)
-        L.marker([@Model.Latitude, @Model.Longitude]).addTo(map)
-            .bindPopup("<b>@Model.Name</b><br/>@Model.Address")
-            .openPopup();
-    </script>
 
     <div class="container mt-5">
         <h2 class="mb-5" style="color: #484848 ;">Nearby Services</h2>
@@ -439,4 +434,66 @@
                 });
             }
         }
+
+     console.log("a;dkfja;d");
+
+    function initMap() {
+            // Initialize map
+                console.log(document.getElementById("map"));
+                    let defaultCoords = [document.getElementById("map").dataset.latitude, document.getElementById("map").dataset.longitude];
+            map = L.map('map').setView(defaultCoords, 10);
+
+            // Add tile layer (OpenStreetMap)
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+            }).addTo(map);
+
+            // Add initial marker
+            marker = L.marker(defaultCoords, { draggable: true }).addTo(map);
+
+            // Click event to move marker
+            map.on('click', function (e) {
+                const { lat, lng } = e.latlng;
+                marker.setLatLng([lat, lng]);
+                updateCoordinates(lat, lng);
+            });
+
+            // Marker drag event
+            marker.on('dragend', function () {
+                const { lat, lng } = marker.getLatLng();
+                updateCoordinates(lat, lng);
+            });
+        }
+
+    function updateMarkerPosition(lat, lng, zoomlevel = 5) {
+        marker.setLatLng([lat, lng]);
+        map.setView([lat, lng], zoomlevel);
+        updateCoordinates(lat, lng);
+    }
+
+    function updateCoordinates(lat, lng) {
+            // Update your form fields or display
+            document.getElementById('Latitude').value = lat;
+            document.getElementById('Longitude').value = lng;
+            console.log(`Coordinates: ${lat}, ${lng}`);
+       }
+
+            document.addEventListener('DOMContentLoaded', async function () {
+                initMap();
+            });
     </script>
+
+
+
+
+    @* <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> *@
+    @* <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script> *@
+
+    @section Scripts {
+        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+        @* <script src="~/js/host/addProperty.js"></script> *@
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        @* <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script> *@
+        @* <script src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js"></script> *@
+    }
+

@@ -63,7 +63,7 @@
 			<input type="submit" value="SIGNIN">
 			<div asp-validation-summary="All" class="text-danger"></div>
 		</form>
-		<p>Don't have an Account? <a asp-controller="Account" asp-action="Register">Sign Up Now!</a></p>
+		<p>Don't have an Account? <a asp-controller="Account" asp-action="Register" asp-route-role="@AppRoles.User">Sign Up Now!</a></p>
 		<p><a asp-controller="Account" asp-action="ForgetPassword">Forget Password</a></p>
 
 

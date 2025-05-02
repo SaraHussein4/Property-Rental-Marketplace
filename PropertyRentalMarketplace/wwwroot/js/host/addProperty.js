@@ -147,14 +147,31 @@ document.addEventListener('DOMContentLoaded', async function () {
     let map;
     let marker;
 
+    const accordionItem = document.querySelector('#collapseLocation');
+    let hasBeenOpened = false;
+    accordionItem.addEventListener('shown.bs.collapse', async function () {
+        if (!hasBeenOpened) {
+            console.log("Entered");
+            initMap();
+            
+            hasBeenOpened = true; // Mark as opened
+        }
+    });
+
     await handleCountries()
 
-    let defaultCoords = [document.getElementById('Latitude').value, document.getElementById('Longitude').value];
+    //let defaultCoords;
+    //if (document.getElementById('Latitude').value != 0) {
+    //}
+    //else {
+    //    defaultCoords =[0,0]
+    //}
 
-    initMap();
+
 
     function initMap() {
         // Initialize map
+        let defaultCoords = [document.getElementById('Latitude').value, document.getElementById('Longitude').value];
         map = L.map('map').setView(defaultCoords, 5);
 
         // Add tile layer (OpenStreetMap)
@@ -177,7 +194,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             const { lat, lng } = marker.getLatLng();
             updateCoordinates(lat, lng);
         });
-            
+          
     }
     // Update marker position and map viewd
     function updateMarkerPosition(lat, lng, zoomlevel = 5) {

@@ -23,11 +23,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         $('[data-tab]').removeClass('active');
         $(`[data-tab="${tabName}"]`).addClass('active');
     }
-
-
     console.log(document.querySelectorAll('#bookingModal'))
-
-
 
 });
     

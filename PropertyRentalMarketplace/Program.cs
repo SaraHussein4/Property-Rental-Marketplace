@@ -7,6 +7,7 @@ using PropertyDAL.Contexts;
 using PropertyDAL.Models;
 using PropertyRentalBL.Interfaces;
 using PropertyRentalBL.Repositories;
+using PropertyRentalDAL.Models;
 
 namespace PropertyRentalMarketplace
 {
@@ -29,6 +30,10 @@ namespace PropertyRentalMarketplace
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IPropertyRepository, PropertyRepository>();
             builder.Services.AddScoped<IFavouriteRepository, FavouriteRepository>();
+            builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
+            builder.Services.AddScoped<IRatingRepository, RatingRepository>();
+
+
             builder.Services.AddIdentity<User, IdentityRole>(Options =>
             {
                 Options.Password.RequireNonAlphanumeric = true;
@@ -44,7 +49,7 @@ namespace PropertyRentalMarketplace
                     Options.LoginPath = "Account/Login";
                 });
 
-builder.Services.AddControllersWithViews();
+            builder.Services.AddControllersWithViews();
             builder.Services.AddDbContext<PropertyDbContext>(
                   optionBuilder =>
                   {

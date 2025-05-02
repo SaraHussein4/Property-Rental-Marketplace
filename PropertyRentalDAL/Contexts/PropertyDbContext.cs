@@ -48,8 +48,8 @@ namespace PropertyDAL.Contexts
             builder.Entity<Booking>().HasKey(b => b.Id);
 
             // Properties 
-            builder.Entity<Booking>().Property(b => b.StartDate).HasColumnType("date");
-            builder.Entity<Booking>().Property(b => b.EndDate).HasColumnType("date");
+            builder.Entity<Booking>().Property(b => b.StartDate).HasColumnType("DATETIME2");
+            builder.Entity<Booking>().Property(b => b.EndDate).HasColumnType("DATETIME2");
             builder.Entity<Booking>().Property(b => b.FeePerMonth).HasColumnType("decimal(12,2)");
             builder.Entity<Booking>().Property(b => b.IsActive).HasDefaultValue(true);
 
@@ -153,7 +153,7 @@ namespace PropertyDAL.Contexts
             // Properties 
             builder.Entity<Notification>().Property(n => n.Title).HasMaxLength(100);
             builder.Entity<Notification>().Property(n => n.Content).HasMaxLength(2000);
-            builder.Entity<Notification>().Property(n => n.CreatedAt).HasColumnType("date").HasDefaultValueSql("GETDATE()");
+            builder.Entity<Notification>().Property(n => n.CreatedAt).HasColumnType("DATETIME2").HasDefaultValueSql("GETDATE()");
 
             #endregion
 
@@ -167,8 +167,8 @@ namespace PropertyDAL.Contexts
             builder.Entity<Property>().Property(p => p.Address).HasMaxLength(200);
             builder.Entity<Property>().Property(p => p.IsListed).IsRequired().HasDefaultValue(false);
             builder.Entity<Property>().Property(p => p.IsFeatured).IsRequired().HasDefaultValue(false);
-            builder.Entity<Property>().Property(p => p.ListedAt).HasColumnType("date");
-            builder.Entity<Property>().Property(p => p.UnListDate).HasColumnType("date");
+            builder.Entity<Property>().Property(p => p.ListedAt).HasColumnType("DATETIME2");
+            builder.Entity<Property>().Property(p => p.UnListDate).HasColumnType("DATETIME2");
             builder.Entity<Property>().Property(p => p.ListingType).HasConversion<string>().HasMaxLength(20);
 
 
@@ -231,6 +231,10 @@ namespace PropertyDAL.Contexts
             #region Rating
             // Primary Key
             builder.Entity<Rating>().HasKey(r => r.Id);
+
+            builder.Entity<Rating>().Property(r => r.CreatedAt).HasColumnType("DATETIME2");
+
+
             #endregion
 
             #region Service
@@ -264,6 +268,15 @@ namespace PropertyDAL.Contexts
                 .WithOne(n => n.User)
                 .HasForeignKey(n => n.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<User>()
+                .HasMany(u => u.Ratings)
+                .WithOne(r => r.User)
+                .HasForeignKey(r => r.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+
+
             #endregion
 
             #region Add Roles in Identity Roles Table

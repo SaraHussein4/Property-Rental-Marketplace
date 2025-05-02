@@ -102,10 +102,10 @@ img {
 
 /*-- end reset --*/
 body {
-/*    background: #76b852;*/
-    background: #664e2b;
+    /*    background: #76b852;*/
+    background: #c1bbbb;
     /* fallback for old browsers */
-/*    background: -webkit-linear-gradient(to top, #76b852, #8DC26F);
+    /*    background: -webkit-linear-gradient(to top, #76b852, #8DC26F);
     background: -moz-linear-gradient(to top, #76b852, #8DC26F);
     background: -o-linear-gradient(to top, #76b852, #8DC26F);
     background: linear-gradient(to top, #76b852, #8DC26F);*/
@@ -117,8 +117,9 @@ body {
 h1 {
     font-size: 3em;
     text-align: center;
-    color: #fff;
+    color: #353030;
     font-weight: 100;
+    font-weight:700;
     text-transform: capitalize;
     letter-spacing: 4px;
     font-family: 'Roboto', sans-serif;
@@ -203,9 +204,9 @@ input.email, input.text.w3lpass {
 input[type="submit"] {
     font-size: .9em;
     color: #fff;
-    background: #664e2b;
+    background: #5a5555;
     outline: none;
-    border: 1px solid #664e2b;
+    border: 1px solid #9A9A9A;
     cursor: pointer;
     padding: 0.9em;
     -webkit-appearance: none;
@@ -220,7 +221,7 @@ input[type="submit"] {
         -o-transition: .5s all;
         -ms-transition: .5s all;
         transition: .5s all;
-        background: #664e6b;
+        background: #938c8c;
     }
 
 .agileits-top p {
@@ -255,7 +256,7 @@ input[type="submit"] {
 }
 
 input.checkbox {
-    background: #664e2b;
+    background: #9A9A9A;
     cursor: pointer;
     width: 1.2em;
     height: 1.2em;
