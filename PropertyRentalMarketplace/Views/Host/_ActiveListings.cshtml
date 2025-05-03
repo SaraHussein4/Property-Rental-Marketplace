@@ -3,127 +3,160 @@
 @*
     For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 *@
-<h1>active</h1>
 
-@foreach(var property in Model)
-{
-    <div class="col-md-6 col-lg-4 mb-4">
-        <div class="card property-card h-100 border-0 shadow-sm">
-            <!-- Featured Badge -->
-            @if (property.IsFeatured)
-            {
-                <div class="featured-badge bg-warning text-white px-2 py-1 position-absolute top-0 end-0 m-2 rounded">
-                    <i class="fas fa-star me-1"></i> Featured
-                </div>
-            }
+<style>
+    .carousel-indicators [data-bs-target] {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background-color: #ccc;
+    }
 
-            <!-- Property Image Placeholder -->
-            <div class="card-img-top bg-light" style="height: 180px; background-color: #eee;">
-                <div class="d-flex justify-content-center align-items-center h-100">
-                    @if (property.Images.Any(img => img.IsPrimary))
-                    {
-                        <img src="~/images/@property.Images.First(img => img.IsPrimary).Path"
-                             alt="@property.Name property image"
-                             class="img-fluid h-100 w-100 object-fit-cover"
-                             onerror="this.onerror=null;this.src='/images/default-property.jpg';this.alt='Default property image'">
-                    }
-                    else
-                    {
-                        <!-- Fallback Icon -->
-                        <div class="d-flex justify-content-center align-items-center h-100 text-muted">
-                            <i class="fas fa-home fa-3x opacity-25"></i>
+    .card-body{
+        height:105px;
+    }
+    .carousel-indicators .active {
+        background-color: #333;
+    }
+
+    .object-fit-cover {
+        object-fit: cover;
+    }
+
+    .card .btn.btn-light i {
+        color: #555;
+    }
+
+    .card .btn.btn-light:hover i {
+        color: #e74c3c;
+    }
+
+    .dropdown-menu {
+        min-width: 140px;
+    }
+</style>
+
+
+<div class="row mt-2">
+    @foreach (var property in Model)
+    {
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card border-0 shadow-sm rounded-4  position-relative h-100">
+
+                <div class="position-relative">
+                    <div id="carousel-@property.Id" class="carousel slide" data-bs-ride="carousel">
+                        <div class="carousel-inner rounded-0">
+                            @if (property.Images != null && property.Images.Any())
+                            {
+                                @for (int i = 0; i < property.Images.Count; i++)
+                                {
+                                    var img = property.Images[i];
+                                    <div class="carousel-item @(i == 0 ? "active" : "")">
+                                        <img src="~/images/@img.Path"
+                                             class="d-block w-100 object-fit-cover"
+                                             style="height: 220px;"
+                                             alt="@property.Name"
+                                             onerror="this.onerror=null;this.src='/images/default-property.jpg';">
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <div class="carousel-item active">
+                                    <div class="d-flex justify-content-center align-items-center bg-light" style="height: 220px;">
+                                        <i class="fas fa-home fa-3x text-muted"></i>
+                                            
+                                    </div>
+                                </div>
+                            }
                         </div>
-                    }
-                </div>
-            </div>
-
-            <div class="card-body">
-                <!-- Title and Status -->
-                <div class="d-flex justify-content-between align-items-start mb-2">
-                    <h5 class="card-title mb-0">@property.Name</h5>
-                    <span class="badge @(property.IsListed ? "bg-success" : "bg-secondary")">
-                        @(property.IsListed ? "Active" : "Inactive")
-                    </span>
-                </div>
-
-                <!-- Address -->
-                <p class="card-text text-muted small mb-2">
-                    <i class="fas fa-map-marker-alt text-danger me-1"></i>
-                    @property.Address
-                </p>
-
-                <!-- Key Features -->
-                <div class="d-flex flex-wrap gap-2 mb-3">
-                    <span class="badge bg-light text-dark border">
-                        <i class="fas fa-bed text-primary me-1"></i> @property.BedRooms
-                    </span>
-                    <span class="badge bg-light text-dark border">
-                        <i class="fas fa-bath text-primary me-1"></i> @property.BathRooms
-                    </span>
-                    <span class="badge bg-light text-dark border">
-                        <i class="fas fa-car text-primary me-1"></i> @property.GarageSlots
-                    </span>
-                    <span class="badge bg-light text-dark border">
-                        <i class="fas fa-ruler-combined text-primary me-1"></i> @property.Area sqft
-                    </span>
-                </div>
-
-                <!-- Pricing -->
-                <div class="d-flex justify-content-between align-items-center mb-2">
-                    <div>
-                        <span class="fw-bold text-primary h5">$@property.FeesPerMonth</span>
-                        <span class="text-muted small">/month</span>
-                    </div>
-                    <span class="badge bg-info text-dark">
-                        @property.ListingType.ToString()
-                    </span>
-                </div>
-
-                <!-- Dates -->
-                <div class="d-flex justify-content-between small text-muted">
-                    <div>
-                        <i class="far fa-calendar-plus me-1"></i>
-                        @property.ListedAt.ToString("MMM d, yyyy")
-                    </div>
-                    <div>
-                        <i class="far fa-calendar-minus me-1"></i>
-                        @property.UnListDate.ToString("MMM d, yyyy")
+                        @if (property.Images?.Count > 1)
+                        {
+                            <div class="carousel-indicators position-absolute bottom-0 start-50 translate-middle-x mb-2">
+                                @for (int i = 0; i < property.Images.Count; i++)
+                                {
+                                    <button type="button"
+                                            data-bs-target="#carousel-@property.Id"
+                                            data-bs-slide-to="@i"
+                                            class="@(i == 0 ? "active" : "")"
+                                            aria-current="@(i == 0 ? "true" : "false")"
+                                            aria-label="Slide @(i + 1)">
+                                    </button>
+                                }
+                            </div>
+                        }
                     </div>
                 </div>
-            </div>
 
-            <!-- Card Footer with Actions -->
-            <div class="card-footer bg-transparent border-top-0 d-flex justify-content-between">
-                <a href="@Url.Action("EditProperty", new { propertyId = property.Id })"
-                   class="btn btn-sm btn-outline-primary">
-                    <i class="fas fa-edit me-1"></i> Edit
-                </a>
-                <div class="dropdown">
-                    <button class="btn btn-sm btn-outline-secondary dropdown-toggle"
-                            type="button" data-bs-toggle="dropdown">
-                        <i class="fas fa-cog"></i>
+            
+                <div class="position-absolute start-0 bottom-0 m-2 px-3 py-1 bg-white bg-opacity-75 rounded-pill shadow-sm">
+                    <strong>$@property.FeesPerMonth</strong> USD
+                </div>
+
+             
+
+             
+                <div class="dropdown position-absolute top-0 start-0 m-2">
+                    <button class="btn btn-light btn-sm rounded-circle" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fa-solid fa-pen-to-square"></i>
                     </button>
-                    <ul class="dropdown-menu dropdown-menu-end">
-                        <li>
-                            <button class="dropdown-item"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#bookingModal"
-                                    data-property-id="@property.Id"
-                                    data-property-name="@property.Name"
-                                    data-property-fee="@property.FeesPerMonth">
-                                <i class="fas fa-calendar-check me-1"></i> Create Booking
-                            </button>
-                        </li>
-                        <li><a class="dropdown-item" href="#"><i class="fas fa-eye me-2"></i>View</a></li>
-                        <li><a class="dropdown-item" href="#"><i class="fas fa-chart-line me-2"></i>Stats</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item text-danger" href="#"><i class="fas fa-trash-alt me-2"></i>Delete</a></li>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="@Url.Action("EditProperty", new { propertyId = property.Id })"><i class="fas fa-edit me-2"></i>Edit</a></li>
+                        <li><a class="dropdown-item text-danger" asp-controller="Property" asp-action="Delete" asp-route-id="@property.Id"><i class="fas fa-trash me-2"></i>Delete</a></li>
                     </ul>
+                </div>
+
+            
+                <div class="card-body pb-2">
+                    <h6 class="fw-semibold">@property.Name</h6>
+                    <p class="text-muted small mb-2">
+                        <i class="fas fa-map-marker-alt me-1 text-danger"></i>
+                        @property.Address
+                    </p>
+
+                    <div class="d-flex justify-content-between text-muted small">
+                        <span><i class="fas fa-bed me-1"></i> @property.BedRooms</span>
+                        <span><i class="fas fa-bath me-1"></i> @property.BathRooms</span>
+                        <span><i class="fas fa-car me-1"></i> @property.GarageSlots</span>
+                        <span><i class="fas fa-paw me-1"></i> 0</span> 
+                    </div>
+                </div>
+
+
+                <div class="card-footer bg-transparent border-top-0 d-flex justify-content-between">
+                    <a>
+                        
+                    </a>
+                    <div class="dropdown">
+                        <button class="btn btn-sm btn-outline-secondary dropdown-toggle"
+                                 type="button" id="propertyDropdown-@property.Id"
+                                 data-bs-toggle="dropdown"
+                                 data-bs-display="static"
+                                 aria-expanded="false">
+                            <i class="fas fa-cog"></i>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="propertyDropdown-@property.Id">
+                            <li>
+                                <button class="dropdown-item"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#bookingModal"
+                                        data-property-id="@property.Id"
+                                        data-property-name="@property.Name"
+                                        data-property-fee="@property.FeesPerMonth">
+                                    <i class="fas fa-calendar-check me-1"></i> Create Booking
+                                </button>
+                            </li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-eye me-1"></i> View</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-chart-line me-1"></i> Stats</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-danger" href="#"><i class="fas fa-trash-alt me-1"></i> Delete</a></li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-}
+    }
+</div>
 
 
 <div class="modal fade" id="bookingModal" tabindex="-1" aria-hidden="true">
