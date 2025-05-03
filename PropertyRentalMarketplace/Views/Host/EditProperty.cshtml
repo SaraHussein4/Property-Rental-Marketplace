@@ -2,7 +2,7 @@
 
 @{
     ViewData["Title"] = "EditProperty";
-    Layout = "_Layout";
+    Layout = "_HostLayout";
 }
 
 @section Styles {
@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="~/css/FormFormat.css" />
     <link rel="stylesheet" href="~/css/AccordionStyle.css" />
 }
-<form method="post" asp-controller="Host" asp-action="EditProperty" enctype="multipart/form-data">
+<form method="post" asp-controller="Host" asp-action="EditProperty" enctype="multipart/form-data" style="margin-top:105px">
     <input type="hidden" asp-for="Id" />
     <div class="accordion" id="propertyAccordion">
         <!-- Property Details -->
