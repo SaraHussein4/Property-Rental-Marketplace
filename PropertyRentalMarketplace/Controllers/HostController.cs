@@ -17,7 +17,7 @@ using System.Threading;
 
 namespace PropertyRentalMarketplace.Controllers
 {
-    [Authorize(Roles = AppRoles.Host)]
+    //[Authorize(Roles = AppRoles.Host)]
 
 
     public class HostController : Controller

@@ -129,7 +129,7 @@ namespace PropertyRentalMarketplace.Controllers
                         }
                         else if (roles.Contains(AppRoles.Host))
                         {
-                            return RedirectToAction("AddProperty", "Host");
+                            return RedirectToAction("Index", "Host");
                         }
                         else
                         {
