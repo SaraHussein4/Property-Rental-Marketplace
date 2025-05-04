@@ -15,6 +15,7 @@ using static System.Net.Mime.MediaTypeNames;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using System.Security.Claims;
 
+
 namespace PropertyRentalMarketplace.Controllers
 {
 
@@ -251,8 +252,10 @@ namespace PropertyRentalMarketplace.Controllers
         [HttpGet]
         public async Task<IActionResult> Notification()
         {
+
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             List<Notification> notifications = await _notificationRepository.GetNotificationsForUser(userId);
+
             return View(notifications);
         }
 
