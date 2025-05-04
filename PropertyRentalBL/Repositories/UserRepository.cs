@@ -29,5 +29,9 @@ namespace PropertyBL.Repositories
         {
             return await _context.Users.FirstOrDefaultAsync(u => u.PhoneNumber == phone);
         }
+        public async Task<User> GetImageUser (string id)
+        {
+            return await _context.Users.FirstOrDefaultAsync(w => w.Id == id);
+        }
     }
 }

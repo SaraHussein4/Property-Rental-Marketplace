@@ -13,6 +13,8 @@ namespace PropertyBL.Interfaces
 
         public Task<bool> CheckUserByPhone(string phone);
         public Task<User> GetUserByPhone(string phone);
+        public Task<User> GetImageUser(string id);
+
 
     }
 }
