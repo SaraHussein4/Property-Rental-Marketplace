@@ -65,6 +65,9 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
 <script>
     document.getElementById("uploadForm").addEventListener("submit", function (e) {
         e.preventDefault();
@@ -100,3 +103,4 @@
         });
     });
 </script>
+}
