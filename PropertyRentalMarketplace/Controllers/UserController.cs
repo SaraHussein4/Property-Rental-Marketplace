@@ -13,12 +13,14 @@ using PropertyRentalMarketplace.ViewModels;
 using System.Security.Claims;
 using static System.Net.Mime.MediaTypeNames;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.Security.Claims;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace PropertyRentalMarketplace.Controllers
 {
 
- 
-    //[Authorize(Roles = AppRoles.User)]
+    [Authorize(Roles = AppRoles.User)]
+
     public class UserController : Controller
     {
         // IUserRepository
@@ -43,7 +45,9 @@ namespace PropertyRentalMarketplace.Controllers
             ,IPropertyAmenityRepository propertyAmenityRepository
             ,IServiceRepository serviceRepository ,ICountryRepository countryRepository
             ,IFavouriteRepository favouriteRepository1 , IPropertyTypeRepository propertyTypeRepository
-            , INotificationRepository notificationRepository, IRatingRepository ratingRepository, IBookingRepository bookingRepository, UserManager<User> userManager)    
+            , INotificationRepository notificationRepository, IRatingRepository ratingRepository, 
+            IBookingRepository bookingRepository, UserManager<User> userManager
+            )    
         {
             _propertyRepository = propertyRepository;
             _imageRepository = imageRepository;
@@ -76,9 +80,10 @@ namespace PropertyRentalMarketplace.Controllers
             return View(model);
         }
         #endregion
-        #region detailspublic async Task<string> getimagehost(int propertyid)
+        #region details
         public async Task<IActionResult> Details(int id, PropertyViewModel propertyViewModel ,UserProfileEditViewModel userProfileEditViewModel)
         {
+
             var data = await _propertyRepository.GetById(id);
             if (data == null)
             {
@@ -89,9 +94,13 @@ namespace PropertyRentalMarketplace.Controllers
             var safeties = await _amenityRepository.GetSafetyById(id);
             var AllAmenities = await _amenityRepository.GetAllAmenitiesById(id);
             var allServices =await _serviceRepository.GetAllServicesById(id);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var allrev = await _ratingRepository.GetallRatingbyid(id);
+            //var isFav = await _favouriteRepository1.isfav(userId, id);
+
             var model = new PropertyViewModel
             {
-                Property = data,
+                Property =data,
                 Address = data.Address,
                 Description=data.Description,
                 BedRooms = data.BedRooms,
@@ -115,7 +124,10 @@ namespace PropertyRentalMarketplace.Controllers
                 amenities = AllAmenities.ToList(),
                 safeties = safeties.ToList(),
                 services=allServices.ToList(),
-                Host = data.Host
+                CurrentUserId = userId,
+                Host = data.Host,
+                ratings=allrev,
+                //isFav = isFav 
             };
             
             
@@ -125,22 +137,51 @@ namespace PropertyRentalMarketplace.Controllers
 
         #region add to favourite
         [HttpPost]
+        //[ValidateAntiForgeryToken]
         public async Task<IActionResult> AddToFavourite(string userId, int propertyId)
         {
+            if (string.IsNullOrEmpty(userId) || propertyId <= 0)
+            {
+                return Json(new { success = false, message = "success" });
+            }
             try
             {
-                // إضافة العقار إلى المفضلة
+
                 await _favouriteRepository1.AddToFavourite(userId, propertyId);
 
-                // إرسال استجابة ناجحة
                 return Json(new { success = true });
             }
             catch (Exception ex)
             {
-                // في حالة حدوث خطأ
                 return Json(new { success = false, message = ex.Message });
             }
         }
+
+
+        public async Task<IActionResult> ShowFav( PropertyViewModel propertyViewModel)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var allfav = await _favouriteRepository1.getallfav(userId);
+            return View("ShowFav",allfav);
+        }
+        #endregion
+        #region remove from  favourite
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RemoveFromFavourite(string userId, int propertyId)
+        {
+            try
+            {
+                await _favouriteRepository1.RemoveToFavourite(userId, propertyId);
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message });
+            }
+          
+        }
+
         #endregion
 
 
@@ -255,12 +296,13 @@ namespace PropertyRentalMarketplace.Controllers
                 await _notificationRepository.Save();
 
                 Booking booking = await _bookingRepository.GetById(rating.BookingId);
-                Property property = await _propertyRepository.GetById(booking.PropertyId);
-                property.StarRating = await _propertyRepository.GetStarRating(property.Id);
+                //Property property = await _propertyRepository.GetById(booking.PropertyId);
+                //property.StarRating = await _propertyRepository.GetStarRating(property.Id);
                 await _propertyRepository.Save();
 
                 await _ratingRepository.CommitAsync();
             }
+                  
             catch (Exception ex) {
                 await _ratingRepository.RollbackAsync();
             }

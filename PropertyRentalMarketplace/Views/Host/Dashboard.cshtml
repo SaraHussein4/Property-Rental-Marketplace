@@ -1,29 +1,30 @@
 ﻿
 @{
     ViewData["Title"] = "Dashboard";
-    Layout = "_Layout";
+    Layout = "_HostLayout";
 }
+@section Styles{
+    <link href="~/css/tabstyle.css" rel="stylesheet" />
+} 
 
-<div class="container">
+<div class="container container1" style="margin-top:105px">
     <ul class="nav nav-tabs" id="propertiesTab" role="tablist">
-        <li class="nav-item">
-            <a class="nav-link active" data-tab="active" href="#">Active Listings</a>
+        <li class="nav-item nav-item1">
+            <a class="nav-link active nav-link1" data-tab="active" href="#">Active Listings</a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link" data-tab="booked" href="#">Booked Properties</a>
+        <li class="nav-item nav-item1">
+            <a class="nav-link nav-link1" data-tab="booked" href="#">Booked Properties</a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link" data-tab="expired" href="#">Expired Listings</a>
+        <li class="nav-item nav-item1">
+            <a class="nav-link nav-link1" data-tab="expired" href="#">Expired Listings</a>
         </li>
     </ul>
 
     <div class="tab-content py-3" id="tabContent">
-        <!-- Content loaded dynamically via AJAX -->
     </div>
 </div>
 
 @section Scripts {
-
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
     <script src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js"></script>

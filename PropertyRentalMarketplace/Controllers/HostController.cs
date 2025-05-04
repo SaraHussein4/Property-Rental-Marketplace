@@ -18,7 +18,6 @@ namespace PropertyRentalMarketplace.Controllers
 {
     //[Authorize(Roles = AppRoles.Host)]
 
-
     public class HostController : Controller
     {
         private readonly IPropertyTypeRepository _propertyTypeRepository;

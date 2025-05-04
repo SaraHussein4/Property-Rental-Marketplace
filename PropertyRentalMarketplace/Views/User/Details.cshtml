@@ -1,14 +1,23 @@
 ﻿ @model PropertyViewModel 
+ @using Microsoft.AspNetCore.Identity
+@using PropertyDAL.Models
+
+@inject UserManager<User> UserManager
+
 @{
     ViewData["Title"] = "Details";
-    Layout = "_Layout";
+    Layout = "_UserLayout";
 }
 
 @section Styles {
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
+    <link rel="stylesheet" href="~/css/userStyle.css">
+
+
     <link rel="stylesheet" href="~/css/propertydetails.css">
+
 }
 
 
@@ -26,10 +35,8 @@
     int extraSafeties = Safeties.Count - 5 + number;
     var services = Model.services?.ToList();
     int propertyid = Model.Property.Id;
+    var allreviews = Model.ratings?.ToList();
 }   
-@* <h2>details</h2> *@
-@* <h2>@extraPhoto</h2> *@
-
 
 <div class="container mt-5">
     <div class="row  images-overview g-2">
@@ -59,24 +66,7 @@
             </div>
         </div>
         
-        <div class="listedby-card">
-            <div class="row">
-                <div class="image-container">
-                    <img src="~/images/@Model.ImagesHost" class="img-fluid rounded-circle">
-                </div>
-
-                <div class=" ">
-                    <div class="ncard-body">
-                        <div class="ncard-text">Listed by</div>
-                        <div class="ncard-title">@Model.Host.Name</div>
-
-                        <div class="ncard-price">For: @($"{@Model.FeesPerMonth}$")</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    
-    </div>
+     
 </div>
 <div class="modal fade" id="moreImagesModal" tabindex="-1" aria-labelledby="moreImagesModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-xl">
@@ -100,18 +90,44 @@
         </div>
     </div>
 </div>
+    <div class="container">
+        <div class="card border-0 bg-transparent m-3  col-md-8 " style="width: 880px; height : 140px ;">
+            <div class="row g-0">
+                <div class="col-md-3 ">
+                    <img src="~/images/@Model.ImagesHost" class="img-fluid rounded-circle ms-4 mt-1" style="width : 170px ; height :150px" alt="...">
+                </div>
+
+                <div class="col-md-9 p-2">
+                    <div class="card-body">
+                        <p class="card-text">Listed by</p>
+                        <h5 class="card-title">@Model.Name</h5>
+
+                        <p class="card-text">@($"{@Model.FeesPerMonth}$")</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 <div class="container">
 </div>
 
 <div class="container mt-5">
     <div class="d-flex gap-5">
-        <div style="color: #484848; font-size: 28px">Well furnished Apartment</div>
-        <a href="javascript:void(0);" onclick="addToFavourite('@User.Identity.Name', @propertyid)">
-            <i class="fa-regular fa-heart fs-1" style="margin-left: 210px; margin-top:7px;"></i>
-        </a>
+
+        <h2 class="mb-3" style="color: #484848 ;">Well furnished Apartment</h2>
+            <i class="fa-heart fa-regular " style="font-size: 30px;margin-left:200px"
+               data-property-id="@Model.Property.Id"
+               data-user-id="@Model.CurrentUserId"
+               onclick="toggleFavourite(this)"></i>
+       
+            <a asp-controller="User" asp-action="ShowFav" asp-route-id="@Model.Property.Id"
+               class="btn btn-outline-primary fw-semibold px-4 py-2 rounded-pill shadow-sm d-inline-flex align-items-center gap-2"
+               style="font-size: 16px; text-decoration: none;">
+                Show Favourites
+            </a>
     </div>
-    <p style="color: #bcbcbc; font-size: 18px; margin-top: -9px;">@Model.Address</p>
+    <p class="mb-3" style="color: #bcbcbc; font-size: 18px; margin-top: -9px;">@Model.Address</p>
 
     <div class="col-md-4 gap-2 d-flex">
         <div class="col">
@@ -178,7 +194,7 @@
 
     </div>
     <div class="mt-3">
-        <h2 class="mb-2" style="color: #484848 ;">Apartment Description</h2>
+        <h2 class="mb-4" style="color: #484848 ;">Apartment Description</h2>
         <div class="col-md-6">
             <p> @Model.Description</p>
         </div>
@@ -285,7 +301,7 @@
                 }
                 else
                 {
-                    // أول 3 + الأخير عليه الزر
+                    // أول 3 + الأخير عليه الزرار
                     foreach (var safeties in Safeties.Take(3))
                     {
                         <div class="col-6">
@@ -348,9 +364,18 @@
 
     @* ---------------------------- *@
 
-    <div class="mb-3 col-md-8" id="map" style="height: 400px; width: 100%;" data-latitude="@Model.Latitude" data-longitude="@Model.Longitude"></div>
 
-
+        <div class="mb-5 col-md-8  mt-5" id="map"
+             style="
+        height: 400px;
+        width: 50%;
+        border-radius: 20px;
+        border: 2px solid black;
+        box-shadow: 0 8px 20px rgba(75, 0, 130, 0.3);
+        overflow: hidden;"
+             data-latitude="@Model.Latitude"
+             data-longitude="@Model.Longitude">
+        </div>
     <div class="container mt-5">
         <h2 class="mb-5" style="color: #484848 ;">Nearby Services</h2>
 
@@ -376,28 +401,61 @@
 
         }
         </div>
-       
-</div>
-
-    <script>
-        function addToFavourite(userName, propertyId) {
-            $.ajax({
-                url: '@Url.Action("AddToFavourite", "Property")',  
-                type: 'POST',
-                data: { userName: userName, propertyId: propertyId },  
-                success: function(response) {
-                    if (response.success) {
-                        alert('Added to favourites!');
-                        $('i.fa-heart').toggleClass('fa-solid fa-regular');
-                    } else {
-                        alert('Error adding to favourites');
-                    }
-                },
-                error: function() {
-                    alert('Error processing your request');
+            <div class="container mt-5">
+                <h1>hu</h1>
+                @foreach (var r in allreviews)
+                {
+                    <div class="card" style="width: 18rem;">
+                        @* <img src="..." class="card-img-top" alt="..."> *@
+                        <div class="card-body">
+                            <h5 class="card-title">Card title</h5>
+                            <p class="card-text">@r.Review</p>
+                            <a href="#" class="btn btn-primary">Go somewhere</a>
+                        </div>
+                    </div>
                 }
-            });
+            </div>
+        </div>
+ 
+  <style>
+        .text-red {
+            color: red !important;
         }
+  </style>
+        <script>
+                function toggleFavourite(icon) {
+                    const propertyId = icon.getAttribute("data-property-id");
+                    const userId = icon.getAttribute("data-user-id");
+
+                    const isFavorited = icon.classList.contains("fa-solid");
+
+                    if (isFavorited) {
+                        // Call Remove
+                        fetch(`/User/RemoveFromFavourite?userId=${userId}&propertyId=${propertyId}`, {
+                            method: 'POST'
+                        })
+                        .then(response => {
+                            if (response.ok) {
+                                icon.classList.remove("fa-solid");
+                                icon.classList.add("fa-regular");
+                                 icon.classList.remove("text-red");
+                            }
+                        });
+                    } else {
+                        // Call Add
+                        fetch(`/User/AddToFavourite?userId=${userId}&propertyId=${propertyId}`, {
+                            method: 'POST'
+                        })
+                        .then(response => {
+                            if (response.ok) {
+                                icon.classList.remove("fa-regular");
+                                icon.classList.add("fa-solid");
+                                 icon.classList.add("text-red");
+                            }
+                        });
+                    }
+                }
+
 
      console.log("a;dkfja;d");
 
@@ -447,15 +505,9 @@
             });
     </script>
 
-
-
-    @* <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> *@
-    @* <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script> *@
-
     @section Scripts {
         <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-        @* <script src="~/js/host/addProperty.js"></script> *@
         <script src="~/lib/jquery/dist/jquery.min.js"></script>
-        @* <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script> *@
-        @* <script src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js"></script> *@
+        
     }
+

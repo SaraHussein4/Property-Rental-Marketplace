@@ -1,26 +1,18 @@
 ﻿<!DOCTYPE html>
-
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>@ViewBag.Title</title>
-
-
-    <link href="/css/FooterStyleSheet.css" rel="stylesheet" />
-
-
-    <link href="/css/style.css" rel="stylesheet"/>
-
-     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/PropertyRentalMarketplace.styles.css" asp-append-version="true" />
+    <link href="/css/style.css" rel="stylesheet" />
+    <link href="/css/FooterStyleSheet.css" rel="stylesheet" />
     @await RenderSectionAsync("Styles", required: false)
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg  fixed-top" style="padding:0px 30px">
-        <div class="container-fluid ">
-            <a class="navbar-brand me-auto" href="#">Homelo</a
+    <nav class="navbar navbar-expand-lg  fixed-top" style="padding:0px 50px;">
+        <div class="container-fluid" style="margin: 0px 30px;">
+            <a class="navbar-brand me-auto" href="#">Homelo</a>
             <div class="d-flex order-lg-3">
                 <div class="dropdown user-login">
                     <button class="btn btn-link nav-link dropdown-toggle" type="button" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false">
@@ -50,13 +42,12 @@
                         <a class="nav-link @(ViewContext.RouteData.Values["action"].ToString() == "Favourite" ? "active" : "") mx-lg-2" asp-controller="Host" asp-action="addproperty">Add Property</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link @(ViewContext.RouteData.Values["action"].ToString() == "Download" ? "active" : "") mx-lg-2" asp-controller="Home" asp-action="Contact">Download Mobile App</a>
-                    </li
+                        <a class="nav-link @(ViewContext.RouteData.Values["action"].ToString() == "Download" ? "active" : "") mx-lg-2" asp-controller="Home" asp-action="ComingSoon">Download Mobile App</a>
+                    </li>
                 </ul>
             </div>
-        </div>
     </nav>
-    <div>
+    <div> 
         @RenderBody()
     </div>
     @Html.Partial("FooterPartial")

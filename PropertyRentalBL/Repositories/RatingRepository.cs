@@ -1,4 +1,5 @@
-﻿using PropertyBL.Repositories;
+﻿using Microsoft.EntityFrameworkCore;
+using PropertyBL.Repositories;
 using PropertyDAL.Contexts;
 using PropertyRentalBL.Interfaces;
 using PropertyRentalDAL.Models;
@@ -12,6 +13,13 @@ namespace PropertyRentalBL.Repositories
 {
     public class RatingRepository: GenericRepository<Rating>, IRatingRepository 
     {
-        public RatingRepository(PropertyDbContext context):base(context) { }
+        private readonly PropertyDbContext _context;
+        public RatingRepository(PropertyDbContext context):base(context) {
+            _context = context;
+        }
+        public async Task<List<Rating>> GetallRatingbyid(int idbook)
+        {
+            return await _context.Ratings.Where(w=>w.Id == idbook).ToListAsync();
+        }
     }
 }
