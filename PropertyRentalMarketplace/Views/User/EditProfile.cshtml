@@ -7,12 +7,17 @@
 @section Styles {
     <link rel="stylesheet" href="~/css/FormFormat.css" />
 }
-
+<<<<<<< HEAD
 <div class="container mt-5">
-    <div class="row">
+    <div class="row" style="margin-top:100px; min-height:80vh;">
+=======
+
+<div class="container mt-5" style="margin-top:105px">
+    <div class="row" style="margin-top:105px">
+>>>>>>> main
         <!-- Profile Image Column -->
         <div class="col-md-4" >
-            <div class="card text-center p-3 shadow-sm" style="background-color: #eff0f2;">
+            <div class="card text-center shadow-sm" style="background-color: #eff0f2;padding: 100px 30px;">
                 <img id="profileImage" 
                      src="~/images/@(string.IsNullOrEmpty(Model.Image) ? "default-profile.jpg" : Model.Image)"
                      class="rounded-circle mx-auto mb-3"
@@ -33,7 +38,7 @@
         </div>
 
         <!-- Profile Edit Form Column -->
-        <div class="col-md-8">
+        <div class="col-md-8" style="margin-bottom:50px">
             <h3 class="mb-4">Edit Profile</h3>
             <form asp-action="SaveEdit" asp-controller="Host" method="post" enctype="multipart/form-data">
                 <input type="hidden" asp-for="Id" />
@@ -65,9 +70,14 @@
         </div>
     </div>
 </div>
+<<<<<<< HEAD
+=======
 
+
+>>>>>>> main
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+
 <script>
     document.getElementById("uploadForm").addEventListener("submit", function (e) {
         e.preventDefault();

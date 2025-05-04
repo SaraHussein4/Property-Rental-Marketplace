@@ -5,8 +5,14 @@
             <h2 class="logo">LOGO</h2>
             <p class="description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper.</p>
             <div class="store-buttons">
-                <button class="store-btn"><i class="fab fa-google-play"></i> PlayStore</button>
-                <button class="store-btn"><i class="fab fa-apple"></i> AppleStore</button>
+                @* <button class="store-btn" asp-controller="Home" asp-action="ComingSoon"><i class="fab fa-google-play"></i> PlayStore</button> *@
+                @* <button class="store-btn" asp-controller="Home" asp-action="ComingSoon"><i class="fab fa-apple"></i> AppleStore</button> *@
+                <button class="store-btn" onclick="window.location.href='@Url.Action("ComingSoon", "Home")'">
+                    <i class="fab fa-google-play"></i> PlayStore
+                </button>
+                <button class="store-btn" onclick="window.location.href='@Url.Action("ComingSoon", "Home")'">
+                    <i class="fab fa-apple"></i> AppleStore
+                </button>
             </div>
         </div>
 

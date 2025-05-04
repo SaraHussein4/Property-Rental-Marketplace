@@ -34,6 +34,14 @@
     .dropdown-menu {
         min-width: 140px;
     }
+
+    #useBaseFe1{
+        transition:all 1s;
+    }
+    #useBaseFe1:hover {
+        background-color: #eff0f2;
+        color:white;
+    }
 </style>
 
 
@@ -137,8 +145,8 @@
 <div class="modal fade" id="bookingModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <div class="modal-header bg-primary text-white">
-                <h5 class="modal-title">Create New Booking</h5>
+            <div class="modal-header text-secondary" style="background-color:#eff0f2;">
+                <h5 class="modal-title text-secondary">Create New Booking</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form id="bookingForm" asp-action="" method="post">
@@ -191,7 +199,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Confirm Booking</button>
+                    <button type="submit" class="btn" style="border:1px solid black" id="useBaseFe1">Confirm Booking</button>
                 </div>
             </form>
         </div>

@@ -9,12 +9,24 @@
     @* <link rel="stylesheet" href="~/css/host/addProperty.css" /> *@
     <link rel="stylesheet" href="~/css/FormFormat.css" />
     <link rel="stylesheet" href="~/css/AccordionStyle.css" />
+    <style>
+        .accordion-button:not(.collapsed)::after 
+        {
+        transform:none;
+        }
+    </style>
 }
 
 <div class="container" style="min-height: 85vh;">
 
+<<<<<<< HEAD
     <form method="post" asp-controller="Host" asp-action="AddProperty" enctype="multipart/form-data" style="margin:100px 0px 30px 0px" >
     <div class="accordion" id="propertyAccordion">
+=======
+
+<form method="post" asp-controller="Host" asp-action="AddProperty" enctype="multipart/form-data" style="margin:100px 0px 30px 0px; padding:0px 120px" >
+<div class="accordion" id="propertyAccordion">
+>>>>>>> main
 
             <!-- Property Details -->
             <div class="accordion-item">
