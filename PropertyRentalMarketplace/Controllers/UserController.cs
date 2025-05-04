@@ -18,7 +18,7 @@ using System.Security.Claims;
 namespace PropertyRentalMarketplace.Controllers
 {
 
-    //[Authorize(Roles = AppRoles.User)]
+    [Authorize(Roles = AppRoles.User)]
 
     public class UserController : Controller
     {
@@ -350,6 +350,7 @@ namespace PropertyRentalMarketplace.Controllers
 
             return View(viewModel);
         }
+       
         public async Task<IActionResult> EditProfile(string id)
         {
             var user = await _userManager.FindByIdAsync(id);
