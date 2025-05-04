@@ -12,12 +12,12 @@ using PropertyRentalDAL.Enumerates;
 using PropertyRentalDAL.Models;
 using PropertyRentalMarketplace.ViewModels;
 using System.Net;
+using System.Security.Claims;
 using System.Threading;
 
 namespace PropertyRentalMarketplace.Controllers
 {
-    //[Authorize(Roles = AppRoles.Host)]
-
+    [Authorize(Roles = AppRoles.Host)]
 
     public class HostController : Controller
     {
@@ -138,8 +138,11 @@ namespace PropertyRentalMarketplace.Controllers
                 await _propertyRepository.BeginTransactionAsync();
                 
                 Property property = await _propertyRepository.GetById(model.Id);
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-                if (property.Host.Id != "23d1c943-494f-489b-acaf-5144c2fe2387")
+
+                //if (property.Host.Id != "23d1c943-494f-489b-acaf-5144c2fe2387")
+                if (property.Host.Id != userId)
                 {
                     return Json("You Can't Edit Property of Another Host");
                 }
@@ -299,8 +302,12 @@ namespace PropertyRentalMarketplace.Controllers
                 await _propertyRepository.BeginTransactionAsync();
                 
                 Property property = await _propertyRepository.GetById(model.Id);
-                
-                if(property.Host.Id != "23d1c943-494f-489b-acaf-5144c2fe2387")
+
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+
+                //if (property.Host.Id != "23d1c943-494f-489b-acaf-5144c2fe2387")
+                if (property.Host.Id != userId)
                 {
                     return Json("You Can't Edit Property of Another Host");
                 }
@@ -412,8 +419,10 @@ namespace PropertyRentalMarketplace.Controllers
                 await _locationRepository.Save();
 
                 var (unListDate, isFeatured) = CalculateListingDetails(model.ListingPlan);
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-                Property property = new Property()
+
+                    Property property = new Property()
                 {
                     Name = model.Name,
                     Description = model.Description,
@@ -431,7 +440,7 @@ namespace PropertyRentalMarketplace.Controllers
                     ListingType = (ListingType)model.ListingType,
                     PropertyTypeId = model.PropertyTypeId,
                     LocationId = loc.Id,
-                    UserId = "23d1c943-494f-489b-acaf-5144c2fe2387",
+                    UserId = userId,
                 };
                 await _propertyRepository.Add(property);
                 await _propertyRepository.Save();
@@ -474,7 +483,7 @@ namespace PropertyRentalMarketplace.Controllers
                 }
 
                 await _propertyRepository.CommitAsync();
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Host");
             }
             catch(Exception ex) 
             {
@@ -682,12 +691,12 @@ namespace PropertyRentalMarketplace.Controllers
         public async Task<IActionResult> LoadTab(string tab)
         {
             // We Must get the Logged IN User 
-
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             return tab switch
             {
-                "active" => PartialView("_ActiveListings", await _propertyRepository.GetActiveListedPropertiesHostedBySpecificHost("23d1c943-494f-489b-acaf-5144c2fe2387")),
-                "booked" => PartialView("_BookedProperties", await _bookingRepository.GetActiveBookingsForHost("23d1c943-494f-489b-acaf-5144c2fe2387")),
-                "expired" => PartialView("_ExpiredListings", await _propertyRepository.GetExpiredPropertiesHostedBySpecificHost("23d1c943-494f-489b-acaf-5144c2fe2387")),
+                "active" => PartialView("_ActiveListings", await _propertyRepository.GetActiveListedPropertiesHostedBySpecificHost(userId)),
+                "booked" => PartialView("_BookedProperties", await _bookingRepository.GetActiveBookingsForHost(userId)),
+                "expired" => PartialView("_ExpiredListings", await _propertyRepository.GetExpiredPropertiesHostedBySpecificHost(userId)),
                 _ => PartialView("_ActiveListings", new List<Property>())
             };
         }

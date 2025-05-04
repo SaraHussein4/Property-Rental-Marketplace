@@ -14,12 +14,12 @@ using System.Security.Claims;
 using static System.Net.Mime.MediaTypeNames;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using System.Security.Claims;
-//using Microsoft.EntityFrameworkCore.Metadata.Internal;
+
 
 namespace PropertyRentalMarketplace.Controllers
 {
 
-    //[Authorize(Roles = AppRoles.User)]
+    [Authorize(Roles = AppRoles.User)]
 
     public class UserController : Controller
     {
@@ -252,7 +252,10 @@ namespace PropertyRentalMarketplace.Controllers
         [HttpGet]
         public async Task<IActionResult> Notification()
         {
-            List<Notification> notifications = await _notificationRepository.GetNotificationsForUser("4f03ea5a-016a-4037-a168-bb328b64853a");
+
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            List<Notification> notifications = await _notificationRepository.GetNotificationsForUser(userId);
+
             return View(notifications);
         }
 
@@ -271,6 +274,8 @@ namespace PropertyRentalMarketplace.Controllers
 
         public async Task<IActionResult> Rate(UserRateViewModel model)
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
             try
             {
                 await _ratingRepository.BeginTransactionAsync();
@@ -285,13 +290,13 @@ namespace PropertyRentalMarketplace.Controllers
                     Review = model.Review,
                     CreatedAt = DateTime.Now,
                     BookingId = model.BookingId,
-                    UserId = "00083eec-d2e1-44f1-b6d1-e9d87946a505"
+                    UserId = userId
                 };
                 await _ratingRepository.Add(rating);
                 await _ratingRepository.Save();
 
 
-                var notification = await _notificationRepository.GetNotificationForUserAndBooking("00083eec-d2e1-44f1-b6d1-e9d87946a505", model.BookingId);
+                var notification = await _notificationRepository.GetNotificationForUserAndBooking(userId, model.BookingId);
                 notification.IsReaded = true;
                 await _notificationRepository.Save();
 
@@ -351,6 +356,7 @@ namespace PropertyRentalMarketplace.Controllers
 
             return View(viewModel);
         }
+       
         public async Task<IActionResult> EditProfile(string id)
         {
             var user = await _userManager.FindByIdAsync(id);
