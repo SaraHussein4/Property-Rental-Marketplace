@@ -121,11 +121,11 @@
                data-user-id="@Model.CurrentUserId"
                onclick="toggleFavourite(this)"></i>
        
-            <a asp-controller="User" asp-action="ShowFav" asp-route-id="@Model.Property.Id"
-               class="btn btn-outline-primary fw-semibold px-4 py-2 rounded-pill shadow-sm d-inline-flex align-items-center gap-2"
-               style="font-size: 16px; text-decoration: none;">
-                Show Favourites
-            </a>
+            @* <a asp-controller="User" asp-action="ShowFav" asp-route-id="@Model.Property.Id" *@
+            @*    class="btn btn-outline-primary fw-semibold px-4 py-2 rounded-pill shadow-sm d-inline-flex align-items-center gap-2" *@
+            @*    style="font-size: 16px; text-decoration: none;"> *@
+            @*     Show Favourites *@
+            @* </a> *@
     </div>
     <p class="mb-3" style="color: #bcbcbc; font-size: 18px; margin-top: -9px;">@Model.Address</p>
 
@@ -199,7 +199,7 @@
             <p> @Model.Description</p>
         </div>
     </div>
-    <div class="container mt-5">
+    <div class="container mt-5 ">
 
         <div class="col-md-4 mt-5">
             <h2 class="mb-5" style="color: #484848 ;">Offered Amenities</h2>
@@ -365,10 +365,12 @@
     @* ---------------------------- *@
 
 
-        <div class="mb-5 col-md-8  mt-5" id="map"
+        <div class="mb-5 col-md-8 " id="map"
              style="
         height: 400px;
         width: 50%;
+        margin-top:100px;
+
         border-radius: 20px;
         border: 2px solid black;
         box-shadow: 0 8px 20px rgba(75, 0, 130, 0.3);
@@ -377,7 +379,7 @@
              data-longitude="@Model.Longitude">
         </div>
     <div class="container mt-5">
-        <h2 class="mb-5" style="color: #484848 ;">Nearby Services</h2>
+        <h2 class="" style="color: #484848 ; margin-top:100px;">Nearby Services</h2>
 
         <div class="d-flex flex-wrap gap-5">
     
