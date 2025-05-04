@@ -14,7 +14,7 @@ using System.Security.Claims;
 using static System.Net.Mime.MediaTypeNames;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using System.Security.Claims;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
+//using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace PropertyRentalMarketplace.Controllers
 {
@@ -252,7 +252,7 @@ namespace PropertyRentalMarketplace.Controllers
         [HttpGet]
         public async Task<IActionResult> Notification()
         {
-            List<Notification> notifications = await _notificationRepository.GetNotificationsForUser("00083eec-d2e1-44f1-b6d1-e9d87946a505");
+            List<Notification> notifications = await _notificationRepository.GetNotificationsForUser("4f03ea5a-016a-4037-a168-bb328b64853a");
             return View(notifications);
         }
 
@@ -296,8 +296,8 @@ namespace PropertyRentalMarketplace.Controllers
                 await _notificationRepository.Save();
 
                 Booking booking = await _bookingRepository.GetById(rating.BookingId);
-                //Property property = await _propertyRepository.GetById(booking.PropertyId);
-                //property.StarRating = await _propertyRepository.GetStarRating(property.Id);
+                Property property = await _propertyRepository.GetById(booking.PropertyId);
+                property.StarRating = await _propertyRepository.GetStarRating(property.Id);
                 await _propertyRepository.Save();
 
                 await _ratingRepository.CommitAsync();

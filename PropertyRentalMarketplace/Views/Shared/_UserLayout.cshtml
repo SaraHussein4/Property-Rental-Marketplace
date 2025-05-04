@@ -39,7 +39,7 @@
                         <a class="nav-link @(ViewContext.RouteData.Values["action"].ToString() == "FindProperty" ? "active" : "") mx-lg-2" asp-controller="User" asp-action="FindProperty">Find A Property</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link @(ViewContext.RouteData.Values["action"].ToString() == "Favourite" ? "active" : "") mx-lg-2" href="#">Favoutite Property</a>
+                        <a class="nav-link @(ViewContext.RouteData.Values["action"].ToString() == "Favourite" ? "active" : "") mx-lg-2" asp-controller="User" asp-action="ShowFav">Favoutite Property</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link @(ViewContext.RouteData.Values["action"].ToString() == "Download" ? "active" : "") mx-lg-2" asp-controller="Home" asp-action="Contact">Download Mobile App</a>
