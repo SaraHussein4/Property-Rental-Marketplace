@@ -10,5 +10,6 @@ namespace PropertyRentalBL.Interfaces
 {
     public interface IRatingRepository:IGenericRepository<Rating>
     {
+        public Task<List<Rating>> GetallRatingbyid(int idbook);
     }
 }

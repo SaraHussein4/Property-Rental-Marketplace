@@ -5,34 +5,92 @@
     Layout = "_UserLayout";
 
 }
-@section Styles {
-    <link rel="stylesheet" href="~/css/userStyle.css">
-}
 
-<div class="hero-section" style=" background:url('@Url.Content("~/images/hero_bg_2.jpg")') no-repeat center;">
+<div class="container py-5 " style="margin:150px;">
+    <h2 class="text-center mb-5 fw-bold mb-5" style="color:black;">💖 Your Favourite Properties</h2>
 
-    <div class="container d-flex align-items-center justify-content-center fs-1 text-white flex-column">
-        <h1>Favourie Property</h1>
-    </div>
-</div>
-
-@* <h1 class="text-center">My Favourites</h1> *@
-
-<div class="container mt-5">
-    <div class="row g-4">
+    <div class="row g-5 ">
 
         @foreach (var fav in Model)
         {
-            <div class="col-md-5">
-                <div class="card text-center shadow-sm">
-                    <div class="card-body">
-                        <h5 class="card-title" style="color:dimgrey">@fav.Property.Name</h5>
-                        <p class="card-text">@fav.Property.Address</p>
-                        <p class="card-text">Price: @fav.Property.FeesPerMonth $ </p>
+            <div class="col-md-6 ">
+                <div class="card border-0 shadow-lg rounded-4 h-100 bg-light position-relative favourite-card" style="width:600px">
+
+                    <div class="card-body p-4">
+                        <h5 class="card-title fw-bold text-primary mt-3" style="font-size: 22px;">
+                            🏡 @fav.Property.Name
+                        </h5>
+
+                        <p class="card-text text-muted mb-2">
+                             @fav.Property.Address
+                        </p>
+
+                        <p class="card-text mb-4" style="font-weight: bold; color: #28a745;">
+                             Price: @fav.Property.FeesPerMonth $
+                        </p>
+
+                        <button class="btn btn-outline-danger w-100 fw-semibold" onclick="removefav(@fav.PropertyId, '@fav.UserId')">
+                            ❌ Remove from Favourites
+                        </button>
                     </div>
+
+                    <div class="favourite-badge position-absolute top-0 end-0 bg-gradient px-3 py-1  rounded-bottom-start mb-5" 
+                    style="background: linear-gradient(45deg, #ff416c, #ff4b2b); font-weight: bold; color:black">
+                        ❤️ Favourite
+                    </div>
+
                 </div>
             </div>
         }
 
     </div>
 </div>
+
+<style>
+    .favourite-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        .favourite-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 0 25px rgba(0, 0, 0, 0.1);
+        }
+
+    .favourite-badge {
+        font-size: 14px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    }
+
+    body {
+        background: linear-gradient(to right, #f5f5f5,#f5f5f5);
+    }
+</style>
+
+<form id="antiForgeryForm">
+    @Html.AntiForgeryToken()
+</form>
+
+<script>
+    function removefav(propertyId, userId) {
+        if (confirm("Are you sure you want to remove this item from favourites?")) {
+            fetch(`/User/RemoveFromFavourite?userId=${userId}&propertyId=${propertyId}`, {
+                method: 'POST',
+                headers: {
+                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload();
+                } else {
+                    alert("Failed to remove item.");
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                alert("An error occurred.");
+            });
+        }
+    }
+</script>

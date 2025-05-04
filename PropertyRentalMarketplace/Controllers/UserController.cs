@@ -19,7 +19,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 namespace PropertyRentalMarketplace.Controllers
 {
 
-    [Authorize(Roles = AppRoles.User)]
+    //[Authorize(Roles = AppRoles.User)]
 
     public class UserController : Controller
     {
@@ -45,7 +45,9 @@ namespace PropertyRentalMarketplace.Controllers
             ,IPropertyAmenityRepository propertyAmenityRepository
             ,IServiceRepository serviceRepository ,ICountryRepository countryRepository
             ,IFavouriteRepository favouriteRepository1 , IPropertyTypeRepository propertyTypeRepository
-            , INotificationRepository notificationRepository, IRatingRepository ratingRepository, IBookingRepository bookingRepository, UserManager<User> userManager)    
+            , INotificationRepository notificationRepository, IRatingRepository ratingRepository, 
+            IBookingRepository bookingRepository, UserManager<User> userManager
+            )    
         {
             _propertyRepository = propertyRepository;
             _imageRepository = imageRepository;
@@ -78,9 +80,10 @@ namespace PropertyRentalMarketplace.Controllers
             return View(model);
         }
         #endregion
-        #region detailspublic async Task<string> getimagehost(int propertyid)
+        #region details
         public async Task<IActionResult> Details(int id, PropertyViewModel propertyViewModel ,UserProfileEditViewModel userProfileEditViewModel)
         {
+
             var data = await _propertyRepository.GetById(id);
             if (data == null)
             {
@@ -92,10 +95,12 @@ namespace PropertyRentalMarketplace.Controllers
             var AllAmenities = await _amenityRepository.GetAllAmenitiesById(id);
             var allServices =await _serviceRepository.GetAllServicesById(id);
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-           
+            var allrev = await _ratingRepository.GetallRatingbyid(id);
+            //var isFav = await _favouriteRepository1.isfav(userId, id);
+
             var model = new PropertyViewModel
             {
-                Property = data,
+                Property =data,
                 Address = data.Address,
                 Description=data.Description,
                 BedRooms = data.BedRooms,
@@ -119,10 +124,10 @@ namespace PropertyRentalMarketplace.Controllers
                 amenities = AllAmenities.ToList(),
                 safeties = safeties.ToList(),
                 services=allServices.ToList(),
-                CurrentUserId = userId
-
-                Host = data.Host
-
+                CurrentUserId = userId,
+                Host = data.Host,
+                ratings=allrev,
+                //isFav = isFav 
             };
             
             
@@ -131,12 +136,13 @@ namespace PropertyRentalMarketplace.Controllers
         #endregion
 
         #region add to favourite
-        [HttpPost]  
+        [HttpPost]
+        //[ValidateAntiForgeryToken]
         public async Task<IActionResult> AddToFavourite(string userId, int propertyId)
         {
             if (string.IsNullOrEmpty(userId) || propertyId <= 0)
             {
-                return Json(new { success = false, message = "المعطيات غير صحيحة" });
+                return Json(new { success = false, message = "success" });
             }
             try
             {
@@ -151,7 +157,7 @@ namespace PropertyRentalMarketplace.Controllers
             }
         }
 
-        
+
         public async Task<IActionResult> ShowFav( PropertyViewModel propertyViewModel)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -161,6 +167,7 @@ namespace PropertyRentalMarketplace.Controllers
         #endregion
         #region remove from  favourite
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> RemoveFromFavourite(string userId, int propertyId)
         {
             try
@@ -289,12 +296,13 @@ namespace PropertyRentalMarketplace.Controllers
                 await _notificationRepository.Save();
 
                 Booking booking = await _bookingRepository.GetById(rating.BookingId);
-                Property property = await _propertyRepository.GetById(booking.PropertyId);
-                property.StarRating = await _propertyRepository.GetStarRating(property.Id);
+                //Property property = await _propertyRepository.GetById(booking.PropertyId);
+                //property.StarRating = await _propertyRepository.GetStarRating(property.Id);
                 await _propertyRepository.Save();
 
                 await _ratingRepository.CommitAsync();
             }
+                  
             catch (Exception ex) {
                 await _ratingRepository.RollbackAsync();
             }

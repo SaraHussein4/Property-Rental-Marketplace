@@ -59,8 +59,10 @@ namespace PropertyRentalBL.Repositories
         {
             return await _context.Favourites.Where(w => w.UserId == id && w.PropertyId == propid).ToListAsync();
         }
-
-       
+        //public async Task<bool> isfav(string id, int propid)
+        //{
+        //   return await _context.Favourites.AnyAsync(a => a.UserId == id && a.PropertyId == propid);
+        //}
         
     }
 }
