@@ -2,70 +2,131 @@
 @*
     For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 *@
-<h1>expired</h1>
 
-@foreach (var property in Model)
-{
-    <div class="col-md-6 col-lg-4 mb-4">
-        <div class="card property-card h-100 border-0 shadow-sm">
-    
-            <!-- Property Image Placeholder -->
-            <div class="card-img-top bg-light" style="height: 180px; background-color: #eee;">
-                <div class="d-flex justify-content-center align-items-center h-100">
-                    @if (property.Images.Any(img => img.IsPrimary))
-                    {
-                        <img src="~/images/@property.Images.First(img => img.IsPrimary).Path"
-                             alt="@property.Name property image"
-                             class="img-fluid h-100 w-100 object-fit-cover"
-                             onerror="this.onerror=null;this.src='/images/default-property.jpg';this.alt='Default property image'">
-                    }
-                    else
-                    {
-                        <!-- Fallback Icon -->
-                        <div class="d-flex justify-content-center align-items-center h-100 text-muted">
-                            <i class="fas fa-home fa-3x opacity-25"></i>
+
+
+<style>
+    .carousel-indicators [data-bs-target] {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background-color: #ccc;
+    }
+
+    .card-body {
+        height: 105px;
+    }
+
+    .carousel-indicators .active {
+        background-color: #333;
+    }
+
+    .object-fit-cover {
+        object-fit: cover;
+    }
+
+    .card .btn.btn-light i {
+        color: #555;
+    }
+
+    .card .btn.btn-light:hover i {
+        color: #e74c3c;
+    }
+
+    .dropdown-menu {
+        min-width: 140px;
+    }
+</style>
+
+
+<div class="row mt-2">
+    @foreach (var property in Model)
+    {
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card border-0 shadow-sm rounded-4 position-relative h-100 overflow-hidden">
+
+                <div class="position-relative">
+                    <div id="carousel-@property.Id" class="carousel slide" data-bs-ride="carousel">
+                        <div class="carousel-inner rounded-0">
+                            @if (property.Images != null && property.Images.Any())
+                            {
+                                @for (int i = 0; i < property.Images.Count; i++)
+                                {
+                                    var img = property.Images[i];
+                                    <div class="carousel-item @(i == 0 ? "active" : "")">
+                                        <img src="~/images/@img.Path"
+                                             class="d-block w-100 object-fit-cover"
+                                             style="height: 220px;"
+                                             alt="@property.Name"
+                                             onerror="this.onerror=null;this.src='/images/default-property.jpg';">
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <div class="carousel-item active">
+                                    <div class="d-flex justify-content-center align-items-center bg-light" style="height: 220px;">
+                                        <i class="fas fa-home fa-3x text-muted"></i>
+
+                                    </div>
+                                </div>
+                            }
                         </div>
-                    }
+                        @if (property.Images?.Count > 1)
+                        {
+                            <div class="carousel-indicators position-absolute bottom-0 start-50 translate-middle-x mb-2">
+                                @for (int i = 0; i < property.Images.Count; i++)
+                                {
+                                    <button type="button"
+                                            data-bs-target="#carousel-@property.Id"
+                                            data-bs-slide-to="@i"
+                                            class="@(i == 0 ? "active" : "")"
+                                            aria-current="@(i == 0 ? "true" : "false")"
+                                            aria-label="Slide @(i + 1)">
+                                    </button>
+                                }
+                            </div>
+                        }
+                    </div>
                 </div>
-            </div>
 
-            <div class="card-body">
-                <!-- Title and Status -->
-                <div class="d-flex justify-content-between align-items-start mb-2">
-                    <h5 class="card-title mb-0">@property.Name</h5>
-                    @* <span class="badge @(property.IsListed ? "bg-success" : "bg-secondary")"> *@
-                    @*     @(property.IsListed ? "Active" : "Inactive") *@
-                    @* </span> *@
+                <div class="position-absolute top-0 start-0 m-2 d-flex justify-content-center align-items-center" style="">
+                    <a class="btn btn-light btn-sm p-1 bg-light rounded-circle d-flex justify-content-center align-items-center"
+                       href="@Url.Action("EditProperty", new { propertyId = property.Id })"
+                       style="width: 30px; height: 30px;">
+                        <i class="fas fa-edit"></i>
+                    </a>
                 </div>
 
-                <!-- Address -->
-                <p class="card-text text-muted small mb-2">
-                    <i class="fas fa-map-marker-alt text-danger me-1"></i>
-                    @property.Address
-                </p>
 
-                <!-- Key Features -->
-                <div class="d-flex flex-wrap gap-2 mb-3">
-                    <span class="badge bg-light text-dark border">
-                        <i class="fas fa-bed text-primary me-1"></i> @property.BedRooms
-                    </span>
-                    <span class="badge bg-light text-dark border">
-                        <i class="fas fa-bath text-primary me-1"></i> @property.BathRooms
-                    </span>
-                    <span class="badge bg-light text-dark border">
-                        <i class="fas fa-car text-primary me-1"></i> @property.GarageSlots
-                    </span>
-                    <span class="badge bg-light text-dark border">
-                        <i class="fas fa-ruler-combined text-primary me-1"></i> @property.Area sqft
-                    </span>
+                <div class="card-body pb-2 mb-3">
+                    <h6 class="fw-semibold">@property.Name</h6>
+                    <p class="text-muted small mb-2">
+                        <i class="fas fa-map-marker-alt me-1 text-danger"></i>
+                        @property.Address
+                    </p>
+
+                    <div class="d-flex justify-content-between text-muted small">
+                        <span><i class="fas fa-bed me-1"></i> @property.BedRooms</span>
+                        <span><i class="fas fa-bath me-1"></i> @property.BathRooms</span>
+                        <span><i class="fas fa-car me-1"></i> @property.GarageSlots</span>
+                        <span><i class="fas fa-paw me-1"></i> @property.BetsAllowd</span>
+                    </div>
                 </div>
-            </div>
-            <div class="card-footer bg-transparent border-top-0 d-flex justify-content-between">
-                <a href="@Url.Action("RelistProperity", new { propertyId = property.Id })"
-                   class="btn btn-sm btn-outline-primary">
-                    <i class="fas fa-edit me-1"></i> Relist Properity
-                </a>
+
+
+                <div class="card-footer bg-transparent border-top-0 d-flex justify-content-between align-items-center">
+                    <div class="bg-white">
+                        <strong>$@property.FeesPerMonth</strong> USD
+                    </div>
+                    <div class="py-2 px-3 bg-opacity-75 rounded-pill shadow-sm">
+                        <a href="@Url.Action("RelistProperity", new { propertyId = property.Id })" style="color: black;">
+                            <i class="fas fa-edit me-1"></i> Relist Properity
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-}
+    }
+</div>
+

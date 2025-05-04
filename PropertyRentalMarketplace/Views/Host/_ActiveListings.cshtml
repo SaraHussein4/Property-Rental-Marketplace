@@ -41,7 +41,7 @@
     @foreach (var property in Model)
     {
         <div class="col-md-6 col-lg-4 mb-4">
-            <div class="card border-0 shadow-sm rounded-4  position-relative h-100 overflow-hidden">
+            <div class="card border-0 shadow-sm rounded-4 position-relative h-100 overflow-hidden">
 
                 <div class="position-relative">
                     <div id="carousel-@property.Id" class="carousel slide" data-bs-ride="carousel">
@@ -73,33 +73,20 @@
                         @if (property.Images?.Count > 1)
                         {
                             <div class="carousel-indicators position-absolute bottom-0 start-50 translate-middle-x mb-2">
-
                                 @for (int i = 0; i < property.Images.Count; i++)
                                 {
-                                    <button type="button" data-bs-target="#featured_@property.Id" data-bs-slide-to="@i"
-                                            class="@(i == 0 ? "active" : "")" aria-current="@(i == 0 ? "true" : "false")"
-                                            aria-label="Slide @(i + 1)"></button>
+                                    <button type="button"
+                                            data-bs-target="#carousel-@property.Id"
+                                            data-bs-slide-to="@i"
+                                            class="@(i == 0 ? "active" : "")"
+                                            aria-current="@(i == 0 ? "true" : "false")"
+                                            aria-label="Slide @(i + 1)">
+                                    </button>
                                 }
-
-                                @* @for (int i = 0; i < property.Images.Count; i++) *@
-                                @* { *@
-                                @*     <button type="button" *@
-                                @*             data-bs-target="#carousel-@property.Id" *@
-                                @*             data-bs-slide-to="@i" *@
-                                @*             class="@(i == 0 ? "active" : "")" *@
-                                @*             aria-current="@(i == 0 ? "true" : "false")" *@
-                                @*             aria-label="Slide @(i + 1)"> *@
-                                @*     </button> *@
-                                @* } *@
                             </div>
                         }
                     </div>
                 </div>
-
-            
-
-
-
 
                 <div class="position-absolute top-0 start-0 m-2 d-flex justify-content-center align-items-center" style="">
                     <a class="btn btn-light btn-sm p-1 bg-light rounded-circle d-flex justify-content-center align-items-center"
@@ -131,25 +118,14 @@
                         <strong>$@property.FeesPerMonth</strong> USD
                     </div>
                     <div class="py-2 px-3 bg-opacity-75 rounded-pill shadow-sm">
-                        @* <button class="btn btn-sm btn-outline-secondary dropdown-toggle" *@
-                        @*          type="button" id="propertyDropdown-@property.Id" *@
-                        @*          data-bs-toggle="dropdown" *@
-                        @*          data-bs-display="static" *@
-                        @*          aria-expanded="false"> *@
-                        @*     <i class="fas fa-cog"></i> *@
-                        @* </button> *@
-                                <button class="dropdown-item"
-                                        data-bs-toggle="modal"
-                                        data-bs-target="#bookingModal"
-                                        data-property-id="@property.Id"
-                                        data-property-name="@property.Name"
-                                        data-property-fee="@property.FeesPerMonth">
-                                    <i class="fas fa-calendar-check me-1"></i> Create Booking
-                                </button>
-                        @* <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="propertyDropdown-@property.Id"> *@
-                        @*     <li> *@
-                        @*     </li> *@
-                        @* </ul> *@
+                        <button class="dropdown-item"
+                                data-bs-toggle="modal"
+                                data-bs-target="#bookingModal"
+                                data-property-id="@property.Id"
+                                data-property-name="@property.Name"
+                                data-property-fee="@property.FeesPerMonth">
+                            <i class="fas fa-calendar-check me-1"></i> Create Booking
+                        </button>
                     </div>
                 </div>
             </div>
