@@ -49,6 +49,10 @@ namespace PropertyRentalMarketplace.ViewModels
         public double Longitude { get; set; }
         //review
         public List<Rating> ratings { get; set; }
+        public List<Rating> allratings { get; set; }
+
+        //image user
+        public string imaguser { get; set; }
         // Navigation Properties
         public virtual PropertyType PropertyType { get; set; } //
         public virtual Location Location { get; set; } //
