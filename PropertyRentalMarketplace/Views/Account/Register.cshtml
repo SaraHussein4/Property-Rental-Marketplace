@@ -44,6 +44,19 @@
 			<div asp-validation-summary="All" class="text-danger"></div>
 		</form>
 		<p>Do you have an Account? <a  asp-controller="Account"  asp-action="Login">Login Now!</a></p>
+
+		<div class="d-flex justify-content-between">
+			<a href="@Url.Action("ExternalRegister", "Account", new { provider = "Google", role = AppRoles.Host })"
+			   class="btn btn-danger d-inline-block m-3">
+				Sign up as Host with Google
+			</a>
+			<a href="@Url.Action("ExternalRegister", "Account", new { provider = "Google", role = AppRoles.User })"
+			   class="btn btn-danger m-3">
+				Sign up as User with Google
+			</a>
+		</div>
+	
+	
 	</div>
 </div>
 
