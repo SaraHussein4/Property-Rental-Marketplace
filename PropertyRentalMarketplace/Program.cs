@@ -8,6 +8,7 @@ using PropertyDAL.Models;
 using PropertyRentalBL.Interfaces;
 using PropertyRentalBL.Repositories;
 using PropertyRentalDAL.Models;
+using System.Configuration;
 
 namespace PropertyRentalMarketplace
 {
@@ -47,7 +48,17 @@ namespace PropertyRentalMarketplace
                 .AddCookie(Options =>
                 {
                     Options.LoginPath = "Account/Login";
-                });
+                })
+                .AddGoogle(options =>
+                {
+                    IConfigurationSection googleAuthSection = builder.Configuration.GetSection("Authentication:Google");
+                    options.ClientId = googleAuthSection["ClientId"];
+                    options.ClientSecret = googleAuthSection["ClientSecret"];
+
+                }
+
+                )
+                ;
 
             builder.Services.AddControllersWithViews();
             builder.Services.AddDbContext<PropertyDbContext>(
@@ -55,6 +66,7 @@ namespace PropertyRentalMarketplace
                   {
                       optionBuilder.UseLazyLoadingProxies().UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
                   });
+
 
             var app = builder.Build();
             app.UseStaticFiles();
