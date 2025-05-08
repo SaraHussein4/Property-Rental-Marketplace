@@ -224,6 +224,11 @@ input[type="submit"] {
         background: #938c8c;
     }
 
+.heading-auth{
+    text-shadow
+
+}
+
 .agileits-top p {
     font-size: 1em;
     color: #fff;
@@ -534,6 +539,7 @@ input.checkbox {
 @media(max-width:1366px) {
     h1 {
         font-size: 2.6em;
+        color: #756868;
     }
 
     .agileits-top {
@@ -570,6 +576,7 @@ input.checkbox {
 @media(max-width:991px) {
     h1 {
         font-size: 2.4em;
+        color: #756868;
     }
 
     .main-w3layouts {
@@ -590,6 +597,7 @@ input.checkbox {
 @media(max-width:800px) {
     h1 {
         font-size: 2.2em;
+        color: #756868;
     }
 }
 
@@ -621,6 +629,7 @@ input.checkbox {
     h1 {
         font-size: 2em;
         letter-spacing: 3px;
+        color: #756868;
     }
 }
 
@@ -638,6 +647,7 @@ input.checkbox {
     h1 {
         font-size: 1.8em;
         letter-spacing: 3px;
+        color: #756868;
     }
 
     .agileits-top {
@@ -657,6 +667,7 @@ input.checkbox {
     h1 {
         font-size: 1.8em;
         letter-spacing: 2px;
+        color: #756868;
     }
 
     .main-agileinfo {
@@ -728,6 +739,7 @@ input.checkbox {
     h1 {
         font-size: 1.7em;
         letter-spacing: 0px;
+        color: #756868;
     }
 
     .main-agileinfo {
@@ -762,3 +774,12 @@ input.checkbox {
     margin:10px 0px;
     color:white;
 }
+
+.google-btn{
+    transition:all 1s;
+}
+
+.google-btn:hover{
+        background-color: white;
+        color: #847d7d;
+    }

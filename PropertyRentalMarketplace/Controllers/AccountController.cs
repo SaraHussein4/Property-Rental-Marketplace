@@ -238,7 +238,7 @@ namespace PropertyRentalMarketplace.Controllers
                     }
                 }
 
-                ModelState.AddModelError(string.Empty, "Invalid login attempt");
+                ModelState.AddModelError(string.Empty, "Invalid Email or Password");
             }
 
             return View(model);
@@ -324,5 +324,49 @@ namespace PropertyRentalMarketplace.Controllers
             }
             return View(model);
         }
+
+
+        [HttpGet]
+        public IActionResult ExternalLogin(string provider, string returnUrl = null)
+        {
+            var redirectUrl = Url.Action("ExternalLoginCallback", "Account", new { returnUrl });
+            var properties = signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
+            return Challenge(properties, provider);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ExternalLoginCallback(string remoteError = null, string returnUrl = null)
+        {
+            if (remoteError != null)
+            {
+                ModelState.AddModelError(string.Empty, $"Error from external provider: {remoteError}");
+                return RedirectToAction("Login");
+            }
+
+            var info = await signInManager.GetExternalLoginInfoAsync();
+            if (info == null)
+                return RedirectToAction("Login");
+
+            var email = info.Principal.FindFirstValue(ClaimTypes.Email);
+            var user = await userManager.FindByEmailAsync(email);
+
+            if (user == null)
+            {
+                
+                TempData["ExternalProviderError"] = "User not registered. Please sign up first.";
+                return RedirectToAction("Login");
+            }
+
+            await signInManager.SignInAsync(user, isPersistent: false);
+
+            var roles = await userManager.GetRolesAsync(user);
+            if (roles.Contains(AppRoles.Admin))
+                return RedirectToAction("Index", "Admin");
+            else if (roles.Contains(AppRoles.Host))
+                return RedirectToAction("Index", "Host");
+            else
+                return RedirectToAction("Index", "User");
+        }
+
     }
 }
