@@ -4,7 +4,7 @@
     Layout = "_AuthLayout";
 }
 
-<h1>SignUp Form</h1>
+<h1 class="heading-auth" style="text-shadow:10px 10px 10px white">SignUp Form</h1>
 <div class="main-agileinfo">
 	<div class="agileits-top">
 		<form asp-controller="Account" asp-action="Register" enctype="multipart/form-data" method="post">
@@ -35,28 +35,27 @@
 			<div class="wthree-text">
 				<label class="anim">
 					<input asp-for="IsAgree" class="checkbox" required="">
-					<span>I Agree To The Terms & Conditions</span>
+					<span>I Agree To The Terms & Conditions</span> <br /> <br/>
+					<span asp-validation-for="IsAgree" class="text-danger"></span>
+
 
 				</label>
 				<div class="clear"> </div>
 			</div>
 			<input type="submit" value="SIGNUP">
-			<div asp-validation-summary="All" class="text-danger"></div>
 		</form>
 		<p>Do you have an Account? <a  asp-controller="Account"  asp-action="Login">Login Now!</a></p>
 
 		<div class="d-flex justify-content-between">
 			<a href="@Url.Action("ExternalRegister", "Account", new { provider = "Google", role = AppRoles.Host })"
-			   class="btn btn-danger d-inline-block m-3">
-				Sign up as Host with Google
+			   class="btn  d-inline-block m-3 fs-6 google-btn" style="background-color:#847d7d ;  color:white">
+				Continue as Host with Google
 			</a>
 			<a href="@Url.Action("ExternalRegister", "Account", new { provider = "Google", role = AppRoles.User })"
-			   class="btn btn-danger m-3">
-				Sign up as User with Google
+			   class="btn  m-3 fs-6 google-btn" style="background-color:#847d7d; color:white">
+				Continue as User with Google
 			</a>
 		</div>
-	
-	
 	</div>
 </div>
 

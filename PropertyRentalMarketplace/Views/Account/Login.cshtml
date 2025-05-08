@@ -6,68 +6,44 @@
 }
 
 
-@*     <h1>Login</h1> *@
-@*             <div class="main-agileinfo"> *@
-@*                 <div class="agileits-top"> *@
-@*         <form asp-action="Login" method="post"> *@
-@*             <div asp-validation-summary="All" class="text-danger"></div> *@
-@*             <div class="form-group"> *@
-@*                 <label asp-for="UserName" class="control-label"></label> *@
-@*                 <input asp-for="UserName" class="form-control text" /> *@
-@*                 <span asp-validation-for="UserName" class="text-danger"></span> *@
-@*             </div> *@
-@*             <div class="form-group"> *@
-@*                 <label asp-for="Password" class="control-label"></label> *@
-@*                 <input asp-for="Password" class="form-control text" /> *@
-@*                 <span asp-validation-for="Password" class="text-danger"></span> *@
-@*             </div> *@
-          
-@*             <div class="wthree-text"> *@
-@*                 <label class="anim"> *@
-@*                     <input asp-for="RememberMe" class="checkbox" required=""> *@
-@*                     <span>@Html.DisplayNameFor(model => model.RememberMe)</span> *@
-
-@*                 </label> *@
-@*                 <div class="clear"> </div> *@
-@*             </div> *@
-@*             <div class="form-group"> *@
-@*                 <a asp-action="ForgetPassword" class="btn btn-link">Forgot your password?</a> *@
-@*             </div> *@
-@*             <div class="form-group"> *@
-@*                 <input type="submit" value="Create" class="btn btn-success" /> *@
-@*             </div> *@
-@*         </form> *@
-@*         <a asp-action="Register">Create Account</a> *@
-
-@*     </div> *@
-@* </div> *@
-
 <h1>SignUp Form</h1>
 <div class="main-agileinfo">
 	<div class="agileits-top">
 		<form asp-controller="Account" asp-action="Login" enctype="multipart/form-data" method="post">
-			<input class="text" asp-for="Email" placeholder="Email" required="">
+			<input class="text" asp-for="Email" placeholder="Email" required="" style="margin:10px 0px"> 
 			<span asp-validation-for="Email" class="text-danger"></span>
 			<br />
-			<input class="text" asp-for="Password" placeholder="Password" required="">
-			<span asp-validation-for="Password" class="text-danger"></span>
+			<input class="text" asp-for="Password" placeholder="Password" required="" style="margin:10px 0px"> 
+			<span asp-validation-for="Password" class="text-danger m-2" ></span>
 			<br />
-			<div class="wthree-text">
+			<div class="wthree-text" style="height:50px;">
 				<label class="anim">
-					<input asp-for="RememberMe" class="checkbox" required="">
-					<span>Remember Me</span>
+					<input asp-for="RememberMe" class="checkbox" >
+					<span>Remember Me</span> <br/><br/>
+					<span asp-validation-for="RememberMe" class="text-danger m-2"></span> 
+					<div asp-validation-summary="All" class="text-danger"></div> <br/>
 
 				</label>
+
+
+
 				<div class="clear"> </div>
+=
+
 			</div>
-			<input type="submit" value="SIGNIN">
-			<div asp-validation-summary="All" class="text-danger"></div>
+			<p style="text-align:left; margin-bottom:10px"><a asp-controller="Account" asp-action="ForgetPassword">Forget Password</a></p>
+
+			<input type="submit" value="SIGNIN" style="margin:0px 0px 10px 0px">
 		</form>
 		<p>Don't have an Account? <a asp-controller="Account" asp-action="Register" asp-route-role="@AppRoles.User">Sign Up Now!</a></p>
-		<p><a asp-controller="Account" asp-action="ForgetPassword">Forget Password</a></p>
+
+		<a href="@Url.Action("ExternalLogin", "Account", new { provider = "Google" })"
+		   class="btn btn-danger d-block m-3">
+			Sign in with Google
+		</a>
 
 
-		<div  asp-validation-summary="All"></div>
+		
 	</div>
 </div>
 

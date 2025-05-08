@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace PropertyRentalMarketplace.ViewModels
 {
@@ -10,6 +11,7 @@ namespace PropertyRentalMarketplace.ViewModels
 
         [Required(ErrorMessage = "Password Is Required")]
         [DataType(DataType.Password)]
+
         public string Password { get; set; }
         public bool RememberMe { get; set; }
     }

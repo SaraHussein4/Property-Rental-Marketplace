@@ -1,7 +1,7 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
-    ViewBag.ImageUrl = @Url.Content("~/images/hero_bg_3.jpg");
-    ViewBag.text = "About";
+    ViewBag.ImageUrl = @Url.Content("~/images/hero_bg_1.jpg");
+    ViewBag.text = "Where Finding a Home Feels Like Home";
 
 
 }
@@ -11,10 +11,10 @@
     <div class="container">
         <!-- ----------- start first section----------------- -->
         <div class="section1">
-            <h1 class="text-center mt-5">What We Do</h1>
+            <h2 class="text-center mt-5">What We Do</h2>
             <div class="d-flex gap-4 align-items-start mt-5 flex-nowrap">
-                <div>
-                    <img class="me-auto" src="/images/first.photo.jpg" style="max-width: 500px; height:350px; object-fit: cover;" alt="image">
+                <div style="overflow:hidden">
+                    <img class="me-auto we-img" src="/images/first.photo.jpg" style="max-width: 500px; height:350px; object-fit: cover;" alt="image">
                 </div>
                 <div class="card border-0 rounded-0 w-100 ">
                     <div class="card-body">
@@ -54,46 +54,46 @@
     </div>
     <!-- ----------- end first section----------------- -->
     <!-- -------------start section2-------- -->
-    <div class="section2 mt-5 " style=" height: 700px;">
+    <div class="section2 mt-5 " >
         <div class="container">
             <h2 class="text-center work">Work Team</h2>
 
             <div class="row row-cols-1 row-cols-md-4 g-4 site-card">
                 <div class="col">
-                    <div class="card h-100 border-0 bg-transparent">
+                    <div class="card h-100 border-0 bg-transparent card-img1">
                         <img src="/images/page2_img01.jpg" class="card-img-top rounded-circle mx-auto d-block mt-4" style="width: 200px; height: 200px;" alt="image1">
                         <div class="card-body  mt-5">
-                            <h6 class="card-title text-center">Eman Ahmed</h6>
-                            <p class="card-text mt-4 pcard">
-                                Eman is passionate about creating content that connects with people.
+                            <h5 class="card-title text-center">Sara Hussein</h5>
+                        <p class="card-text mt-4 pcard text-center">
+                                Sara is passionate about creating content that connects with people.
                             </p>
                         </div>
                     </div>
                 </div>
                 <div class="col">
-                    <div class="card h-100 border-0 bg-transparent">
+                <div class="card h-100 border-0 bg-transparent card-img1">
                         <img src="/images/page2_img02.jpg" class="card-img-top rounded-circle mx-auto d-block mt-4" style="width: 200px; height: 200px;" alt="image1">
                         <div class="card-body mt-5">
-                            <h6 class="card-title  text-center">Omar Youssef</h6>
-                            <p class="card-text mt-4 pcard">He builds and maintains our website and platform features.</p>
+                            <h5 class="card-title  text-center">Ahmed Hamdy</h5>
+                        <p class="card-text mt-4 pcard text-center">He builds and maintains our website and platform features.</p>
                         </div>
                     </div>
                 </div>
                 <div class="col border-0 bg-transparent">
-                    <div class="card h-100 border-0 bg-transparent">
+                <div class="card h-100 border-0 bg-transparent card-img1">
                         <img src="/images/page2_img03.jpg" class="card-img-top rounded-circle mx-auto d-block mt-4" style="width: 200px; height: 200px;" alt="image1">
                         <div class="card-body  mt-5">
-                            <h6 class="card-title text-center">Laila Mostafa</h6>
-                            <p class="card-text mt-4 pcard">She answers questions and makes sure everyone’s happy</p>
+                            <h5 class="card-title text-center">Aml Ahmed</h5>
+                        <p class="card-text mt-4 pcard text-center">She answers questions and makes sure everyone’s happy</p>
                         </div>
                     </div>
                 </div>
                 <div class="col">
-                    <div class="card h-100 border-0 bg-transparent">
+                <div class="card h-100 border-0 bg-transparent card-img1 ">
                         <img src="/images/page2_img04.jpg" class="card-img-top rounded-circle mx-auto d-block mt-4" style="width: 200px; height: 200px;" alt="image1">
                         <div class="card-body mt-5">
-                            <h6 class="card-title text-center ">Mohamed Adel</h6>
-                            <p class="card-text mt-4 pcard">He handles logistics, schedules, and daily tasks.</p>
+                            <h5 class="card-title text-center ">Mostafa Murad</h5>
+                        <p class="card-text mt-4 pcard text-center">He handles logistics, schedules, and daily tasks.</p>
                         </div>
                     </div>
                 </div>
@@ -101,74 +101,20 @@
         </div>
     </div>
     <!-- ------------end section2----------- -->
-    <!-- --------------start section3----------------- -->
 
-
-    <div class="section3 mt-5 ">
-        <div class="container">
-            <h2 class="text-center work">Why finding your perfect property is easier with us?</h2>
-            <div class="row row-cols-1 row-cols-md-3 g-5">
-                <div class="col">
-                    <div class="card border-0 bg-transparent mt-5">
-                        <div class="card-body">
-                            <h5 class="card-title hsection3">Finding the best homes</h5>
-                            <p class="card-text psection3">
-                                We help our customers and their friends find the perfect accommodations to enjoy their dream vacations together. The
-                                beautiful homes on our site feature more space, privacy, and amenities than hotels, often for less than half the cost
-                                per person. We are dedicated to helping you create unforgettable experiences by staying together. That’s our mission.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="card border-0 bg-transparent mt-5">
-                        <div class="card-body">
-                            <h5 class="card-title hsection3">Excursions and travellings</h5>
-                            <p class="card-text psection3">
-                                Regardless of the length of holiday you want or the budget you have to work within, our company is able to offer the
-                                widest possible range of touring experiences within the USA and Canada that include the must-see attractions of each
-                                region. The escorted coach tours and holidays we recommend all deliver the perfect balance between value for money and
-                                great experiences. Being on holiday with friends who know and love the destination is great
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="card border-0 bg-transparent mt-5">
-                        <div class="card-body">
-                            <h5 class="card-title links">Most extensive on the web</h5>
-                            <a class="text-decoration-none a" href="#">ease of use</a>
-                            <br>
-                            <a class="text-decoration-none a" href="#">potential savings</a>
-                            <br>
-
-                            <a class="text-decoration-none a" href="#">last minute deals</a>
-
-                            <a class="text-decoration-none a" href="#">Advanced search functionality</a>
-
-
-                            <a class="text-decoration-none a" href="#">search engine rankings</a>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- --------------end section 3--------------------- -->
     <!-- ----------------start section4-------------------- -->
-    <div class="section4 mt-5">
-    <div class="container" style="margin-top:150px;">
-            <h2 class="text-center work">We're here to help you:</h2>
+    <div class="section4 mt-5" style="margin-bottom:140px">
+    <div class="container" >
+            <h2 class="text-center work">We're here to help you</h2>
             <div class="row row-cols-1 row-cols-md-3 g-5">
                 <div class="col">
                     <div class="card border-0 bg-transparent mt-5 mb-5">
                         <div class="card-body">
-                            <div class="d-flex align-items-baseline gap-2">
+                        <div class="d-flex align-items-baseline gap-2 justify-content-center">
                                 <i class="fa-solid fa-clock-rotate-left icon"></i>
                                 <h5 class="card-title hsection4 ">Before</h5>
                             </div>
-                            <p class="card-text psection3">
+                            <p class="card-text psection3 text-center">
                                 With so much choice, you may need help deciding where or how to book, or maybe you have some special requirements? Just
                                 let us know and we will do our best to assist you.
                             </p>
@@ -178,13 +124,13 @@
                 <div class="col">
                     <div class="card border-0 bg-transparent mt-5 mb-5">
                         <div class="card-body">
-                            <div class="d-flex align-items-baseline gap-2">
+                        <div class="d-flex align-items-baseline gap-2 justify-content-center">
                                 <i class="fa-solid fa-spinner icon"></i>
                                 <h5 class="card-title hsection4 ">During</h5>
                             </div>
-                            <p class="card-text psection3">
+                        <p class="card-text psection3 text-center">
                                 Need ideas of what’s going on or somewhere to eat, or looking for some discount vouchers to local attractions? Maybe you
-                                have an emergency and need some assistance? Whatever it is we will always try to help and remember we are 'local'./p>
+                                have an emergency and need some assistance? Whatever it is we will always try to help and remember we are 'local'.</p>
                         </div>
                     </div>
                 </div>
@@ -192,11 +138,11 @@
                 <div class="col">
                     <div class="card border-0 bg-transparent mt-5 mb-5">
                         <div class="card-body">
-                            <div class="d-flex align-items-baseline gap-2">
+                        <div class="d-flex align-items-baseline gap-2 justify-content-center">
                                 <i class="fa-solid fa-check-double icon"></i>
                                 <h5 class="card-title hsection4 ">After</h5>
                             </div>
-                            <p class="card-text psection3">
+                        <p class="card-text psection3 text-center">
                                 It doesn’t stop when you’ve gone home either! A customer feedback questionnaire will be sent for you to complete and
                                 your comments will be passed on or possibly you’ve left something behind and you would like us to send it back.
                             </p>

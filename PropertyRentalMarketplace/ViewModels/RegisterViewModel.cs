@@ -22,9 +22,10 @@ namespace PropertyRentalMarketplace.ViewModels
             public string ConfirmPassword { get; set; }
 
             [Required(ErrorMessage = "Gender Is Required")]
-            public Gender? Gender { get; set; }  
+            public Gender? Gender { get; set; }
+           [Required(ErrorMessage = "Agree Is Required")]
 
-            public bool IsAgree { get; set; }
+        public bool IsAgree { get; set; }
         
 
     }

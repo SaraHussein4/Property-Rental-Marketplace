@@ -15,6 +15,28 @@ h1 {
     font-style: normal;
 }
 
+.section1 h2 , .section2 h2  , .section4 h2{
+    font-family: 'Times New Roman', Times, serif;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 30px;
+    font-size:40px;
+}
+.we-img{
+    transition:all 1s;
+    border-radius:15px;
+}
+.card-img1 img{
+    transition : all 1s;
+}
+.card-img1 img:hover{
+    transform:scale(1.1);
+}
+
+.we-img:hover {
+    transform: scale(1.1);
+}
 /* ------- end first section--------------- */
 /* ------------start section2---------------- */
 .section2 {
