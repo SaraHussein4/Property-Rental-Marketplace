@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.General;
@@ -212,49 +213,60 @@ namespace PropertyRentalMarketplace.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(LoginViewModel model)
+
+      
+        public async Task<IActionResult> Login(LoginViewModel model, string returnUrl)
         {
-            if (ModelState.IsValid)
+            var user = await userManager.FindByEmailAsync(model.Email);
+            if (user == null)
             {
-                var user = await userManager.FindByEmailAsync(model.Email);
-
-                if (user != null)
-                {
-                    var result = await signInManager.PasswordSignInAsync(
-                        user.UserName,
-                        model.Password,
-                        model.RememberMe,
-                        lockoutOnFailure: false);
-
-                    if (result.Succeeded)
-                    {
-                      
-                        var roles = await userManager.GetRolesAsync(user);
-
-           
-                        if (roles.Contains(AppRoles.Admin))
-                        {
-                            return RedirectToAction("Index", "Admin");
-                        }
-                        else if (roles.Contains(AppRoles.Host))
-                        {
-                            return RedirectToAction("Index", "Host");
-                        }
-                        else
-                        {
-                            return RedirectToAction("Index", "User");
-                        }
-                    }
-                }
-
-                ModelState.AddModelError(string.Empty, "Invalid Email or Password");
+                ModelState.AddModelError(string.Empty, "Invalid login attempt");
+                return View(model);
             }
 
+            var result = await signInManager.CheckPasswordSignInAsync(user, model.Password, false);
+            if (result.Succeeded)
+            {
+                var roles = await userManager.GetRolesAsync(user);
+
+                // Clear any existing authentication
+                await HttpContext.SignOutAsync();
+
+                if (roles.Contains("Host"))
+                {
+                    var hostPrincipal = await signInManager.CreateUserPrincipalAsync(user);
+                    var hostIdentity = (ClaimsIdentity)hostPrincipal.Identity;
+                    hostIdentity.AddClaim(new Claim(ClaimTypes.AuthenticationMethod, "HostScheme"));
+
+                    await HttpContext.SignInAsync("HostScheme", hostPrincipal, new AuthenticationProperties
+                    {
+                        IsPersistent = model.RememberMe
+                    });
+
+                    return RedirectToAction("Index", "Host");
+                }
+                else
+                {
+                    var userPrincipal = await signInManager.CreateUserPrincipalAsync(user);
+                    var userIdentity = (ClaimsIdentity)userPrincipal.Identity;
+                    userIdentity.AddClaim(new Claim(ClaimTypes.AuthenticationMethod, "UserScheme"));
+
+                    await HttpContext.SignInAsync("UserScheme", userPrincipal, new AuthenticationProperties
+                    {
+                        IsPersistent = model.RememberMe
+                    });
+
+                    return RedirectToAction("Index", "User");
+                }
+            }
+
+            ModelState.AddModelError(string.Empty, "Invalid login attempt");
             return View(model);
         }
         public new async Task<IActionResult> SignOut()
         {
-           await signInManager.SignOutAsync();
+            await HttpContext.SignOutAsync("UserScheme");
+            await HttpContext.SignOutAsync("HostScheme");
             return RedirectToAction(nameof(Login));
         }
 

@@ -48,10 +48,19 @@ namespace PropertyRentalMarketplace
             //
            
             builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddCookie(Options =>
-                {
-                    Options.LoginPath = "Account/Login";
-                })
+                  
+                 .AddCookie("UserScheme", options =>
+                 {
+                     options.LoginPath = "/Account/Login";
+                     options.Cookie.Name = "UserAuthCookie";
+                     options.AccessDeniedPath = "/Account/AccessDenied";
+                 })
+    .AddCookie("HostScheme", options =>
+    {
+        options.LoginPath = "/Account/Login";
+        options.Cookie.Name = "HostAuthCookie";
+        options.AccessDeniedPath = "/Account/AccessDenied";
+    })
                 .AddGoogle(options =>
                 {
                     IConfigurationSection googleAuthSection = builder.Configuration.GetSection("Authentication:Google");
@@ -60,8 +69,18 @@ namespace PropertyRentalMarketplace
 
                 }
 
-                )
-                ;
+                );
+
+            builder.Services.AddAuthorization(options =>
+            {
+                options.AddPolicy("UserPolicy", policy =>
+                    policy.RequireRole("User")
+                          .AddAuthenticationSchemes("UserScheme"));
+
+                options.AddPolicy("HostPolicy", policy =>
+                    policy.RequireRole("Host")
+                          .AddAuthenticationSchemes("HostScheme"));
+            });
 
             builder.Services.AddControllersWithViews();
             builder.Services.AddDbContext<PropertyDbContext>(
