@@ -183,6 +183,7 @@
     </div>
 </div>
 
+
 <div class="container mt-5">
     <div class="col-md-4 mt-5">
         <h2 class="mb-5" style="color: #484848;">Offered Amenities</h2>
@@ -227,6 +228,16 @@
     </div>
 </div>
 
+                    @if (Amentites.Count <= 4)
+                    {
+                        foreach (var amenity in Amentites)
+                        {
+                            <div class="col-md-2">
+                                <div class="border-0 ">
+                                    <i class="@amenity.IconClass m-2"></i>
+                                    @amenity.Name
+
+
 @if (Amentites.Count > 4)
 {
     <div class="modal fade" id="moreAmenitiesModal" tabindex="-1" aria-labelledby="moreAmenitiesModalLabel" aria-hidden="true">
@@ -240,6 +251,7 @@
                     <div class="row g-2">
                         @for (int i = 4; i < Amentites.Count; i++)
                         {
+
                             <div class="col-md-4">
                                 <div class="border-0 text-center">
                                     <i class="@Amentites[i].IconClass m-2"></i>
@@ -248,6 +260,32 @@
                             </div>
                         }
                     </div>
+
+                            <div class="col-6">
+                                <div class="border-0 ">
+                                    <i class=" @amenity.IconClass m-2"></i>
+                                    @amenity.Name
+
+                                </div>
+                            </div>
+                        }
+
+                        <div class="col-6 ">
+                            <div class="border-0   ">
+                                <i class=" @Amentites[3].IconClass m-2"></i>
+
+                                @Amentites[3].Name
+                            </div>
+
+                            <div class=" bg-dark bg-opacity-50 text-white fw-bold rounded px-2 py-1 btn btnclass mt-5"
+                            data-bs-toggle="modal"
+                            data-bs-target="#moreAmenitiesModal">
+                                +@extraAmentites More of Amenities
+                            </div>
+                        </div>
+                    }
+
+
                 </div>
             </div>
         </div>
@@ -267,6 +305,7 @@
                             <i class="@safeties.IconClass m-2"></i>
                             @safeties.Name
                         </div>
+
                     </div>
                 }
             }
@@ -279,6 +318,21 @@
                         <div class="border-0 text-center">
                             <i class="@safeties.IconClass m-2"></i>
                             @safeties.Name
+
+                        <div class="modal-body">
+                            <div class="row g-2">
+                                @for (int i = 4; i < Amentites.Count; i++)
+                                {
+                                    <div class="col-md-4">
+                                        <div class="border-0 ">
+                                            <i class="@Amentites[i].IconClass m-2"></i>
+
+                                            @Amentites[i].Name
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+
                         </div>
                     </div>
                 }
@@ -312,6 +366,7 @@
                         @for (int i = 4; i < Safeties.Count; i++)
                         {
                             <div class="col-md-6">
+
                                 <div class="border-0 text-center">
                                     <i class="@Safeties[i].IconClass m-2"></i>
                                     @Safeties[i].Name
@@ -319,6 +374,43 @@
                             </div>
                         }
                     </div>
+
+                                <div class="border-0   ">
+                                    <i class="@safeties.IconClass m-2"></i>
+                                    @safeties.Name
+                                </div>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        // أول 3 + الأخير عليه الزرار
+                        foreach (var safeties in Safeties.Take(3))
+                        {
+                            <div class="col-6">
+                                <div class="border-0 text-center ">
+                                    <i class="@safeties.IconClass m-2"></i>
+
+                                    @safeties.Name
+                                </div>
+                            </div>
+                        }
+
+                        <div class="col-6 ">
+                            <div class="border-0   ">
+                                <i class="@Safeties[3].IconClass m-2"></i>
+
+                                @Safeties[3].Name
+                            </div>
+
+                            <div class=" bg-dark bg-opacity-50 text-white fw-bold rounded px-2 py-1 btn btnclass mt-5"
+                            data-bs-toggle="modal"
+                            data-bs-target="#moreSafetiesModal">
+                                +@extraSafeties More of Amenities
+                            </div>
+                        </div>
+                    }
+
                 </div>
             </div>
         </div>

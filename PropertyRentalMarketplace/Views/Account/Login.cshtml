@@ -16,26 +16,25 @@
 			<input class="text" asp-for="Password" placeholder="Password" required="" style="margin:10px 0px"> 
 			<span asp-validation-for="Password" class="text-danger m-2" ></span>
 			<br />
-			<div class="wthree-text" style="height:50px;">
-				<label class="anim">
-					<input asp-for="RememberMe" class="checkbox" >
+			<div class="wthree-text" style="height:38px;">
+				<label class="anim" style="height:27px;">
+					<input asp-for="RememberMe" class="checkbox">
 					<span>Remember Me</span> <br/><br/>
 					<span asp-validation-for="RememberMe" class="text-danger m-2"></span> 
-					<div asp-validation-summary="All" class="text-danger"></div> <br/>
+					<div asp-validation-summary="All" class="text-danger " style="margin-top:-30px"></div> <br />
 
 				</label>
 
 
 
 				<div class="clear"> </div>
-=
 
 			</div>
-			<p style="text-align:left; margin-bottom:10px"><a asp-controller="Account" asp-action="ForgetPassword">Forget Password</a></p>
 
-			<input type="submit" value="SIGNIN" style="margin:0px 0px 10px 0px">
+			<input type="submit" value="SIGNIN" style="margin:10px 0px 10px 0px">
 		</form>
 		<p>Don't have an Account? <a asp-controller="Account" asp-action="Register" asp-route-role="@AppRoles.User">Sign Up Now!</a></p>
+		<p style="text-align:center; margin-bottom:10px"><a asp-controller="Account" asp-action="ForgetPassword">Forget Password</a></p>
 
 		<a href="@Url.Action("ExternalLogin", "Account", new { provider = "Google" })"
 		   class="btn btn-danger d-block m-3">
