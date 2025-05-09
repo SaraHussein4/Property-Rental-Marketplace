@@ -9,30 +9,42 @@
 <div class="container py-5 " style="margin:150px;">
     <h2 class="text-center mb-5 fw-bold mb-5" style="color:black;">💖 Your Favourite Properties</h2>
 
-    <div class="row g-5 ">
+    <div class="row g-5" style="margin-left:20px;">
 
         @foreach (var fav in Model)
         {
             <div class="col-md-6 ">
-                <div class="card border-0 shadow-lg rounded-4 h-100 bg-light position-relative favourite-card" style="width:600px">
+                <a asp-controller="User" asp-action="Details" asp-route-id="@fav.PropertyId" class="text-decoration-none text-dark">
+                    <div class="card border-0 shadow-lg rounded-4 h-100 bg-light position-relative favourite-card" style="width:600px; cursor:pointer;">
 
-                    <div class="card-body p-4">
-                        <h5 class="card-title fw-bold  mt-3" style="font-size: 22px;">
-                            🏡 @fav.Property.Name
-                        </h5>
+                        <div class="card-body p-4">
+                            <h5 class="card-title fw-bold  mt-3" style="font-size: 22px;">
+                                🏡 @fav.Property.Name
+                            </h5>
 
-                        <p class="card-text text-muted mb-2">
-                             @fav.Property.Address
-                        </p>
+                            <p class="card-text text-muted mb-2">
+                                @fav.Property.Address
+                            </p>
 
-                        <p class="card-text mb-4" style="font-weight: bold; color: black;">
-                             Price: @fav.Property.FeesPerMonth $
-                        </p>
+                            <p class="card-text mb-4" style="font-weight: bold; color: black;">
+                                Price: @fav.Property.FeesPerMonth $
+                            </p>
 
-                        <button class="btn btn-outline-danger w-100 fw-semibold" onclick="removefav(@fav.PropertyId, '@fav.UserId')">
-                            ❌ Remove from Favourites
-                        </button>
+                        </div>
+
+                        <div class="favourite-badge position-absolute top-0 end-0 bg-gradient px-3 py-1  rounded-bottom-start mb-5"
+                             style="background: linear-gradient(45deg, #ff416c, #ff4b2b); font-weight: bold; color:black">
+                            ❤️ Favourite
+                        </div>
                     </div>
+                </a>
+
+                <button class="btn btn-outline-danger w-100 fw-semibold mt-2" onclick="removefav(@fav.PropertyId, '@fav.UserId')">
+                    ❌ Remove from Favourites
+                </button>
+            </div>
+        }
+
 
                     <div class="favourite-badge position-absolute top-0 end-0 bg-gradient px-3 py-1  rounded-bottom-start mb-5" 
                     style="background: linear-gradient(45deg, #ff416c, #ff4b2b); font-weight: bold; color:black">
@@ -62,7 +74,8 @@
     }
 
     body {
-        background: linear-gradient(to right, #f5f5f5,#f5f5f5);
+        /* background: linear-gradient(to right, #f5f5f5,#f5f5f5); */
+        background-color:white;
     }
 </style>
 

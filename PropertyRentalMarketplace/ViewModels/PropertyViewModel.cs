@@ -53,6 +53,8 @@ namespace PropertyRentalMarketplace.ViewModels
 
         //image user
         public string imaguser { get; set; }
+        // name of user
+        public string username { get; set; }
         // Navigation Properties
         public virtual PropertyType PropertyType { get; set; } //
         public virtual Location Location { get; set; } //

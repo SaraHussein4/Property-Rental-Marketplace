@@ -33,5 +33,9 @@ namespace PropertyBL.Repositories
         {
             return await _context.Users.FirstOrDefaultAsync(w => w.Id == id);
         }
+        public async Task<User> GetUserName( string id)
+        {
+            return await _context.Users.FirstOrDefaultAsync(f => f.Id == id);
+        }
     }
 }
