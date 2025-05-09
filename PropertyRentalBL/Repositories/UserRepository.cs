@@ -37,5 +37,10 @@ namespace PropertyBL.Repositories
         {
             return await _context.Users.FirstOrDefaultAsync(f => f.Id == id);
         }
+
+        public async Task<string> GetNameHost(int id)
+        {
+            return await _context.Properties.Where(w => w.Id == id).Select(s => s.Host.Name).FirstOrDefaultAsync();
+        }
     }
 }

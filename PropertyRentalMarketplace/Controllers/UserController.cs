@@ -100,6 +100,7 @@ namespace PropertyRentalMarketplace.Controllers
             var imgUser = await _userRepository.GetImageUser(userId);
             var alldatarat = await _ratingRepository.getallrating(id);
             var userName = await _userRepository.GetUserName(userId);
+            var namehost = await _userRepository.GetNameHost(id);
             var model = new PropertyViewModel
             {
                 Property =data,
@@ -133,6 +134,7 @@ namespace PropertyRentalMarketplace.Controllers
                 imaguser = imgUser?.Image ?? "Capture.PNG",
                 allratings = alldatarat,
                 username = userName?.Name,
+                nameHost = namehost
             };
             
             

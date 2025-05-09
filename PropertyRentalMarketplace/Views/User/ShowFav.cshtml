@@ -9,11 +9,11 @@
 <div class="container py-5 " style="margin:150px;">
     <h2 class="text-center mb-5 fw-bold mb-5" style="color:black;">💖 Your Favourite Properties</h2>
 
-    <div class="row g-5" style="margin-left:20px;">
+    <div class="row g-5 " style="margin-left:20px;">
 
         @foreach (var fav in Model)
         {
-            <div class="col-md-6 ">
+            <div class="col-md-6 mb-5">
                 <a asp-controller="User" asp-action="Details" asp-route-id="@fav.PropertyId" class="text-decoration-none text-dark">
                     <div class="card border-0 shadow-lg rounded-4 h-100 bg-light position-relative favourite-card" style="width:600px; cursor:pointer;">
 
