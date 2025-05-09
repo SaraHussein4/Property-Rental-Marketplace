@@ -1,152 +1,108 @@
-﻿@* @model List<Notification> *@
-@* @{ *@
-@*     Layout = "_Layout"; *@
-@*     ViewData["Title"] = "Notification"; *@
-@* } *@
-
-@* <style> *@
-@*     .notification-card { *@
-@*         border-radius: 10px; *@
-@*         overflow: hidden; *@
-@*         color: #484848; *@
-
-
-@*     } *@
-@*     .notification-card .card-header{ *@
-@*             font-size: 20px; *@
-@*             font-weight: bold; *@
-@*             background-color: #E8EAEC; *@
-@*     } *@
-
-
-@*     .list-group-item { *@
-@*         padding: 1rem; *@
-@*     } *@
-
-@*         .list-group-item button { *@
-@*             font-size: 1.2rem; *@
-@*             border: none; *@
-@*             background: none; *@
-@*             cursor: pointer; *@
-@*         } *@
-
-@*             .list-group-item button:hover { *@
-@*                 color: red; *@
-@*             } *@
-@* </style> *@
-
-@* <div class="container my-5"> *@
-@*     <div class="card notification-card"> *@
-@*         <div class="card-header bg-light fw-bold ps-4 py-4"> *@
-@*             All Notifications *@
-@*         </div> *@
-@*         <ul class="list-group list-group-flush"> *@
-@*             @foreach (var notification in Model) *@
-@*             { *@
-@*                 <li class="list-group-item d-flex justify-content-between align-items-start"> *@
-@*                     <div role="button" data-bs-toggle="modal" data-bs-target="#modal-@notification.Id"> *@
-@*                         <div class="fw-semibold">@notification.Title</div> *@
-@*                         <small class="text-muted">@notification.CreatedAt.ToString("dd MMM yyyy")</small> *@
-@*                     </div> *@
-@*                     <button class="btn btn-link text-decoration-none text-muted p-0"> *@
-@*                         ✕ *@
-@*                     </button> *@
-@*                 </li> *@
-
-@*                 <!-- Modal --> *@
-@*                 <div class="modal fade" id="modal-@notification.Id" tabindex="-1" aria-labelledby="modalLabel-@notification.Id" aria-hidden="true"> *@
-@*                     <div class="modal-dialog"> *@
-@*                         <div class="modal-content"> *@
-@*                             <div class="modal-header"> *@
-@*                                 <h5 class="modal-title" id="modalLabel-@notification.Id">@notification.Title</h5> *@
-@*                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> *@
-@*                             </div> *@
-@*                             <div class="modal-body"> *@
-@*                                 @notification.Content *@
-@*                                 <a asp-action="Rate" asp-controller="User" asp-route-bookingId="@notification.BookingId">Click To Rate</a> *@
-@*                             </div> *@
-@*                             <div class="modal-footer"> *@
-@*                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> *@
-@*                             </div> *@
-@*                         </div> *@
-@*                     </div> *@
-@*                 </div> *@
-@*             } *@
-@*         </ul> *@
-@*     </div> *@
-@* </div> *@
-
-
+﻿
 @model List<Notification>
 
 @{
     Layout = "_UserLayout";
     ViewBag.Title = "Notifications";
 }
-
 <style>
-    .notification-section{
+    .notification-section {
         margin-top: 100px;
         min-height: 85vh;
     }
+
     .notification-card {
-        border: 1px solid #e2e2e2;
-        border-radius: 8px;
-        background-color: #ffffff;
-        /* max-width: 600px; */
-        margin: 20px auto;
+        border: none;
+        border-radius: 12px;
+        background-color: #EFF0F2;
+        padding: 0;
         overflow: hidden;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
     }
 
     .notification-header {
-        background-color: #E8EAEC;
-        padding: 25px 20px;
-        font-weight: bold;
-        font-size: 20px;
+        background-color: #484848;
+        color: #ffffff;
+        padding: 20px 25px;
+        font-size: 1.25rem;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        text-align: center;
     }
 
     .notification-item {
-        padding: 15px 20px;
-        border-top: 1px solid #f1f1f1;
+        background-color: #ffffff;
+        padding: 20px 25px;
+        border-bottom: 1px solid #ddd;
+        border-left: 4px solid #484848;
+        margin-bottom: 0;
     }
 
     .notification-title {
-        font-weight: 500;
-        margin-bottom: 5px;
+        font-weight: 600;
+        font-size: 1.05rem;
         color: #484848;
+        margin-bottom: 5px;
     }
 
     .notification-content {
         font-size: 0.95rem;
-        color: #333;
+        color: #666666;
     }
 
     .notification-date {
         font-size: 0.8rem;
         color: #9A9A9A;
-        margin-top: 5px;
+        margin-top: 8px;
+    }
+
+    .notification-item a.btn-dark {
+        background-color: #484848;
+        border: none;
+    }
+
+        .notification-item a.btn-dark:hover {
+            background-color: #333333;
+        }
+
+    .notification-empty {
+        background-color: #EFF0F2;
+        color: #484848;
+        border: 1px solid #9A9A9A;
+        padding: 40px 20px;
+        font-size: 1rem;
+        border-radius: 0 0 12px 12px;
     }
 </style>
 
 <div class="container notification-section">
     <div class="row justify-content-center">
-        <div class="col-10">
+        <div class="col-12 col-md-10 col-lg-8">
             <div class="notification-card">
                 <div class="notification-header">All Notifications</div>
 
-                @foreach (var notification in Model)
+                @if (Model == null || !Model.Any())
                 {
-                    <div class="notification-item">
-                        <div class="notification-title">@notification.Title</div>
-                        <div class="notification-content">
-                            @notification.Content
-                        </div>
-                        <div>
-                            <a asp-action="Rate" asp-controller="User" asp-route-bookingId="@notification.BookingId">Click To Rate</a>
-                        </div>
-                        
-                        <div class="notification-date">@notification.CreatedAt.ToString("dd MMM yyyy")</div>
+                    <div class="notification-empty text-center">
+                        <strong>No notifications available.</strong><br />
+                        You don’t have any notifications at the moment.
                     </div>
+                }
+                else
+                {
+                    foreach (var notification in Model)
+                    {
+                        <div class="notification-item">
+                            <div class="notification-title">@notification.Title</div>
+                            <div class="notification-content">@notification.Content</div>
+                            <div class="mt-2 d-flex justify-content-between align-items-center flex-wrap gap-2">
+                                <a asp-action="Rate" asp-controller="User" asp-route-bookingId="@notification.BookingId" class="btn btn-sm btn-dark">
+                                    Click To Rate
+                                </a>
+                                <div class="notification-date">@notification.CreatedAt.ToString("dd MMM yyyy")</div>
+                            </div>
+                        </div>
+                    }
                 }
             </div>
         </div>

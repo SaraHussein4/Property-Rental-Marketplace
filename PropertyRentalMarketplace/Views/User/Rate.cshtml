@@ -1,18 +1,26 @@
 ﻿@model UserRateViewModel
 @{
     ViewData["Title"] = "Rate";
-    Layout = "_Layout";
+    Layout = "_UserLayout";
 }
 
-<form asp-action="Rate" asp-controller="User" method="post">
-    <!-- Hidden field for BookingId (if needed) -->
+<style>
+    .form-control, .form-range {
+        border-color: #9A9A9A;
+    }
+
+    label {
+        font-weight: 500;
+    }
+</style>
+
+<form asp-action="Rate" asp-controller="User" method="post" class="p-4 rounded shadow-sm" style="background-color: #EFF0F2; max-width: 600px; margin-left: auto; margin-right: auto; margin-top: 100px;">
     <input type="hidden" asp-for="BookingId" />
 
-    <h3>Rate Your Experience</h3>
+    <h3 class="text-center mb-4" style="color: #484848;">Rate Your Experience</h3>
 
-    <!-- Overall Rating -->
-    <div class="form-group">
-        <label asp-for="OverallRating">Overall Rating*</label>
+    <div class="form-group mb-3">
+        <label asp-for="OverallRating" class="form-label" style="color: #484848;">Overall Rating <span class="text-danger">*</span></label>
         <select asp-for="OverallRating" class="form-control" required>
             <option value="">Select Rating (1-5)</option>
             <option value="1">1 - Poor</option>
@@ -21,57 +29,61 @@
             <option value="4">4 - Very Good</option>
             <option value="5">5 - Excellent</option>
         </select>
-        <span asp-validation-for="OverallRating" class="text-danger"></span>
+        <span asp-validation-for="OverallRating" class="text-danger small"></span>
     </div>
 
     <!-- Category Ratings -->
     <div class="form-group">
-        <label asp-for="AmenitiesRating">Amenities Rating*</label>
+        <label asp-for="AmenitiesRating" class="form-label" style="color: #484848;">Amenities Rating <span class="text-danger">*</span></label>
         <input asp-for="AmenitiesRating" type="range" min="1" max="5" step="1" class="form-range">
-        <span asp-validation-for="AmenitiesRating" class="text-danger"></span>
+        <span asp-validation-for="AmenitiesRating" class="text-danger small"></span>
  <!-- Dynamic value display -->
     </div>
 
     <!-- Repeat for other ratings (same structure) -->
     <div class="form-group">
-        <label asp-for="CommunicationRating">Communication Rating*</label>
+        <label asp-for="CommunicationRating" class="form-label" style="color: #484848;">Communication Rating <span class="text-danger">*</span></label>
         <input asp-for="CommunicationRating" type="range" min="1" max="5" step="1" class="form-range">
-        <span asp-validation-for="CommunicationRating" class="text-danger"></span>
+        <span asp-validation-for="CommunicationRating" class="text-danger small"></span>
 
     </div>
 
     <div class="form-group">
-        <label asp-for="ValueForMoneyRating">Value for Money*</label>
+        <label asp-for="ValueForMoneyRating" class="form-label" style="color: #484848;">Value for Money <span class="text-danger">*</span></label>
         <input asp-for="ValueForMoneyRating" type="range" min="1" max="5" step="1" class="form-range">
-        <span asp-validation-for="ValueForMoneyRating" class="text-danger"></span>
+        <span asp-validation-for="ValueForMoneyRating" class="text-danger small"></span>
 
     </div>
 
     <div class="form-group">
-        <label asp-for="HygieneRating">Hygiene Rating*</label>
+        <label asp-for="HygieneRating" class="form-label" style="color: #484848;">Hygiene Rating <span class="text-danger">*</span></label>
         <input asp-for="HygieneRating" type="range" min="1" max="5" step="1" class="form-range">
-        <span asp-validation-for="HygieneRating" class="text-danger"></span>
+        <span asp-validation-for="HygieneRating" class="text-danger small"></span>
 
     </div>
 
     <div class="form-group">
-        <label asp-for="LocationRating">Location Rating*</label>
+        <label asp-for="LocationRating" class="form-label" style="color: #484848;">Location Rating <span class="text-danger">*</span></label>
         <input asp-for="LocationRating" type="range" min="1" max="5" step="1" class="form-range">
-        <span asp-validation-for="LocationRating" class="text-danger"></span>
+        <span asp-validation-for="LocationRating" class="text-danger small"></span>
 
     </div>
 
-    <!-- Review Text -->
-    <div class="form-group">
-        <label asp-for="Review">Your Review</label>
+
+
+    <div class="form-group mb-3">
+        <label asp-for="Review" class="form-label" style="color: #484848;">Your Review <span class="text-danger">*</span></label>
         <textarea asp-for="Review" class="form-control" rows="4" placeholder="Share your experience..."></textarea>
-        <span asp-validation-for="Review" class="text-danger"></span>
-
+        <span asp-validation-for="Review" class="text-danger small"></span>
     </div>
 
-    <!-- Submit Button -->
-    <button type="submit" class="btn btn-primary">Submit Rating</button>
+    <div class="text-center">
+        <button type="submit" class="btn px-4" style="background-color: #484848; color: white;">Submit Rating</button>
+    </div>
 </form>
+
+
+
 
 @section Scripts {
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
