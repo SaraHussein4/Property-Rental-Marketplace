@@ -212,7 +212,7 @@
                         foreach (var amenity in Amentites)
                         {
                             <div class="col-md-2">
-                                <div class="border-0 text-center  ">
+                                <div class="border-0 ">
                                     <i class="@amenity.IconClass m-2"></i>
                                     @amenity.Name
 
@@ -226,7 +226,7 @@
                         foreach (var amenity in Amentites.Take(3))
                         {
                             <div class="col-6">
-                                <div class="border-0 text-center ">
+                                <div class="border-0 ">
                                     <i class=" @amenity.IconClass m-2"></i>
                                     @amenity.Name
 
@@ -235,7 +235,7 @@
                         }
 
                         <div class="col-6 ">
-                            <div class="border-0 text-center  ">
+                            <div class="border-0   ">
                                 <i class=" @Amentites[3].IconClass m-2"></i>
 
                                 @Amentites[3].Name
@@ -268,7 +268,7 @@
                                 @for (int i = 4; i < Amentites.Count; i++)
                                 {
                                     <div class="col-md-4">
-                                        <div class="border-0 text-center">
+                                        <div class="border-0 ">
                                             <i class="@Amentites[i].IconClass m-2"></i>
 
                                             @Amentites[i].Name
@@ -293,7 +293,7 @@
                         foreach (var safeties in Safeties)
                         {
                             <div class="col-md-6">
-                                <div class="border-0 text-center  ">
+                                <div class="border-0   ">
                                     <i class="@safeties.IconClass m-2"></i>
                                     @safeties.Name
                                 </div>
@@ -315,7 +315,7 @@
                         }
 
                         <div class="col-6 ">
-                            <div class="border-0 text-center  ">
+                            <div class="border-0   ">
                                 <i class="@Safeties[3].IconClass m-2"></i>
 
                                 @Safeties[3].Name

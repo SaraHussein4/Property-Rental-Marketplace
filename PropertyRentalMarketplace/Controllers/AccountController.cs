@@ -38,11 +38,20 @@ namespace PropertyRentalMarketplace.Controllers
         {
             Console.WriteLine($"DEBUG: Received role parameter: {role}");
             if (ModelState.IsValid) {
+
+                var existingUser = await userManager.FindByEmailAsync(model.Email);
+                if (existingUser != null)
+                {
+                    ModelState.AddModelError("Email", "This email is already registered.");
+                    return View(model);
+                }
+
                 var User = new User()
                 {
                     UserName = model.Email.Split('@')[0],
                     Name = model.Name,
                     Email = model.Email,
+                    PhoneNumber = model.PhoneNumber,
                     IsAgree = model.IsAgree,
                     Gender = model.Gender
                 };
