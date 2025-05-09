@@ -19,7 +19,7 @@ using System.Security.Claims;
 namespace PropertyRentalMarketplace.Controllers
 {
 
-    //[Authorize(Roles = AppRoles.User)]
+    [Authorize(Roles = AppRoles.User)]
 
     public class UserController : Controller
     {
