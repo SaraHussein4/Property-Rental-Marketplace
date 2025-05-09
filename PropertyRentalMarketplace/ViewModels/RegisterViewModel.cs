@@ -12,7 +12,15 @@ namespace PropertyRentalMarketplace.ViewModels
             [EmailAddress(ErrorMessage = "Invalid Email")]
             public string Email { get; set; }
 
-            [Required(ErrorMessage = "Password Is Required")]
+
+
+        [RegularExpression(@"^(011|012|015|010)\d{8}$",
+     ErrorMessage = "Phone number is invalid !")]
+        [Required(ErrorMessage = "Phone Number Is Required")]
+
+        public string PhoneNumber { get; set; }
+
+        [Required(ErrorMessage = "Password Is Required")]
             [DataType(DataType.Password)]
             public string Password { get; set; }
 

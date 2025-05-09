@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using PropertyBL.Interfaces;
 using PropertyBL.Repositories;
 using PropertyDAL.Contexts;
@@ -40,6 +41,7 @@ namespace PropertyRentalMarketplace
             {
                 Options.Password.RequireNonAlphanumeric = true;
                 Options.Password.RequireDigit = true;
+                Options.User.RequireUniqueEmail = true;
             })
             .AddEntityFrameworkStores<PropertyDbContext>()
             .AddDefaultTokenProviders();

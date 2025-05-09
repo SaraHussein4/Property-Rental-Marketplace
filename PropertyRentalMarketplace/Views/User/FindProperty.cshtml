@@ -106,7 +106,7 @@
 
 }
 
-<div class="container-fluid tab-section" style="margin-top:130px;">
+<div class="container tab-section" style="margin-top:130px;min-height:80vh">
     <div class="row">
         <div class="col-12">
             <div class="nav nav-tabs" id="nav-tab" role="tablist">
@@ -129,7 +129,7 @@
                         var images = property.Images.ToList();
 
                         <div class="col-lg-4 col-md-6 mb-4">
-                            <div class="card-container h-100" data-propertyId="@property.Id" onclick="window.location.href='@Url.Action("Details", "User", new { id = property.Id })'">
+                            <div class="card-container h-100" >
                                 <div id="@carouselId" class="carousel carousel-dark slide" data-bs-ride="carousel">
                                     <div class="carousel-indicators">
                                         @for (int i = 0; i < images.Count; i++)
@@ -154,7 +154,7 @@
                                     </div>
                                 </div>
 
-                                <div class="body p-3">
+                                <div class="body p-3" data-propertyId="@property.Id" onclick="window.location.href='@Url.Action("Details", "User", new { id = property.Id })'">
                                     <div class="price">@property.FeesPerMonth USD</div>
                                     <div class="favourite"><i class="fa-regular fa-heart"></i></div>
 
@@ -400,7 +400,7 @@
 
                     content += `
                     <div class="col-lg-4 col-md-6 mb-4">
-                        <div class="card-container h-100" data-propertyId="${p.id}" onclick="window.location.href='/User/Details/${p.id}'">
+                        <div class="card-container h-100" >
                             <div id="carousel_${p.id}" class="carousel carousel-dark slide" data-bs-ride="carousel">
                                 <div class="carousel-indicators">
                                     ${indicators}
@@ -410,7 +410,7 @@
                                 </div>
                             </div>
 
-                            <div class="body p-3">
+                            <div class="body p-3" data-propertyId="${p.id}" onclick="window.location.href='/User/Details/${p.id}'">
                                 <div class="price">${p.feesPerMonth} USD</div>
                                 <div class="favourite"><i class="fa-regular fa-heart"></i></div>
 

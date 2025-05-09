@@ -19,7 +19,7 @@ using System.Security.Claims;
 namespace PropertyRentalMarketplace.Controllers
 {
 
-    [Authorize(Roles = AppRoles.User)]
+    //[Authorize(Roles = AppRoles.User)]
 
     public class UserController : Controller
     {
@@ -68,7 +68,7 @@ namespace PropertyRentalMarketplace.Controllers
         public async Task<IActionResult> Index()
         {
             var allProperities = (await _propertyRepository.GetAll()).OrderByDescending(p=>p.ListedAt).Take(4).ToList();
-            var featuredModel = await _propertyRepository.GetAllFeatured();
+            var featuredModel = (await _propertyRepository.GetAllFeatured()).Take(8).ToList();
             var topRating = (await _propertyRepository.GetTopRating1()).Take(4).ToList();
             var model = new PropertyPageViewModel
             {
