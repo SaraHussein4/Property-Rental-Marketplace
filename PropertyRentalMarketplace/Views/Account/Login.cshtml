@@ -30,11 +30,13 @@
 		</form>
 		<p>Don't have an Account? <a asp-controller="Account" asp-action="Register" asp-route-role="@AppRoles.User">Sign Up Now!</a></p>
 		<p style="text-align:center; margin-bottom:10px"><a asp-controller="Account" asp-action="ForgetPassword">Forget Password</a></p>
-
-		<a href="@Url.Action("ExternalLogin", "Account", new { provider = "Google" })"
-		   class="btn btn-danger d-block m-3">
-			Sign in with Google
-		</a>
+		
+		<div class="d-flex justify-content-center">
+			<a href="@Url.Action("ExternalLogin", "Account", new { provider = "Google" })"
+			   class="btn m-3 fs-6 google-btn" style="background-color:#847d7d; color:white">
+				Sign in with Google
+			</a>
+		</div>
 	</div>
 </div>
 
