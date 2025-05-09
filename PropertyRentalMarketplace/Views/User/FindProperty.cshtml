@@ -100,6 +100,30 @@
                 font-size: 0.8rem;
                 color: #666;
             }
+
+        #countryFilters {
+            scrollbar-width: thin;
+            scrollbar-color: #888 #f1f1f1;
+        }
+
+            #countryFilters::-webkit-scrollbar {
+                width: 6px;
+            }
+
+            #countryFilters::-webkit-scrollbar-track {
+                background: #f1f1f1;
+            }
+
+            #countryFilters::-webkit-scrollbar-thumb {
+                background-color: #888;
+                border-radius: 3px;
+            }
+
+        #countrySearch {
+            border-radius: 20px;
+            padding: 8px 15px;
+            margin-bottom: 10px;
+        }
     </style>
 
 
@@ -129,7 +153,7 @@
                         var images = property.Images.ToList();
 
                         <div class="col-lg-4 col-md-6 mb-4">
-                            <div class="card-container h-100" >
+                            <div class="card-container h-100">
                                 <div id="@carouselId" class="carousel carousel-dark slide" data-bs-ride="carousel">
                                     <div class="carousel-indicators">
                                         @for (int i = 0; i < images.Count; i++)
@@ -245,11 +269,16 @@
                                     </button>
                                 </h2>
                                 <div id="countryCollapse" class="accordion-collapse collapse" data-bs-parent="#filterAccordion">
-                                    <div class="accordion-body scrollable-accordion" id="countryFilters">
-
-                                        <div class="text-center">
-                                            <div class="spinner-border" role="status">
-                                                <span class="visually-hidden">Loading...</span>
+                                    <div class="accordion-body scrollable-accordion">
+                                        <div class="mb-3">
+                                            <input type="text" id="countrySearch" class="form-control" placeholder="Search countries...">
+                                        </div>
+                                        <div id="countryFilters" style="max-height: 300px; overflow-y: auto;">
+                                            <div class="text-center py-3">
+                                                <div class="spinner-border spinner-border-sm" role="status">
+                                                    <span class="visually-hidden">Loading countries...</span>
+                                                </div>
+                                                <small class="text-muted d-block mt-1">Loading countries...</small>
                                             </div>
                                         </div>
                                     </div>
@@ -317,10 +346,9 @@
 </div>
 
 @section Scripts {
+
     <script>
         $(document).ready(function() {
-            loadCountries();
-
             let currentFilters = {
                 priceRanges: [],
                 countries: [],
@@ -329,29 +357,116 @@
             };
 
             function loadCountries() {
+
+                $('#countryFilters').html(`
+                    <div class="text-center py-3">
+                        <div class="spinner-border spinner-border-sm" role="status">
+                            <span class="visually-hidden">Loading countries...</span>
+                        </div>
+                        <small class="text-muted d-block mt-1">Loading countries...</small>
+                    </div>
+                `);
+
+
                 $.ajax({
                     url: 'https://api.countrystatecity.in/v1/countries',
                     headers: {
                         "X-CSCAPI-KEY": "WndlbUtKQVNRbm5tdnMyd2NQWWlpUFgyTkJ3YkNMbkpJeFF2c1Q1aA=="
                     },
+                    timeout: 10000,
                     success: function(countries) {
-                        let countryHtml = '';
-                        countries.forEach(country => {
-                            countryHtml += `
-                                <div class="form-check">
-                                    <input class="form-check-input country-filter" type="checkbox" value="${country.iso2}" id="country-${country.iso2}">
-                                    <label class="form-check-label" for="country-${country.iso2}">
-                                        ${country.name}
-                                    </label>
-                                </div>`;
-                        });
-                        $('#countryFilters').html(countryHtml);
+                        if (countries && countries.length > 0) {
+                            window.countryList = countries;
+                            renderCountries(countries);
+                            setupCountrySearch();
+                        } else {
+                            showCountryError("No countries data received");
+                        }
                     },
                     error: function(xhr, status, error) {
-                        $('#countryFilters').html('<div class="alert alert-danger">Failed to load countries.</div>');
+                        let errorMsg = "Failed to load countries. ";
+                        if (xhr.status === 0) {
+                            errorMsg += "Network error or CORS issue.";
+                        } else {
+                            errorMsg += `Server responded with ${xhr.status}: ${error}`;
+                        }
+                        showCountryError(errorMsg);
+
+
+                        const cachedCountries = localStorage.getItem('cachedCountries');
+                        if (cachedCountries) {
+                            try {
+                                window.countryList = JSON.parse(cachedCountries);
+                                renderCountries(window.countryList);
+                                setupCountrySearch();
+                                showCountryError("Using cached data. " + errorMsg, 'warning');
+                            } catch(e) {
+                                console.error("Failed to parse cached countries", e);
+                            }
+                        }
                     }
                 });
             }
+
+            function renderCountries(countries) {
+                if (!countries || countries.length === 0) {
+                    $('#countryFilters').html(`
+                        <div class="alert alert-warning py-2">
+                            No countries available
+                        </div>
+                    `);
+                    return;
+                }
+
+                let countryHtml = countries.map(country => `
+                    <div class="form-check">
+                        <input class="form-check-input country-filter"
+                               type="checkbox"
+                               value="${country.iso2}"
+                               id="country-${country.iso2}">
+                        <label class="form-check-label" for="country-${country.iso2}">
+                            ${country.name}
+                        </label>
+                    </div>
+                `).join('');
+
+                $('#countryFilters').html(countryHtml);
+
+
+                try {
+                    localStorage.setItem('cachedCountries', JSON.stringify(countries));
+                } catch(e) {
+                    console.warn("Failed to cache countries", e);
+                }
+            }
+
+            function setupCountrySearch() {
+                $('#countrySearch').off('input').on('input', function() {
+                    const searchTerm = $(this).val().toLowerCase();
+                    const filteredCountries = window.countryList.filter(country =>
+                        country.name.toLowerCase().includes(searchTerm));
+                    renderCountries(filteredCountries);
+                });
+            }
+
+            function showCountryError(message, type = 'danger') {
+                $('#countryFilters').html(`
+                    <div class="alert alert-${type} py-2">
+                        ${message}
+                        <button class="btn btn-sm btn-outline-${type} float-end"
+                                onclick="loadCountries()">
+                            Retry
+                        </button>
+                    </div>
+                `);
+            }
+
+
+            $('#countryCollapse').on('shown.bs.collapse', function() {
+                if (!window.countryList || window.countryList.length === 0) {
+                    loadCountries();
+                }
+            });
 
             function loadProperties() {
                 const filters = {
@@ -381,69 +496,69 @@
                 });
             }
 
-             function renderProperties(properties) {
-            let content = '';
-            if (properties.length === 0) {
-                content = '<div class="alert alert-warning col-12">No properties found.</div>';
-            } else {
-                properties.forEach(p => {
-                    const images = (p.images && p.images.length > 0) ? p.images : [{ path: "/images/default.jpg" }];
-                    const carouselItems = images.map((img, i) => `
-                        <div class="carousel-item ${i === 0 ? 'active' : ''}">
-                            <img src="${img.path}" class="d-block w-100" style="height: 200px; object-fit: cover;" />
-                        </div>`).join('');
+            function renderProperties(properties) {
+                let content = '';
+                if (properties.length === 0) {
+                    content = '<div class="alert alert-warning col-12">No properties found.</div>';
+                } else {
+                    properties.forEach(p => {
+                        const images = (p.images && p.images.length > 0) ? p.images : [{ path: "/images/default.jpg" }];
+                        const carouselItems = images.map((img, i) => `
+                            <div class="carousel-item ${i === 0 ? 'active' : ''}">
+                                <img src="${img.path}" class="d-block w-100" style="height: 200px; object-fit: cover;" />
+                            </div>`).join('');
 
-                    const indicators = images.map((_, i) => `
-                        <button type="button" data-bs-target="#carousel_${p.id}" data-bs-slide-to="${i}"
-                                class="${i === 0 ? 'active' : ''}" aria-current="${i === 0 ? 'true' : 'false'}"
-                                aria-label="Slide ${i + 1}"></button>`).join('');
+                        const indicators = images.map((_, i) => `
+                            <button type="button" data-bs-target="#carousel_${p.id}" data-bs-slide-to="${i}"
+                                    class="${i === 0 ? 'active' : ''}" aria-current="${i === 0 ? 'true' : 'false'}"
+                                    aria-label="Slide ${i + 1}"></button>`).join('');
 
-                    content += `
-                    <div class="col-lg-4 col-md-6 mb-4">
-                        <div class="card-container h-100" >
-                            <div id="carousel_${p.id}" class="carousel carousel-dark slide" data-bs-ride="carousel">
-                                <div class="carousel-indicators">
-                                    ${indicators}
+                        content += `
+                        <div class="col-lg-4 col-md-6 mb-4">
+                            <div class="card-container h-100" >
+                                <div id="carousel_${p.id}" class="carousel carousel-dark slide" data-bs-ride="carousel">
+                                    <div class="carousel-indicators">
+                                        ${indicators}
+                                    </div>
+                                    <div class="carousel-inner">
+                                        ${carouselItems}
+                                    </div>
                                 </div>
-                                <div class="carousel-inner">
-                                    ${carouselItems}
+
+                                <div class="body p-3" data-propertyId="${p.id}" onclick="window.location.href='/User/Details/${p.id}'">
+                                    <div class="price">${p.feesPerMonth} USD</div>
+                                    <div class="favourite"><i class="fa-regular fa-heart"></i></div>
+
+                                    <div class="d-flex justify-content-between align-items-start mb-2">
+                                        <p class="card-title mb-0 flex-grow-1 pe-2">${p.name}</p>
+                                        <p class="card-address text-muted small mb-0 text-end">${p.address}</p>
+                                    </div>
+
+                                    <div class="d-flex justify-content-between align-items-center mt-2">
+                                        <div class="text-center px-1">
+                                            <i class="fa-solid fa-bed"></i>
+                                            <span class="small ms-1">${p.bedRooms ?? 0}</span>
+                                        </div>
+                                        <div class="text-center px-1">
+                                            <i class="fa-solid fa-sink"></i>
+                                            <span class="small ms-1">${p.bathRooms ?? 0}</span>
+                                        </div>
+                                        <div class="text-center px-1">
+                                            <i class="fa-solid fa-car"></i>
+                                            <span class="small ms-1">${p.garageSlots ?? 0}</span>
+                                        </div>
+                                        <div class="text-center px-1">
+                                            <i class="fa-solid fa-paw"></i>
+                                            <span class="small ms-1">${p.petsAllowed ? 'Yes' : 'No'}</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-
-                            <div class="body p-3" data-propertyId="${p.id}" onclick="window.location.href='/User/Details/${p.id}'">
-                                <div class="price">${p.feesPerMonth} USD</div>
-                                <div class="favourite"><i class="fa-regular fa-heart"></i></div>
-
-                                <div class="d-flex justify-content-between align-items-start mb-2">
-                                    <p class="card-title mb-0 flex-grow-1 pe-2">${p.name}</p>
-                                    <p class="card-address text-muted small mb-0 text-end">${p.address}</p>
-                                </div>
-
-                                <div class="d-flex justify-content-between align-items-center mt-2">
-                                    <div class="text-center px-1">
-                                        <i class="fa-solid fa-bed"></i>
-                                        <span class="small ms-1">${p.bedRooms ?? 0}</span>
-                                    </div>
-                                    <div class="text-center px-1">
-                                        <i class="fa-solid fa-sink"></i>
-                                        <span class="small ms-1">${p.bathRooms ?? 0}</span>
-                                    </div>
-                                    <div class="text-center px-1">
-                                        <i class="fa-solid fa-car"></i>
-                                        <span class="small ms-1">${p.garageSlots ?? 0}</span>
-                                    </div>
-                                    <div class="text-center px-1">
-                                        <i class="fa-solid fa-paw"></i>
-                                        <span class="small ms-1">${p.petsAllowed ? 'Yes' : 'No'}</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>`;
-                });
+                        </div>`;
+                    });
+                }
+                $('#property-list').html(content);
             }
-            $('#property-list').html(content);
-        }
 
             $('.tab-btn').click(function() {
                 $('.tab-btn').removeClass('active');
@@ -482,7 +597,10 @@
                 loadProperties();
             });
 
+
+            loadCountries();
             loadProperties();
         });
     </script>
+}
 }
