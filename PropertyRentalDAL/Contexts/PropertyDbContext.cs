@@ -27,7 +27,7 @@ namespace PropertyDAL.Contexts
             builder.Entity<Amenity>().Property(a => a.Name).HasMaxLength(100);
             builder.Entity<Amenity>().Property(a => a.IconClass).HasMaxLength(100);
             #endregion
-
+         
             #region AmenityCategory
             // Primary Key
             builder.Entity<AmenityCategory>().HasKey(ac => ac.Id);
@@ -301,6 +301,10 @@ namespace PropertyDAL.Contexts
                 }
             );
             #endregion
+
+            builder.Entity<User>()
+     .HasIndex(u => u.Email)
+     .IsUnique();
         }
         public virtual DbSet<Amenity> Amenities { get; set; }
         public virtual DbSet<AmenityCategory> AmenityCategories { get; set; }
