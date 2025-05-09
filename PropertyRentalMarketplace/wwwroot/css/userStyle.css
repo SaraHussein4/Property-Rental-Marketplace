@@ -64,37 +64,51 @@
 .find-property-banner,
 .TopReatedProperty-section,
 .LatestProperty-section,
-.FeaturedProperty-section {
+.FeaturedProperty-section,
+.RentalGuides-section{
     margin-top: 60px;
     /*    width: 80%;*/
 }
     .TopReatedProperty-section .image-container, /*Top Rated*/
     .LatestProperty-section .image-container, /*latest*/
-    .FeaturedProperty-section .image-container {
+    .FeaturedProperty-section .image-container,
+    .RentalGuides-section .image-container
+    {
         border-radius: 10px;
         margin-bottom: 15px;
         overflow: hidden;
     }
-        .TopReatedProperty-section .image-container img, /*Top Rated*/
-        .LatestProperty-section .image-container img, /*latest*/
-        .FeaturedProperty-section .image-container img {
-            width: 100%; /* Ensure full container width */
-            height: 340px; /* Fixed height as needed */
-            object-fit: cover; /* Prevents stretching (crops if needed) */
-            object-position: center; /* Centers the image in the frame */
+    .RentalGuides-section .image-container {
+        border-end-start-radius: 0px;
+        border-end-end-radius: 0px;
+    }
+    .TopReatedProperty-section .image-container img, /*Top Rated*/
+    .LatestProperty-section .image-container img, /*latest*/
+    .FeaturedProperty-section .image-container img,
+    .RentalGuides-section .image-container img{
+        width: 100%; /* Ensure full container width */
+        height: 340px; /* Fixed height as needed */
+        object-fit: cover; /* Prevents stretching (crops if needed) */
+        object-position: center; /* Centers the image in the frame */
+    }
+
+    .RentalGuides-section .card-title,
+    .FeaturedProperty-section .card-title {
+        font-size: 18px;
+        color: #484848;
+        font-weight: bold;
+    }
+
+        .RentalGuides-section .card-container{
+            cursor: pointer;
         }
 
-.FeaturedProperty-section .card-title {
-    font-size: 18px;
-    color: #484848;
-    font-weight: bold;
-}
-
-.FeaturedProperty-section .card-address {
-    font-size: 14px;
-    color: #9A9A9A;
-    font-weight: 600;
-}
+        .RentalGuides-section .card-address,
+        .FeaturedProperty-section .card-address {
+            font-size: 14px;
+            color: #9A9A9A;
+            font-weight: 600;
+        }
 
 .FeaturedProperty-section .icons {
     color: #484848;
@@ -183,39 +197,45 @@
 
 
 /*Banners*/
-.find-property-banner,
-.hosted-banner {
-    /*    margin-top: 100px;*/
-    background-image: url('/images/graybanner.jpg');
-    height: 430px;
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-attachment: fixed;
-    padding: 0px 0px 0px 70px;
-    border-radius: 20px;
-    position: relative;
-}
+    .find-property-banner,
+    .hosted-banner {
+        /*    margin-top: 100px;*/
+        background-image: url('/images/graybanner.jpg');
+        height: 430px;
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-attachment: fixed;
+        padding: 0px 0px 0px 70px;
+        border-radius: 20px;
+        position: relative;
+    }
+
     .find-property-banner .banner-content,
     .hosted-banner .banner-content {
         position: absolute;
         top: 50%;
         transform: translateY(-50%);
     }
-        .find-property-banner h2,
-        .hosted-banner h2 {
-            font-family: Montserrat;
-            font-weight: 700;
-            font-size: 48px;
-            line-height: 64px;
-            color: #484848;
-            font-weight: bold;
-        }
+
+    .find-property-banner h2,
+    .hosted-banner h2 {
+        font-family: Montserrat;
+        font-weight: 700;
+        font-size: 48px;
+        line-height: 64px;
+        color: #484848;
+        font-weight: bold;
+    }
+
     .find-property-banner p,
     .hosted-banner p {
         color: #9A9A9A;
     }
+
     .find-property-banner .host-button,
-    .hosted-banner .host-button {
+    .hosted-banner .host-button,
+    .RentalGuides-section .host-button
+    {
         display: inline-block;
         background-color: #484848;
         color: #fff;

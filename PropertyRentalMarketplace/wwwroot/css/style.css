@@ -1,4 +1,11 @@
-﻿.navbar-brand {
+﻿
+.dropdown-menu .dropdown-item:active,
+.dropdown-menu .dropdown-item.active {
+    background-color: #E0E2E6 !important;
+    color: #000 !important; /* optional: ensure text remains readable */
+}
+
+.navbar-brand {
     font-weight: 500;
     color: #484848;
     font-size: 24px;
