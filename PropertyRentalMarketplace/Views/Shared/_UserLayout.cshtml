@@ -22,7 +22,8 @@
                         <i class="fa-solid fa-circle-user"></i>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
-                        <li><a class="dropdown-item" asp-controller="Host" asp-action="Profile" asp-route-id="@User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value">Profile</a></li>
+                        <li><a class="dropdown-item" asp-controller="User" asp-action="Profile" asp-route-id="@User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value">Profile</a></li>
+                        <li><a class="dropdown-item" asp-controller="User" asp-action="Notification">Notifications</a></li>
                         <li><a class="dropdown-item" asp-controller="Account" asp-action="SignOut">Log Out</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="#">Help</a></li>
