@@ -34,14 +34,12 @@
 				}
 				<span asp-validation-for="Gender" class="text-danger"></span>
 			</div>
-			<br />
+			<br/>
 			<div class="wthree-text">
 				<label class="anim">
 					<input asp-for="IsAgree" class="checkbox" required="">
 					<span>I Agree To The Terms & Conditions</span> <br /> <br/>
 					<span asp-validation-for="IsAgree" class="text-danger"></span>
-
-
 				</label>
 				<div class="clear"> </div>
 			</div>
@@ -49,14 +47,10 @@
 		</form>
 		<p>Do you have an Account? <a  asp-controller="Account"  asp-action="Login">Login Now!</a></p>
 
-		<div class="d-flex justify-content-between">
-			<a href="@Url.Action("ExternalRegister", "Account", new { provider = "Google", role = AppRoles.Host })"
-			   class="btn  d-inline-block m-3 fs-6 google-btn" style="background-color:#847d7d ;  color:white">
-				Continue as Host with Google
-			</a>
-			<a href="@Url.Action("ExternalRegister", "Account", new { provider = "Google", role = AppRoles.User })"
-			   class="btn  m-3 fs-6 google-btn" style="background-color:#847d7d; color:white">
-				Continue as User with Google
+		<div class="d-flex justify-content-center">
+			<a href="@Url.Action("ExternalRegister", "Account", new { provider = "Google", role = ViewBag.Role ?? AppRoles.User })"
+			   class="btn m-3 fs-6 google-btn" style="background-color:#847d7d; color:white">
+				Continue with Google
 			</a>
 		</div>
 	</div>
