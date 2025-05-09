@@ -1,5 +1,5 @@
-﻿@model PropertyViewModel
- @using Microsoft.AspNetCore.Identity
+@model PropertyViewModel
+@using Microsoft.AspNetCore.Identity
 @using PropertyDAL.Models
 
 @inject UserManager<User> UserManager
@@ -22,7 +22,6 @@
 
 
 @{
-    //بحسب العدد الذيادة للصور
     int number = 1;
 
     var Images = Model.Images?.ToList();
@@ -40,21 +39,20 @@
 }
 
 <div class="container mt-5">
-    <div class="row  images-overview g-2">
+    <div class="row images-overview g-2">
         <div class="col-md-6 mt-5 primary-image">
-            <img src="~/images/@Images[0].Path" class="img-fluid rounded mb-2 " style="height: 400px;width : 800px; object-fit: cover;" />
+            <img src="~/images/@Images[0].Path" class="img-fluid rounded mb-2" style="height: 400px; width: 800px; object-fit: cover;" />
         </div>
 
         <div class="col-md-6 mt-5">
             <div class="row g-2">
-
                 @foreach (var i in Images.Take(3))
                 {
-                    <img src="~/images/@i.Path" class="img-fluid rounded" style="height: 192px;width : 320px; object-fit: cover;" />
+                    <img src="~/images/@i.Path" class="img-fluid rounded" style="height: 192px; width: 320px; object-fit: cover;" />
                 }
 
                 <div class="position-relative" style="height: 192px; width: 320px;">
-                    <img src="~/images/@Images[4].Path" class="img-fluid rounded mb-2" style="height: 192px;width: 320px; object-fit: cover;" />
+                    <img src="~/images/@Images[4].Path" class="img-fluid rounded mb-2" style="height: 192px; width: 320px; object-fit: cover;" />
                     @if (extraPhoto > 0)
                     {
                         <div class="position-absolute top-50 start-50 translate-middle bg-dark bg-opacity-50 text-white fw-bold rounded px-2 py-1 btn btnclass"
@@ -63,530 +61,471 @@
                             +@extraPhoto More Photos
                         </div>
                     }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
+<div class="modal fade" id="moreImagesModal" tabindex="-1" aria-labelledby="moreImagesModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="moreImagesModalLabel">More Photos</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row g-3">
+                    @for (var i = 5; i < Images.Count; i++)
+                    {
+                        <div class="col-md-4">
+                            <img src="~/images/@Images[i].Path" class="img-fluid rounded" style="height: 250px; width: 100%; object-fit: cover;" />
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="card border-0 bg-transparent m-3 col-md-8" style="width: 880px; height: 140px;">
+        <div class="row g-0">
+            <div class="col-md-3">
+                <img src="~/images/@Model.ImagesHost" class="img-fluid rounded-circle ms-4 mt-1" style="width: 170px; height: 150px;" alt="...">
+            </div>
+            <div class="col-md-9 p-2">
+                <div class="card-body">
+                    <p class="card-text">Listed by</p>
+                    <h5 class="card-title">@Model.nameHost</h5>
+                    <p class="card-text">@($"{@Model.FeesPerMonth}$")</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container mt-5">
+    <div class="d-flex gap-5">
+        <h2 class="mb-3" style="color: #484848;">Well furnished Apartment</h2>
+        <i class="fa-heart fa-regular" style="font-size: 30px; margin-left:200px"
+           data-property-id="@Model.Property.Id"
+           data-user-id="@Model.CurrentUserId"
+           onclick="toggleFavourite(this)"></i>
+    </div>
+    <p class="mb-3" style="color: #bcbcbc; font-size: 18px; margin-top: -9px;">@Model.Address</p>
+
+    <div class="col-md-4 gap-2 d-flex">
+        <div class="col">
+            <div class="card text-center shadow-sm" style="width: 170px; height: 130px; background-color: #EFF0F2; border-width: 0px;">
+                <i class="fa-solid fa-bed fs-3 mt-4"></i>
+                <div class="card-body">
+                    <h5 class="card-title d-flex justify-content-center align-items-center">@($"{@Model.BedRooms} BedRooms")</h5>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card text-center shadow-sm" style="width: 170px; height: 130px; background-color: #EFF0F2; border-width: 0px;">
+                <i class="fa-solid fa-sink fs-3 mt-4"></i>
+                <div class="card-body">
+                    <h5 class="card-title d-flex justify-content-center align-items-center">@($"{@Model.BathRooms} BathRooms")</h5>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card text-center shadow-sm" style="width: 170px; height: 130px; background-color: #EFF0F2; border-width: 0px;">
+                <i class="fa-solid fa-car fs-3 mt-4"></i>
+                <div class="card-body">
+                    <h5 class="card-title d-flex justify-content-center align-items-center">@($"{@Model.GarageSlots} Garage Slots")</h5>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card text-center shadow-sm" style="width: 170px; height: 130px; background-color: #EFF0F2; border-width: 0px;">
+                <i class="fa-solid fa-paw fs-3 mt-4"></i>
+                <div class="card-body">
+                    <h5 class="card-title d-flex justify-content-center align-items-center">@($"{@Model.BetsAllowd} Bets")</h5>
                 </div>
             </div>
         </div>
 
-
+        <div class="card shadow rounded-4 p-4 border-0 col-md-8" style="width: 400px; margin-left:100px;">
+            <div class="mb-3">
+                <h5 class="fw-bold text-primary mb-1">Contact Directly</h5>
+                <small class="text-muted">Host Owner</small>
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item border-0 px-0 pb-1">
+                    <i class="bi bi-telephone-fill text-primary me-2"></i>
+                    <a href="https://wa.me/@Model.PhoneNumber?text=Welcome%21%20Thank%20you%20for%20choosing%20our%20company.%20We%27re%20here%20to%20help%20you%20with%20any%20inquiries%20you%20may%20have.%20If%20you%20need%20more%20details%2C%20feel%20free%20to%20ask%21" target="_blank" class="text-decoration-none text-dark">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" width="20" class="me-2">
+                        @Model.PhoneNumber
+                    </a>
+                </li>
+                <li class="list-group-item border-0 px-0 pt-2">
+                    <a href="https://wa.me/@Model.PhoneNumber?text=Welcome%21%20Thank%20you%20for%20choosing%20our%20company.%20We%27re%20here%20to%20help%20you%20with%20any%20inquiries%20you%20may%20have.%20If%20you%20need%20more%20details%2C%20feel%20free%20to%20ask%21"
+                       target="_blank"
+                       class="btn btn-success btn-sm rounded-pill px-4 py-2 shadow-sm"
+                       style="background: linear-gradient(to right, #25D366, #128C7E); border: none; transition: transform 0.2s;">
+                        <i class="bi bi-whatsapp me-1"></i> Chat on WhatsApp
+                    </a>
+                </li>
+            </ul>
+        </div>
     </div>
-    <div class="modal fade" id="moreImagesModal" tabindex="-1" aria-labelledby="moreImagesModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-xl">
+
+    <div class="mt-3">
+        <h2 class="mb-4" style="color: #484848;">Apartment Description</h2>
+        <div class="col-md-6">
+            <p>@Model.Description</p>
+        </div>
+    </div>
+</div>
+
+<div class="container mt-5">
+    <div class="col-md-4 mt-5">
+        <h2 class="mb-5" style="color: #484848;">Offered Amenities</h2>
+        <div class="row g-2">
+            @if (Amentites.Count <= 4)
+            {
+                foreach (var amenity in Amentites)
+                {
+                    <div class="col-md-2">
+                        <div class="border-0 text-center">
+                            <i class="@amenity.IconClass m-2"></i>
+                            @amenity.Name
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                @* أول 3 + الأخير عليه الزر *@
+                foreach (var amenity in Amentites.Take(3))
+                {
+                    <div class="col-6">
+                        <div class="border-0 text-center">
+                            <i class="@amenity.IconClass m-2"></i>
+                            @amenity.Name
+                        </div>
+                    </div>
+                }
+                <div class="col-6">
+                    <div class="border-0 text-center">
+                        <i class="@Amentites[3].IconClass m-2"></i>
+                        @Amentites[3].Name
+                    </div>
+                    <div class="bg-dark bg-opacity-50 text-white fw-bold rounded px-2 py-1 btn btnclass mt-5"
+                         data-bs-toggle="modal"
+                         data-bs-target="#moreAmenitiesModal">
+                        +@extraAmentites More of Amenities
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@if (Amentites.Count > 4)
+{
+    <div class="modal fade" id="moreAmenitiesModal" tabindex="-1" aria-labelledby="moreAmenitiesModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="moreImagesModalLabel">More Photos</h5>
+                    <h5 class="modal-title" id="moreAmenitiesModalLabel">More Amenities</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="row g-3">
-                        @for (var i = 5; i < Images.Count; i++)
-
+                    <div class="row g-2">
+                        @for (int i = 4; i < Amentites.Count; i++)
                         {
                             <div class="col-md-4">
-                                <img src="~/images/@Images[i].Path" class="img-fluid rounded" style="height: 250px; width: 100%; object-fit: cover;" />
+                                <div class="border-0 text-center">
+                                    <i class="@Amentites[i].IconClass m-2"></i>
+                                    @Amentites[i].Name
+                                </div>
                             </div>
                         }
-
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="container">
-        <div class="card border-0 bg-transparent m-3  col-md-8 " style="width: 880px; height : 140px ;">
-            <div class="row g-0">
-                <div class="col-md-3 ">
-                    <img src="~/images/@Model.ImagesHost" class="img-fluid rounded-circle ms-4 mt-1" style="width : 170px ; height :150px" alt="...">
+}
+
+<div class="container mt-5">
+    <div class="col-md-4 mt-5">
+        <h2 class="mb-5" style="color: #484848;">Safety and Hygiene</h2>
+        <div class="row g-2">
+            @if (Safeties.Count <= 4)
+            {
+                foreach (var safeties in Safeties)
+                {
+                    <div class="col-md-6">
+                        <div class="border-0 text-center">
+                            <i class="@safeties.IconClass m-2"></i>
+                            @safeties.Name
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                @* أول 3 + الأخير عليه الزرار *@
+                foreach (var safeties in Safeties.Take(3))
+                {
+                    <div class="col-6">
+                        <div class="border-0 text-center">
+                            <i class="@safeties.IconClass m-2"></i>
+                            @safeties.Name
+                        </div>
+                    </div>
+                }
+                <div class="col-6">
+                    <div class="border-0 text-center">
+                        <i class="@Safeties[3].IconClass m-2"></i>
+                        @Safeties[3].Name
+                    </div>
+                    <div class="bg-dark bg-opacity-50 text-white fw-bold rounded px-2 py-1 btn btnclass mt-5"
+                         data-bs-toggle="modal"
+                         data-bs-target="#moreSafetiesModal">
+                        +@extraSafeties More of Amenities
+                    </div>
                 </div>
+            }
+        </div>
+    </div>
+</div>
 
-                <div class="col-md-9 p-2">
-                    <div class="card-body">
-                        <p class="card-text">Listed by</p>
-                        <h5 class="card-title">@Model.Name</h5>
-
-                        <p class="card-text">@($"{@Model.FeesPerMonth}$")</p>
+@if (Safeties.Count > 4)
+{
+    <div class="modal fade" id="moreSafetiesModal" tabindex="-1" aria-labelledby="moreSafetiesModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="moreSafetiesModalLabel">More Safeties</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row g-2">
+                        @for (int i = 4; i < Safeties.Count; i++)
+                        {
+                            <div class="col-md-6">
+                                <div class="border-0 text-center">
+                                    <i class="@Safeties[i].IconClass m-2"></i>
+                                    @Safeties[i].Name
+                                </div>
+                            </div>
+                        }
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
-    <div class="container">
+}
+<div class="container mt-5">
+    <div class="mb-5 col-md-8" id="map" style="height: 400px; width: 50%; margin-top:100px; border-radius: 20px; border: 2px solid black; box-shadow: 0 8px 20px rgba(75, 0, 130, 0.3); overflow: hidden;" data-latitude="@Model.Latitude" data-longitude="@Model.Longitude">
+    </div>
+</div>
+<div class="container mt-5">
+    <h2 class="" style="color: #484848; margin-top:100px;">Nearby Services</h2>
+    <div class="d-flex flex-wrap gap-5">
+        @foreach (var s in services)
+        {
+            <div class="card col-md-4 mt-3" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title">@s.Name</h5>
+                    <h6 class="card-subtitle mb-2 text-body-secondary">Card subtitle</h6>
+                    <p class="card-text">@($"{@s.Distance} meters away")</p>
+                    <p class="card-text">
+                        <i class="fa-solid fa-star @(s.StarRating >= 1 ? "text-warning" : "")"></i>
+                        <i class="fa-solid fa-star @(s.StarRating >= 2 ? "text-warning" : "")"></i>
+                        <i class="fa-solid fa-star @(s.StarRating >= 3 ? "text-warning" : "")"></i>
+                        <i class="fa-solid fa-star @(s.StarRating >= 4 ? "text-warning" : "")"></i>
+                        <i class="fa-solid fa-star @(s.StarRating >= 5 ? "text-warning" : "")"></i>
+                    </p>
+                </div>
+            </div>
+        }
     </div>
 
     <div class="container mt-5">
-        <div class="d-flex gap-5">
-
-            <h2 class="mb-3" style="color: #484848 ;">Well furnished Apartment</h2>
-            <i class="fa-heart fa-regular " style="font-size: 30px;margin-left:200px"
-               data-property-id="@Model.Property.Id"
-               data-user-id="@Model.CurrentUserId"
-               onclick="toggleFavourite(this)"></i>
-
-            @* <a asp-controller="User" asp-action="ShowFav" asp-route-id="@Model.Property.Id" *@
-            @*    class="btn btn-outline-primary fw-semibold px-4 py-2 rounded-pill shadow-sm d-inline-flex align-items-center gap-2" *@
-            @*    style="font-size: 16px; text-decoration: none;"> *@
-            @*     Show Favourites *@
-            @* </a> *@
-        </div>
-        <p class="mb-3" style="color: #bcbcbc; font-size: 18px; margin-top: -9px;">@Model.Address</p>
-
-        <div class="col-md-4 gap-2 d-flex">
-            <div class="col">
-                <div class="card text-center shadow-sm" style="width: 170px; height: 130px; background-color: #EFF0F2; border-width: 0px;">
-                    <i class="fa-solid fa-bed fs-3 mt-4"></i>
-                    <div class="card-body">
-                        <h5 class="card-title d-flex justify-content-center  align-items-center">@($"{@Model.BedRooms} BedRooms")</h5>
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="card text-center shadow-sm" style="width: 170px; height: 130px; background-color: #EFF0F2; border-width: 0px;">
-                    <i class="fa-solid fa-sink fs-3 mt-4"></i>
-
-                    <div class="card-body">
-                        <h5 class="card-title d-flex justify-content-center  align-items-center">@($"{@Model.BathRooms} BathRooms")</h5>
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="card text-center shadow-sm" style="width: 170px; height: 130px; background-color: #EFF0F2; border-width: 0px;">
-                    <i class="fa-solid fa-car fs-3 mt-4"></i>
-                    <div class="card-body">
-                        <h5 class="card-title d-flex justify-content-center  align-items-center">@($"{@Model.GarageSlots} Garage Slots")</h5>
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="card text-center shadow-sm" style="width: 170px; height: 130px; background-color: #EFF0F2; border-width: 0px;">
-                    <i class="fa-solid fa-paw fs-3 mt-4"></i>
-                    <div class="card-body">
-                        <h5 class="card-title d-flex justify-content-center  align-items-center">@($"{@Model.BetsAllowd} Bets")</h5>
-                    </div>
-                </div>
-            </div>
-
-            @* ------------------------contact---------------------------- *@
-            <div class="card shadow rounded-4 p-4 border-0 col-md-8 " style="width: 400px; margin-left:100px;  ">
-                <div class="mb-3">
-                    <h5 class="fw-bold text-primary mb-1">Contact Directly</h5>
-                    <small class="text-muted">Host Owner</small>
-                </div>
-
-                <ul class="list-group list-group-flush">
-
-                    <li class="list-group-item border-0 px-0 pb-1">
-                        <i class="bi bi-telephone-fill text-primary me-2"></i>
-                        <a href="https://wa.me/@Model.PhoneNumber?text=Welcome%21%20Thank%20you%20for%20choosing%20our%20company.%20We%27re%20here%20to%20help%20you%20with%20any%20inquiries%20you%20may%20have.%20If%20you%20need%20more%20details%2C%20feel%20free%20to%20ask%21" target="_blank" class="text-decoration-none text-dark">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" width="20" class="me-2">
-                            @Model.PhoneNumber
-                        </a>
-                    </li>
-
-                    <li class="list-group-item border-0 px-0 pt-2">
-                        <a href="https://wa.me/@Model.PhoneNumber?text=Welcome%21%20Thank%20you%20for%20choosing%20our%20company.%20We%27re%20here%20to%20help%20you%20with%20any%20inquiries%20you%20may%20have.%20If%20you%20need%20more%20details%2C%20feel%20free%20to%20ask%21"
-                           target="_blank"
-                           class="btn btn-success btn-sm rounded-pill px-4 py-2 shadow-sm"
-                           style="background: linear-gradient(to right, #25D366, #128C7E); border: none; transition: transform 0.2s;">
-                            <i class="bi bi-whatsapp me-1"></i> Chat on WhatsApp
-                        </a>
-                    </li>
-                </ul>
-            </div>
-
-        </div>
-        <div class="mt-3">
-            <h2 class="mb-4" style="color: #484848 ;">Apartment Description</h2>
-            <div class="col-md-6">
-                <p> @Model.Description</p>
-            </div>
-        </div>
-        <div class="container mt-5 ">
-
-            <div class="col-md-4 mt-5">
-                <h2 class="mb-5" style="color: #484848 ;">Offered Amenities</h2>
-
-                <div class="row g-2">
-
-                    @if (Amentites.Count <= 4)
-                    {
-                        foreach (var amenity in Amentites)
-                        {
-                            <div class="col-md-2">
-                                <div class="border-0 ">
-                                    <i class="@amenity.IconClass m-2"></i>
-                                    @amenity.Name
-
-                                </div>
-                            </div>
-                        }
-                    }
-                    else
-                    {
-                        // أول 3 + الأخير عليه الزر
-                        foreach (var amenity in Amentites.Take(3))
-                        {
-                            <div class="col-6">
-                                <div class="border-0 ">
-                                    <i class=" @amenity.IconClass m-2"></i>
-                                    @amenity.Name
-
-                                </div>
-                            </div>
-                        }
-
-                        <div class="col-6 ">
-                            <div class="border-0   ">
-                                <i class=" @Amentites[3].IconClass m-2"></i>
-
-                                @Amentites[3].Name
-                            </div>
-
-                            <div class=" bg-dark bg-opacity-50 text-white fw-bold rounded px-2 py-1 btn btnclass mt-5"
-                                 data-bs-toggle="modal"
-                                 data-bs-target="#moreAmenitiesModal">
-                                +@extraAmentites More of Amenities
-                            </div>
-                        </div>
-                    }
-
-                </div>
-
-            </div>
-        </div>
-
-        @if (Amentites.Count > 4)
-        {
-            <div class="modal fade" id="moreAmenitiesModal" tabindex="-1" aria-labelledby="moreAmenitiesModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered modal-lg">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="moreAmenitiesModalLabel">More Amenities</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="row g-2">
-                                @for (int i = 4; i < Amentites.Count; i++)
-                                {
-                                    <div class="col-md-4">
-                                        <div class="border-0 ">
-                                            <i class="@Amentites[i].IconClass m-2"></i>
-
-                                            @Amentites[i].Name
-                                        </div>
-                                    </div>
-                                }
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
+        <h2 class="mb-4" style="color: #484848; margin-top:100px;">Reviews ⭐ 5.0</h2>
+        @{
+            var totalCount = allratings.Count();
+            double avgAmenities = 0, avgCommunication = 0, avgOverall = 0, avgHygiene = 0, avgLocation = 0;
+            if (totalCount > 0)
+            {
+                avgAmenities = allratings.Average(r => r.AmenitiesRating);
+                avgCommunication = allratings.Average(r => r.CommunicationRating);
+                avgOverall = allratings.Average(r => r.OverallRating);
+                avgHygiene = allratings.Average(r => r.HygieneRating);
+                avgLocation = allratings.Average(r => r.LocationRating);
+            }
+        }
+        @{
+            var totalCount1 = allratings != null ? allratings.Count() : 0;
+            double avgAmenities1 = 0;
+            double avgCommunication1 = 0;
+            double avgOverall1 = 0;
+            double avgHygiene1 = 0;
+            double avgLocation1 = 0;
         }
         <div class="container mt-5">
-            <div class="col-md-4 mt-5">
-                <h2 class="mb-5" style="color: #484848 ;">Safety and Hygiene</h2>
-
-                <div class="row g-2">
-
-                    @if (Safeties.Count <= 4)
-                    {
-                        foreach (var safeties in Safeties)
-                        {
-                            <div class="col-md-6">
-                                <div class="border-0   ">
-                                    <i class="@safeties.IconClass m-2"></i>
-                                    @safeties.Name
-                                </div>
-                            </div>
-                        }
-                    }
-                    else
-                    {
-                        // أول 3 + الأخير عليه الزرار
-                        foreach (var safeties in Safeties.Take(3))
-                        {
-                            <div class="col-6">
-                                <div class="border-0 text-center ">
-                                    <i class="@safeties.IconClass m-2"></i>
-
-                                    @safeties.Name
-                                </div>
-                            </div>
-                        }
-
-                        <div class="col-6 ">
-                            <div class="border-0   ">
-                                <i class="@Safeties[3].IconClass m-2"></i>
-
-                                @Safeties[3].Name
-                            </div>
-
-                            <div class=" bg-dark bg-opacity-50 text-white fw-bold rounded px-2 py-1 btn btnclass mt-5"
-                                 data-bs-toggle="modal"
-                                 data-bs-target="#moreSafetiesModal">
-                                +@extraSafeties More of Amenities
-                            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <!-- Amenities -->
+                    <div class="d-flex align-items-center mb-2">
+                        <div style="width: 160px;">Amenities</div>
+                        <div class="flex-grow-1 mx-2" style="background-color: #ccc; height: 4px; position: relative;">
+                            <div style="background-color: #888; width: @(avgAmenities * 20)%; height: 100%;"></div>
                         </div>
-                    }
+                        <div style="width: 30px;">@avgAmenities.ToString("0.0")</div>
+                    </div>
 
-                </div>
-
-            </div>
-        </div>
-
-        @if (Safeties.Count > 4)
-        {
-            <div class="modal fade" id="moreSafetiesModal" tabindex="-1" aria-labelledby="moreSafetiesModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered modal-lg">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="moreSafetiesModalLabel">More Safeties</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <!-- Communication -->
+                    <div class="d-flex align-items-center mb-2">
+                        <div style="width: 160px;">Communication</div>
+                        <div class="flex-grow-1 mx-2" style="background-color: #ccc; height: 4px; position: relative;">
+                            <div style="background-color: #888; width: @(avgCommunication * 20)%; height: 100%;"></div>
                         </div>
-                        <div class="modal-body">
-                            <div class="row g-2">
-                                @for (int i = 4; i < Safeties.Count; i++)
-                                {
-                                    <div class="col-md-6">
-                                        <div class="border-0 text-center">
-                                            <i class="@Safeties[i].IconClass m-2"></i>
+                        <div style="width: 30px;">@avgCommunication.ToString("0.0")</div>
+                    </div>
 
-                                            @Safeties[i].Name
-                                        </div>
-                                    </div>
-                                }
-                            </div>
+                    <!-- Overall -->
+                    <div class="d-flex align-items-center mb-2">
+                        <div style="width: 160px;">Overall</div>
+                        <div class="flex-grow-1 mx-2" style="background-color: #ccc; height: 4px; position: relative;">
+                            <div style="background-color: #888; width: @(avgOverall * 20)%; height: 100%;"></div>
                         </div>
+                        <div style="width: 30px;">@avgOverall.ToString("0.0")</div>
                     </div>
                 </div>
 
+                <div class="col-md-4">
+                    <!-- Hygiene -->
+                    <div class="d-flex align-items-center mb-2">
+                        <div style="width: 120px;">Hygiene</div>
+                        <div class="flex-grow-1 mx-2" style="background-color: #ccc; height: 4px; position: relative;">
+                            <div style="background-color: #888; width: @(avgHygiene * 20)%; height: 100%;"></div>
+                        </div>
+                        <div style="width: 30px;">@avgHygiene.ToString("0.0")</div>
+                    </div>
+
+                    <!-- Location -->
+                    <div class="d-flex align-items-center mb-2">
+                        <div style="width: 120px;">Location</div>
+                        <div class="flex-grow-1 mx-2" style="background-color: #ccc; height: 4px; position: relative;">
+                            <div style="background-color: #888; width: @(avgLocation * 20)%; height: 100%;"></div>
+                        </div>
+                        <div style="width: 30px;">@avgLocation.ToString("0.0")</div>
+                    </div>
+                </div>
             </div>
+        </div>
+    </div>
+
+    <div class="container mt-5">
+        <div class="row">
+            @foreach (var r in allreviews)
+            {
+                <div class="col-md-3 mb-4">
+                    <div class="card shadow-sm bg-light p-2 border-0" style="height: auto; width:270px;">
+                        <div class="d-flex">
+                            <img src="~/images/@Model.imaguser" class="rounded-circle me-3" style="width: 60px; height: 60px; object-fit: cover;" alt="User Image" />
+                            <div>
+                                <h6 class="mb-0">@Model.username</h6>
+                                <small class="text-muted">@r.CreatedAt.ToShortDateString()</small>
+                            </div>
+                        </div>
+                        <p class="card-text mt-2" style="font-size: 14px;">
+                            @r.Review
+                        </p>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+
+<style>
+    .text-red {
+        color: red !important;
+    }
+</style>
+<script>
+                function toggleFavourite(icon) {
+                    const propertyId = icon.getAttribute("data-property-id");
+                    const userId = icon.getAttribute("data-user-id");
+
+                    const isFavorited = icon.classList.contains("fa-solid");
+
+                    if (isFavorited) {
+                        // Call Remove
+                        fetch(`/User/RemoveFromFavourite?userId=${userId}&propertyId=${propertyId}`, {
+                            method: 'POST'
+                        })
+                        .then(response => {
+                            if (response.ok) {
+                                icon.classList.remove("fa-solid");
+                                icon.classList.add("fa-regular");
+                                 icon.classList.remove("text-red");
+                            }
+                        });
+                    } else {
+                        // Call Add
+                        fetch(`/User/AddToFavourite?userId=${userId}&propertyId=${propertyId}`, {
+                            method: 'POST'
+                        })
+                        .then(response => {
+                            if (response.ok) {
+                                icon.classList.remove("fa-regular");
+                                icon.classList.add("fa-solid");
+                                 icon.classList.add("text-red");
+                            }
+                        });
+                    }
+                }
+
+
+     console.log("a;dkfja;d");
+
+    function initMap() {
+            // Initialize map
+                console.log(document.getElementById("map"));
+                    let defaultCoords = [document.getElementById("map").dataset.latitude, document.getElementById("map").dataset.longitude];
+            map = L.map('map').setView(defaultCoords, 10);
+
+            // Add tile layer (OpenStreetMap)
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+            }).addTo(map);
+
+            // Add initial marker
+            marker = L.marker(defaultCoords, { draggable: true }).addTo(map);
         }
 
-        @* ---------------------------- *@
+    function updateMarkerPosition(lat, lng, zoomlevel = 5) {
+        marker.setLatLng([lat, lng]);
+        map.setView([lat, lng], zoomlevel);
+        updateCoordinates(lat, lng);
+    }
 
+    function updateCoordinates(lat, lng) {
+            // Update your form fields or display
+            document.getElementById('Latitude').value = lat;
+            document.getElementById('Longitude').value = lng;
+            console.log(`Coordinates: ${lat}, ${lng}`);
+       }
 
-        <div class="mb-5 col-md-8 " id="map"
-             style="
-        height: 400px;
-        width: 50%;
-        margin-top:100px;
+            document.addEventListener('DOMContentLoaded', async function () {
+                initMap();
+            });
+</script>
 
-        border-radius: 20px;
-        border: 2px solid black;
-        box-shadow: 0 8px 20px rgba(75, 0, 130, 0.3);
-        overflow: hidden;"
-             data-latitude="@Model.Latitude"
-             data-longitude="@Model.Longitude">
-        </div>
-        <div class="container mt-5">
-            <h2 class="" style="color: #484848 ; margin-top:100px;">Nearby Services</h2>
+@section Scripts {
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
 
-            <div class="d-flex flex-wrap gap-5">
-
-                @foreach (var s in services)
-                {
-                    <div class="card col-md-4 mt-3 " style="width: 18rem;">
-                        <div class="card-body">
-                            <h5 class="card-title">@s.Name</h5>
-                            <h6 class="card-subtitle mb-2 text-body-secondary">Card subtitle</h6>
-                            <p class="card-text">@($"{@s.Distance} meters away")</p>
-                            <p class="card-text">
-
-                                <i class="fa-solid fa-star @(s.StarRating >= 1 ? "text-warning" : "")"></i>
-                                <i class="fa-solid fa-star @(s.StarRating >= 2 ? "text-warning" : "")"></i>
-                                <i class="fa-solid fa-star @(s.StarRating >= 3 ? "text-warning" : "")"></i>
-                                <i class="fa-solid fa-star @(s.StarRating >= 4 ? "text-warning" : "")"></i>
-                                <i class="fa-solid fa-star @(s.StarRating >= 5 ? "text-warning" : "")"></i>
-                            </p>
-                        </div>
-                    </div>
-
-                }
-            </div>
-            <div class="container mt-5">
-                <h2 class="mb-4" style="color: #484848 ; margin-top:100px;">Reviews ⭐ 5.0</h2>
-
-                @{
-                    var totalCount = allratings.Count();
-                    double avgAmenities = 0, avgCommunication = 0, avgOverall = 0, avgHygiene = 0, avgLocation = 0;
-
-                    if (totalCount > 0)
-                    {
-                        avgAmenities = allratings.Average(r => r.AmenitiesRating);
-                        avgCommunication = allratings.Average(r => r.CommunicationRating);
-                        avgOverall = allratings.Average(r => r.OverallRating);
-                        avgHygiene = allratings.Average(r => r.HygieneRating);
-                        avgLocation = allratings.Average(r => r.LocationRating);
-                    }
-                }
-
-                @{
-                    var totalCount1 = allratings != null ? allratings.Count() : 0;
-                    double avgAmenities1 = 0;
-                    double avgCommunication1 = 0;
-                    double avgOverall1 = 0;
-                    double avgHygiene1 = 0;
-                    double avgLocation1 = 0;
-                }
-
-                <div class="container mt-5">
-                    <div class="row">
-                        <div class="col-md-4">
-                            @* Amenities *@
-                            <div class="d-flex align-items-center mb-2">
-                                <div style="width: 160px;">Amenities</div>
-                                <div class="flex-grow-1 mx-2" style="background-color: #ccc; height: 4px; position: relative;">
-                                    <div style="background-color: #888; width: @(avgAmenities * 20)%; height: 100%;"></div>
-                                </div>
-                                <div style="width: 30px;">@avgAmenities.ToString("0.0")</div>
-                            </div>
-
-                            @* Communication *@
-                            <div class="d-flex align-items-center mb-2">
-                                <div style="width: 160px;">Communication</div>
-                                <div class="flex-grow-1 mx-2" style="background-color: #ccc; height: 4px; position: relative;">
-                                    <div style="background-color: #888; width: @(avgCommunication * 20)%; height: 100%;"></div>
-                                </div>
-                                <div style="width: 30px;">@avgCommunication.ToString("0.0")</div>
-                            </div>
-
-                            @* Overall *@
-                            <div class="d-flex align-items-center mb-2">
-                                <div style="width: 160px;">Overall</div>
-                                <div class="flex-grow-1 mx-2" style="background-color: #ccc; height: 4px; position: relative;">
-                                    <div style="background-color: #888; width: @(avgOverall * 20)%; height: 100%;"></div>
-                                </div>
-                                <div style="width: 30px;">@avgOverall.ToString("0.0")</div>
-                            </div>
-                        </div>
-
-                        <div class="col-md-4">
-                            @* Hygiene *@
-                            <div class="d-flex align-items-center mb-2">
-                                <div style="width: 120px;">Hygiene</div>
-                                <div class="flex-grow-1 mx-2" style="background-color: #ccc; height: 4px; position: relative;">
-                                    <div style="background-color: #888; width: @(avgHygiene * 20)%; height: 100%;"></div>
-                                </div>
-                                <div style="width: 30px;">@avgHygiene.ToString("0.0")</div>
-                            </div>
-
-                            @* Location *@
-                            <div class="d-flex align-items-center mb-2">
-                                <div style="width: 120px;">Location</div>
-                                <div class="flex-grow-1 mx-2" style="background-color: #ccc; height: 4px; position: relative;">
-                                    <div style="background-color: #888; width: @(avgLocation * 20)%; height: 100%;"></div>
-                                </div>
-                                <div style="width: 30px;">@avgLocation.ToString("0.0")</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="container mt-5">
-
-                    <div class="row">
-                        @foreach (var r in allreviews)
-                        {
-                            <div class="col-md-3 mb-4 ">
-                                <div class="card shadow-sm bg-light p-2  border-0" style="height: auto; width:270px; ">
-                                    <div class="d-flex ">
-                                        <img src="~/images/@Model.imaguser" class="rounded-circle me-3"
-                                             style="width: 60px; height: 60px; object-fit: cover;" alt="User Image" />
-                                        <div>
-                                            <h6 class="mb-0">@UserManager.GetUserName(User)</h6>
-                                            <small class="text-muted">@r.CreatedAt.ToShortDateString()</small>
-                                        </div>
-                                    </div>
-                                    <p class="card-text mt-2" style="font-size: 14px;">
-                                        @r.Review
-                                    </p>
-                                </div>
-                            </div>
-                        }
-                    </div>
-                </div>
-
-
-
-                <style>
-                    .text-red {
-                        color: red !important;
-                    }
-                </style>
-                <script>
-                                function toggleFavourite(icon) {
-                                    const propertyId = icon.getAttribute("data-property-id");
-                                    const userId = icon.getAttribute("data-user-id");
-
-                                    const isFavorited = icon.classList.contains("fa-solid");
-
-                                    if (isFavorited) {
-                                        // Call Remove
-                                        fetch(`/User/RemoveFromFavourite?userId=${userId}&propertyId=${propertyId}`, {
-                                            method: 'POST'
-                                        })
-                                        .then(response => {
-                                            if (response.ok) {
-                                                icon.classList.remove("fa-solid");
-                                                icon.classList.add("fa-regular");
-                                                 icon.classList.remove("text-red");
-                                            }
-                                        });
-                                    } else {
-                                        // Call Add
-                                        fetch(`/User/AddToFavourite?userId=${userId}&propertyId=${propertyId}`, {
-                                            method: 'POST'
-                                        })
-                                        .then(response => {
-                                            if (response.ok) {
-                                                icon.classList.remove("fa-regular");
-                                                icon.classList.add("fa-solid");
-                                                 icon.classList.add("text-red");
-                                            }
-                                        });
-                                    }
-                                }
-
-
-                     console.log("a;dkfja;d");
-
-                    function initMap() {
-                            // Initialize map
-                                console.log(document.getElementById("map"));
-                                    let defaultCoords = [document.getElementById("map").dataset.latitude, document.getElementById("map").dataset.longitude];
-                            map = L.map('map').setView(defaultCoords, 10);
-
-                            // Add tile layer (OpenStreetMap)
-                            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-                            }).addTo(map);
-
-                            // Add initial marker
-                            marker = L.marker(defaultCoords, { draggable: true }).addTo(map);
-                        }
-
-                    function updateMarkerPosition(lat, lng, zoomlevel = 5) {
-                        marker.setLatLng([lat, lng]);
-                        map.setView([lat, lng], zoomlevel);
-                        updateCoordinates(lat, lng);
-                    }
-
-                    function updateCoordinates(lat, lng) {
-                            // Update your form fields or display
-                            document.getElementById('Latitude').value = lat;
-                            document.getElementById('Longitude').value = lng;
-                            console.log(`Coordinates: ${lat}, ${lng}`);
-                       }
-
-                            document.addEventListener('DOMContentLoaded', async function () {
-                                initMap();
-                            });
-                </script>
-
-                @section Scripts {
-                    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-                    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-
-                }
+}
