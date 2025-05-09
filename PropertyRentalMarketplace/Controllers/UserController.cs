@@ -81,7 +81,7 @@ namespace PropertyRentalMarketplace.Controllers
         }
         #endregion
         #region details
-        public async Task<IActionResult> Details(int id, PropertyViewModel propertyViewModel ,UserProfileEditViewModel userProfileEditViewModel)
+        public async Task<IActionResult> Details(int id,PropertyViewModel propertyViewModel ,UserProfileEditViewModel userProfileEditViewModel)
         {
 
             var data = await _propertyRepository.GetById(id);
@@ -99,6 +99,8 @@ namespace PropertyRentalMarketplace.Controllers
             //var isFav = await _favouriteRepository1.isfav(userId, id);
             var imgUser = await _userRepository.GetImageUser(userId);
             var alldatarat = await _ratingRepository.getallrating(id);
+            var userName = await _userRepository.GetUserName(userId);
+            var namehost = await _userRepository.GetNameHost(id);
             var model = new PropertyViewModel
             {
                 Property =data,
@@ -131,6 +133,8 @@ namespace PropertyRentalMarketplace.Controllers
                 //isFav = isFav ,
                 imaguser = imgUser?.Image ?? "Capture.PNG",
                 allratings = alldatarat,
+                username = userName?.Name,
+                nameHost = namehost
             };
             
             
@@ -167,6 +171,7 @@ namespace PropertyRentalMarketplace.Controllers
             var allfav = await _favouriteRepository1.getallfav(userId);
             return View("ShowFav",allfav);
         }
+       
         #endregion
         #region remove from  favourite
         [HttpPost]
