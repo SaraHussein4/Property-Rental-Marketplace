@@ -211,9 +211,11 @@ namespace PropertyRentalMarketplace.Controllers
                 name = p.Name,
                 address = p.Address,
                 bedRooms = p.BedRooms,
-                bathRooms = p.BathRooms, // Fixed typo from your original code
+                bathRooms = p.BathRooms, 
                 petsAllowed = p.BetsAllowd,
                 garageSlots = p.GarageSlots,
+                feesPerMonth = p.FeesPerMonth,
+
                 images = p.Images.Select(i => new {
                     path = i.Path.StartsWith("http") ? i.Path : $"/images/{i.Path}"
                 }).ToList()
@@ -227,7 +229,6 @@ namespace PropertyRentalMarketplace.Controllers
         {
             try
             {
-                // Implement your filtering logic here based on the filters object
                 var filteredProperties = await _propertyRepository.GetFilteredProperties(
                     filters.TypeId,
                     filters.PriceRanges,
@@ -242,6 +243,7 @@ namespace PropertyRentalMarketplace.Controllers
                     bathRooms = p.BathRooms,
                     garageSlots = p.GarageSlots,
                     petsAllowed = p.BetsAllowd,
+                    feesPerMonth = p.FeesPerMonth,
                     images = p.Images.Select(i => new {
                         path = i.Path.StartsWith("http") ? i.Path : $"/images/{i.Path}"
                     })
