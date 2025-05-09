@@ -35,7 +35,7 @@
     int extraSafeties = Safeties.Count - 5 + number;
     var services = Model.services?.ToList();
     int propertyid = Model.Property.Id;
-    var allreviews = Model.ratings?.ToList();
+    var allreviews = Model.allratings?.ToList();
     var allratings = Model.allratings?.ToList();
 }   
 
@@ -485,8 +485,6 @@
 
             <div class="container mt-5">
 
-                
-
                 <div class="row">
                     @foreach (var r in allreviews)
                     {
@@ -566,19 +564,6 @@
 
             // Add initial marker
             marker = L.marker(defaultCoords, { draggable: true }).addTo(map);
-
-            // Click event to move marker
-            map.on('click', function (e) {
-                const { lat, lng } = e.latlng;
-                marker.setLatLng([lat, lng]);
-                updateCoordinates(lat, lng);
-            });
-
-            // Marker drag event
-            marker.on('dragend', function () {
-                const { lat, lng } = marker.getLatLng();
-                updateCoordinates(lat, lng);
-            });
         }
 
     function updateMarkerPosition(lat, lng, zoomlevel = 5) {

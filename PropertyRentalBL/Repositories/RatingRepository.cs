@@ -22,18 +22,22 @@ namespace PropertyRentalBL.Repositories
         {
             return await _context.Ratings.Where(w=>w.UserId == id).ToListAsync();
         }
-        public async Task<List<Rating>> getallrating(string id)
+        public async Task<List<Rating>> getallrating(int PropertyId)
         {
-            return await _context.Ratings.Where(w => w.UserId == id).Select(
-                s => new Rating
-                {
-                   AmenitiesRating= s.AmenitiesRating,
-                    CommunicationRating= s.CommunicationRating,
-                    OverallRating=  s.OverallRating,
-                    ValueForMoneyRating= s.ValueForMoneyRating,
-                    HygieneRating= s.HygieneRating,
-                    LocationRating= s.LocationRating,
-                }).ToListAsync();
+            Property property = await _context.Properties.FindAsync(PropertyId);
+            return property.Bookings.Select(b => b.Rating).ToList();
+            
+            
+            //Where(r => r.boo== id).Select(
+            //    s => new Rating
+            //    {
+            //       AmenitiesRating= s.AmenitiesRating,
+            //        CommunicationRating= s.CommunicationRating,
+            //        OverallRating=  s.OverallRating,
+            //        ValueForMoneyRating= s.ValueForMoneyRating,
+            //        HygieneRating= s.HygieneRating,
+            //        LocationRating= s.LocationRating,
+            //    }).ToListAsync();
         }
     }
 }

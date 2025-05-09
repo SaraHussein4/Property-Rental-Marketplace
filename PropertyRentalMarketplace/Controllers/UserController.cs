@@ -19,7 +19,7 @@ using System.Security.Claims;
 namespace PropertyRentalMarketplace.Controllers
 {
 
-    //[Authorize(Roles = AppRoles.User)]
+    [Authorize(Roles = AppRoles.User)]
 
     public class UserController : Controller
     {
@@ -98,7 +98,7 @@ namespace PropertyRentalMarketplace.Controllers
             var allrev = await _ratingRepository.GetallRatingbyid(userId);
             //var isFav = await _favouriteRepository1.isfav(userId, id);
             var imgUser = await _userRepository.GetImageUser(userId);
-            var alldatarat = await _ratingRepository.getallrating(userId);
+            var alldatarat = await _ratingRepository.getallrating(id);
             var model = new PropertyViewModel
             {
                 Property =data,
@@ -307,6 +307,8 @@ namespace PropertyRentalMarketplace.Controllers
 
                 Booking booking = await _bookingRepository.GetById(rating.BookingId);
                 Property property = await _propertyRepository.GetById(booking.PropertyId);
+                int x = 1;
+
                 property.StarRating = await _propertyRepository.GetStarRating(property.Id);
                 await _propertyRepository.Save();
 

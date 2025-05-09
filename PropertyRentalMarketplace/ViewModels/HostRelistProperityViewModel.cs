@@ -79,6 +79,5 @@ namespace PropertyRentalMarketplace.ViewModels
 
 
         public int ListingPlan { get; set; }
-        public string PaymentMethod { get; set; }
     }
 }

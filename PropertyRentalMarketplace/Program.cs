@@ -8,6 +8,7 @@ using PropertyDAL.Models;
 using PropertyRentalBL.Interfaces;
 using PropertyRentalBL.Repositories;
 using PropertyRentalDAL.Models;
+using Stripe;
 using System.Configuration;
 
 namespace PropertyRentalMarketplace
@@ -77,6 +78,9 @@ namespace PropertyRentalMarketplace
                 app.UseExceptionHandler("/Home/Error");
             }
             app.UseRouting();
+
+            StripeConfiguration.ApiKey = builder.Configuration.GetSection("Stripe:SecretKey").Get<string>();
+
             app.UseAuthentication();
 
             app.UseAuthorization();

@@ -315,7 +315,7 @@
             <div class="accordion-item">
                 <h2 class="accordion-header" id="headingPayment">
                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePayment" aria-expanded="false" aria-controls="collapsePayment">
-                        Payment Info
+                        Plans
                     </button>
                 </h2>
                 <div id="collapsePayment" class="accordion-collapse collapse" aria-labelledby="headingPayment" data-bs-parent="#propertyAccordion">
@@ -332,18 +332,13 @@
                                 </select>
                                 <span asp-validation-for="ListingPlan" class="text-danger"></span>
                             </div>
-                            <div class="mb-3 col-md-6 col-lg-4">
-                                <label asp-for="PaymentMethod" class="form-label fw-bold">Payment Method <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" asp-for="PaymentMethod">
-                                <span asp-validation-for="PaymentMethod" class="text-danger"></span>
-                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
         </div>
-        <button type="submit" class="submit-button mt-2">Add Property</button>
+        <button type="submit" class="submit-button mt-2">Relist Property</button>
     </form>
 </div>
 @section Scripts {

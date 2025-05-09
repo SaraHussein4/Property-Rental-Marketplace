@@ -311,7 +311,7 @@
             <div class="accordion-item">
                 <h2 class="accordion-header" id="headingPayment">
                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePayment" aria-expanded="false" aria-controls="collapsePayment">
-                        Payment Info
+                        Plans
                     </button>
                 </h2>
                 <div id="collapsePayment" class="accordion-collapse collapse" aria-labelledby="headingPayment" data-bs-parent="#propertyAccordion">
@@ -327,11 +327,6 @@
                                     <option value="4">Featured Listing (30 Days - Priority Placement)</option>
                                 </select>
                                 <span asp-validation-for="ListingPlan" class="text-danger"></span>
-                            </div>
-                            <div class="mb-3 col-md-6 col-lg-4">
-                                <label asp-for="PaymentMethod" class="form-label fw-bold">Payment Method <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" asp-for="PaymentMethod">
-                                <span asp-validation-for="PaymentMethod" class="text-danger"></span>
                             </div>
                         </div>
                     </div>

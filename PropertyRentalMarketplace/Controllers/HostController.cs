@@ -11,13 +11,15 @@ using PropertyRentalBL.Repositories;
 using PropertyRentalDAL.Enumerates;
 using PropertyRentalDAL.Models;
 using PropertyRentalMarketplace.ViewModels;
+using Stripe.Checkout;
+using Stripe.FinancialConnections;
 using System.Net;
 using System.Security.Claims;
 using System.Threading;
 
 namespace PropertyRentalMarketplace.Controllers
 {
-    //[Authorize(Roles = AppRoles.Host)]
+    [Authorize(Roles = AppRoles.Host)]
 
     public class HostController : Controller
     {
@@ -215,8 +217,44 @@ namespace PropertyRentalMarketplace.Controllers
                     await _imageRepository.Save();
                 }
 
+                // Payment 
+                var domain = "http://localhost:5016/";
+                var options = new Stripe.Checkout.SessionCreateOptions
+                {
+                    SuccessUrl = domain + "Host/Dashboard",
+                    CancelUrl = domain + "Host/index",
+                    LineItems = new List<SessionLineItemOptions>(),
+                    Mode = "payment",
+                    CustomerEmail = "ahmed@gmail.com"
+
+                };
+
+                var sessionListItem = new SessionLineItemOptions
+                {
+                    PriceData = new SessionLineItemPriceDataOptions
+                    {
+                        UnitAmount = (long)(model.ListingPlan * 15 * 100),
+                        Currency = "usd",
+                        ProductData = new SessionLineItemPriceDataProductDataOptions
+                        {
+                            Name = model.Name
+                        }
+                    },
+                    Quantity = 1
+                };
+
+                options.LineItems.Add(sessionListItem);
+
+                var service = new Stripe.Checkout.SessionService();
+                Stripe.Checkout.Session session = service.Create(options);
+
+                Response.Headers.Add("Location", session.Url);
+
+
+
                 await _propertyRepository.CommitAsync();
-                return RedirectToAction("Dashboard", "Host");
+                return new StatusCodeResult(303);
+                // Payment 
             }
             catch (Exception ex)
             {
@@ -420,6 +458,7 @@ namespace PropertyRentalMarketplace.Controllers
 
                 var (unListDate, isFeatured) = CalculateListingDetails(model.ListingPlan);
                 var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var userEmail = User.FindFirstValue(ClaimTypes.Email);
 
 
                     Property property = new Property()
@@ -447,14 +486,14 @@ namespace PropertyRentalMarketplace.Controllers
 
                 foreach(var modelService in model.Services)
                 {
-                    var service = new Service()
+                    var servicce = new Service()
                     {
                         Name = modelService.Name,
                         Distance = modelService.Distance,
                         StarRating = modelService.StarRating,
                         PropertyId = property.Id,
                     };
-                    await _serviceRepository.Add(service);
+                    await _serviceRepository.Add(servicce);
                     await _serviceRepository.Save();
                 }
 
@@ -482,8 +521,52 @@ namespace PropertyRentalMarketplace.Controllers
                     await _imageRepository.Save();
                 }
 
+
+
+
+
+                // Payment 
+                var domain = "http://localhost:5016/";
+                var options = new Stripe.Checkout.SessionCreateOptions
+                {
+                    SuccessUrl = domain + "Host/Dashboard",
+                    CancelUrl = domain + "Host/index",
+                    LineItems = new List<SessionLineItemOptions>(),
+                    Mode = "payment",
+                    CustomerEmail = userEmail
+
+                };
+
+                var sessionListItem = new SessionLineItemOptions
+                {
+                    PriceData = new SessionLineItemPriceDataOptions
+                    {
+                        UnitAmount = (long)(model.ListingPlan * 15 * 100),
+                        Currency = "usd",
+                        ProductData = new SessionLineItemPriceDataProductDataOptions
+                        {
+                            Name = model.Name
+                        }
+                    },
+                    Quantity = 1
+                };
+
+                options.LineItems.Add(sessionListItem);
+
+                var service = new Stripe.Checkout.SessionService();
+                Stripe.Checkout.Session session = service.Create(options);
+
+                Response.Headers.Add("Location", session.Url);
+
+
+
                 await _propertyRepository.CommitAsync();
-                return RedirectToAction("Index", "Host");
+                return new StatusCodeResult(303);
+                // Payment 
+
+
+
+                //return RedirectToAction("Index", "Host");
             }
             catch(Exception ex) 
             {
@@ -521,33 +604,6 @@ namespace PropertyRentalMarketplace.Controllers
             }
         }
 
-        //private async Task PopulateHostEditPropertyViewModelAsync(HostEditPropertyViewModel viewModel) {
-        //    var propertyTypes = await _propertyTypeRepository.GetAll();
-        //    var amenities = await _amenityRepository.GetAmenities();
-        //    var safeties = await _amenityRepository.GetSafeties();
-        //    var countries = await _countryRepository.GetAll();
-        //    var listingTypes = Enum.GetValues(typeof(ListingType))
-        //              .Cast<ListingType>()
-        //              .Select(e => new ListingTypeViewModel
-        //              {
-        //                  Id = ((int)e),
-        //                  Name = e.ToString()
-        //              });
-
-        //    viewModel.propertyTypes = propertyTypes;
-        //    viewModel.amenities = amenities;
-        //    viewModel.safeties = safeties;
-        //    viewModel.countries = countries;
-        //    viewModel.listingTypes = listingTypes;
-        //    if (viewModel.Services == null)
-        //    {
-        //        viewModel.Services = new List<ServiceViewModel>()
-        //        {
-        //            new ServiceViewModel(),
-        //            new ServiceViewModel()
-        //        };
-        //    }
-        //}
 
         public string uploadImage(IFormFile ImgUrl)
         {
@@ -619,9 +675,11 @@ namespace PropertyRentalMarketplace.Controllers
                     await _bookingRepository.BeginTransactionAsync();
                     User client = await _userRepository.GetUserByPhone(model.phoneNumber);
 
+                    var hostId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
                     Booking booking = new Booking()
                     {
-                        HostId = "23d1c943-494f-489b-acaf-5144c2fe2387",
+                        HostId = hostId,
                         UserId = client.Id,
                         PropertyId = model.PropertyId,
                         FeePerMonth = model.FeePerMonth,
