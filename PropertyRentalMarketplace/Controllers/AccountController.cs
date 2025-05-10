@@ -117,6 +117,8 @@ namespace PropertyRentalMarketplace.Controllers
             var properties = signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
 
             properties.Items["role"] = role;
+            properties.Items["scheme"] = role == AppRoles.Host ? "HostScheme" : "UserScheme";
+
             if (!string.IsNullOrEmpty(returnUrl))
             {
                 properties.Items["returnUrl"] = returnUrl;
@@ -138,13 +140,17 @@ namespace PropertyRentalMarketplace.Controllers
 
             var allowedRoles = new[] { AppRoles.Host, AppRoles.User };
             var role = info.AuthenticationProperties.Items.TryGetValue("role", out var extractedRole)
-                && allowedRoles.Contains(extractedRole)
-                    ? extractedRole
-                    : AppRoles.User;
+                       && allowedRoles.Contains(extractedRole)
+                       ? extractedRole
+                       : AppRoles.User;
+
+            var scheme = info.AuthenticationProperties.Items.TryGetValue("scheme", out var extractedScheme)
+                        ? extractedScheme
+                        : (role == AppRoles.Host ? "HostScheme" : "UserScheme");
 
             var returnUrl = info.AuthenticationProperties.Items.TryGetValue("returnUrl", out var extractedReturnUrl)
-                ? extractedReturnUrl
-                : null;
+                           ? extractedReturnUrl
+                           : null;
 
             var email = info.Principal.FindFirstValue(ClaimTypes.Email);
             var name = info.Principal.FindFirstValue(ClaimTypes.Name);
@@ -152,7 +158,13 @@ namespace PropertyRentalMarketplace.Controllers
             var existingUser = await userManager.FindByEmailAsync(email);
             if (existingUser != null)
             {
-                await signInManager.SignInAsync(existingUser, isPersistent: false);
+                await HttpContext.SignOutAsync();
+
+                var principal = await signInManager.CreateUserPrincipalAsync(existingUser);
+                var identity = (ClaimsIdentity)principal.Identity;
+                identity.AddClaim(new Claim(ClaimTypes.AuthenticationMethod, scheme));
+
+                await HttpContext.SignInAsync(scheme, principal);
 
                 if (string.IsNullOrEmpty(returnUrl))
                 {
@@ -164,6 +176,7 @@ namespace PropertyRentalMarketplace.Controllers
                 return LocalRedirect(returnUrl);
             }
 
+           
             var newUser = new User
             {
                 UserName = email.Split('@')[0],
@@ -181,7 +194,13 @@ namespace PropertyRentalMarketplace.Controllers
                     await roleManager.CreateAsync(new IdentityRole(role));
 
                 await userManager.AddToRoleAsync(newUser, role);
-                await signInManager.SignInAsync(newUser, isPersistent: false);
+
+             
+                var principal = await signInManager.CreateUserPrincipalAsync(newUser);
+                var identity = (ClaimsIdentity)principal.Identity;
+                identity.AddClaim(new Claim(ClaimTypes.AuthenticationMethod, scheme));
+
+                await HttpContext.SignInAsync(scheme, principal);
 
                 if (string.IsNullOrEmpty(returnUrl))
                 {
@@ -200,7 +219,7 @@ namespace PropertyRentalMarketplace.Controllers
             foreach (var error in createResult.Errors)
                 ModelState.AddModelError(string.Empty, error.Description);
 
-            return RedirectToAction("Index", "User");
+            return RedirectToAction("Register");
         }
 
 
@@ -229,7 +248,7 @@ namespace PropertyRentalMarketplace.Controllers
             {
                 var roles = await userManager.GetRolesAsync(user);
 
-                // Clear any existing authentication
+               
                 await HttpContext.SignOutAsync();
 
                 if (roles.Contains("Host"))
@@ -358,35 +377,38 @@ namespace PropertyRentalMarketplace.Controllers
         [HttpGet]
         public async Task<IActionResult> ExternalLoginCallback(string remoteError = null, string returnUrl = null)
         {
-            if (remoteError != null)
-            {
-                ModelState.AddModelError(string.Empty, $"Error from external provider: {remoteError}");
-                return RedirectToAction("Login");
-            }
-
             var info = await signInManager.GetExternalLoginInfoAsync();
             if (info == null)
-                return RedirectToAction("Login");
-
-            var email = info.Principal.FindFirstValue(ClaimTypes.Email);
-            var user = await userManager.FindByEmailAsync(email);
-
-            if (user == null)
             {
-                
-                TempData["ExternalProviderError"] = "User not registered. Please sign up first.";
                 return RedirectToAction("Login");
             }
 
-            await signInManager.SignInAsync(user, isPersistent: false);
+            var result = await signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: false);
+            if (result.Succeeded)
+            {
+                var user = await userManager.FindByLoginAsync(info.LoginProvider, info.ProviderKey);
+                var roles = await userManager.GetRolesAsync(user);
 
-            var roles = await userManager.GetRolesAsync(user);
-            if (roles.Contains(AppRoles.Admin))
-                return RedirectToAction("Index", "Admin");
-            else if (roles.Contains(AppRoles.Host))
-                return RedirectToAction("Index", "Host");
+                await HttpContext.SignOutAsync();
+
+                if (roles.Contains("Host"))
+                {
+                    var hostPrincipal = await signInManager.CreateUserPrincipalAsync(user);
+                    await HttpContext.SignInAsync("HostScheme", hostPrincipal);
+                    return RedirectToAction("Index", "Host");
+                }
+                else
+                {
+                    var userPrincipal = await signInManager.CreateUserPrincipalAsync(user);
+                    await HttpContext.SignInAsync("UserScheme", userPrincipal);
+                    return RedirectToAction("Index", "User");
+                }
+            }
             else
-                return RedirectToAction("Index", "User");
+            {
+                return RedirectToAction("Login");
+
+            }
         }
 
     }
