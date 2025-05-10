@@ -31,7 +31,6 @@ namespace PropertyRentalMarketplace
             builder.Services.AddScoped<IServiceRepository, ServiceRepository>();
             builder.Services.AddScoped<IBookingRepository, BookingRepository>();
             builder.Services.AddScoped<IUserRepository, UserRepository>();
-            builder.Services.AddScoped<IPropertyRepository, PropertyRepository>();
             builder.Services.AddScoped<IFavouriteRepository, FavouriteRepository>();
             builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
             builder.Services.AddScoped<IRatingRepository, RatingRepository>();
@@ -66,7 +65,6 @@ namespace PropertyRentalMarketplace
                     IConfigurationSection googleAuthSection = builder.Configuration.GetSection("Authentication:Google");
                     options.ClientId = googleAuthSection["ClientId"];
                     options.ClientSecret = googleAuthSection["ClientSecret"];
-
                 }
 
                 );
