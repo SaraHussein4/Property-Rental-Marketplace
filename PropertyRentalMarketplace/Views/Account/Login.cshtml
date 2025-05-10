@@ -40,6 +40,11 @@
 	</div>
 </div>
 
+@if (TempData["ExternalProviderError"] != null)
+{
+	<div class="alert alert-danger">@TempData["ExternalProviderError"]</div>
+}
+
 
 @section ValidationScript {
 	<partial name="_ValidationScriptsPartial" />
