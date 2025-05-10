@@ -17,5 +17,7 @@ namespace PropertyRentalBL.Interfaces
         public  Task<List<Favourite>> getallfavtoremove(string id, int propid);
         public  Task RemoveToFavourite(string UId, int PropId);
         //public Task<bool> isfav(string id, int propid);
+        Task<bool> IsPropertyFavorited(string userId, int propertyId);
+
     }
 }

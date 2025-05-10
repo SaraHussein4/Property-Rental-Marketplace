@@ -108,7 +108,8 @@
 <div class="container mt-5">
     <div class="d-flex gap-5">
         <h2 class="mb-3" style="color: #484848;">Well furnished Apartment</h2>
-        <i class="fa-heart fa-regular" style="font-size: 30px; margin-left:200px"
+        <i class="fa-heart @(Model.IsFavourite? "fa-solid text-red" : "fa-regular")"
+           style="font-size: 30px; margin-left:200px"
            data-property-id="@Model.Property.Id"
            data-user-id="@Model.CurrentUserId"
            onclick="toggleFavourite(this)"></i>
@@ -455,56 +456,20 @@
     }
 </style>
 <script>
-                function toggleFavourite(icon) {
-                    const propertyId = icon.getAttribute("data-property-id");
-                    const userId = icon.getAttribute("data-user-id");
+       function initMap() {
+        // Initialize map
+        console.log(document.getElementById("map"));
+        let defaultCoords = [document.getElementById("map").dataset.latitude, document.getElementById("map").dataset.longitude];
+        map = L.map('map').setView(defaultCoords, 10);
 
-                    const isFavorited = icon.classList.contains("fa-solid");
+        // Add tile layer (OpenStreetMap)
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        }).addTo(map);
 
-                    if (isFavorited) {
-                        // Call Remove
-                        fetch(`/User/RemoveFromFavourite?userId=${userId}&propertyId=${propertyId}`, {
-                            method: 'POST'
-                        })
-                        .then(response => {
-                            if (response.ok) {
-                                icon.classList.remove("fa-solid");
-                                icon.classList.add("fa-regular");
-                                 icon.classList.remove("text-red");
-                            }
-                        });
-                    } else {
-                        // Call Add
-                        fetch(`/User/AddToFavourite?userId=${userId}&propertyId=${propertyId}`, {
-                            method: 'POST'
-                        })
-                        .then(response => {
-                            if (response.ok) {
-                                icon.classList.remove("fa-regular");
-                                icon.classList.add("fa-solid");
-                                 icon.classList.add("text-red");
-                            }
-                        });
-                    }
-                }
-
-
-     console.log("a;dkfja;d");
-
-    function initMap() {
-            // Initialize map
-                console.log(document.getElementById("map"));
-                    let defaultCoords = [document.getElementById("map").dataset.latitude, document.getElementById("map").dataset.longitude];
-            map = L.map('map').setView(defaultCoords, 10);
-
-            // Add tile layer (OpenStreetMap)
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-            }).addTo(map);
-
-            // Add initial marker
-            marker = L.marker(defaultCoords, { draggable: true }).addTo(map);
-        }
+        // Add initial marker
+        marker = L.marker(defaultCoords, { draggable: true }).addTo(map);
+    }
 
     function updateMarkerPosition(lat, lng, zoomlevel = 5) {
         marker.setLatLng([lat, lng]);
@@ -513,15 +478,61 @@
     }
 
     function updateCoordinates(lat, lng) {
-            // Update your form fields or display
-            document.getElementById('Latitude').value = lat;
-            document.getElementById('Longitude').value = lng;
-            console.log(`Coordinates: ${lat}, ${lng}`);
-       }
+        // Update your form fields or display
+        document.getElementById('Latitude').value = lat;
+        document.getElementById('Longitude').value = lng;
+        console.log(`Coordinates: ${lat}, ${lng}`);
+    }
 
-            document.addEventListener('DOMContentLoaded', async function () {
-                initMap();
-            });
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize favorite icons
+        const favoriteIcons = document.querySelectorAll('.fa-heart[data-property-id]');
+        favoriteIcons.forEach(icon => {
+            const propertyId = icon.getAttribute('data-property-id');
+            const userId = icon.getAttribute('data-user-id');
+
+            if (userId) {  // Only check if user is logged in
+                fetch(`/User/IsPropertyFavorited?userId=${userId}&propertyId=${propertyId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success && data.isFavorited) {
+                            icon.classList.remove('fa-regular');
+                            icon.classList.add('fa-solid', 'text-red');
+                        }
+                    });
+            }
+        });
+
+        initMap();
+    });
+
+    async function toggleFavourite(icon) {
+        const propertyId = icon.getAttribute('data-property-id');
+        const userId = icon.getAttribute('data-user-id');
+
+        if (!userId) {
+            window.location.href = '/Account/Login';
+            return;
+        }
+
+        const isFavorited = icon.classList.contains('fa-solid');
+
+        try {
+            const url = isFavorited
+                ? `/User/RemoveFromFavourite?userId=${userId}&propertyId=${propertyId}`
+                : `/User/AddToFavourite?userId=${userId}&propertyId=${propertyId}`;
+
+            const response = await fetch(url, { method: 'POST' });
+
+            if (response.ok) {
+                icon.classList.toggle('fa-regular');
+                icon.classList.toggle('fa-solid');
+                icon.classList.toggle('text-red');
+            }
+        } catch (error) {
+            console.error('Error toggling favorite:', error);
+        }
+    }
 </script>
 
 @section Scripts {

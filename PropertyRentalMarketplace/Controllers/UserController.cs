@@ -14,6 +14,7 @@ using System.Security.Claims;
 using static System.Net.Mime.MediaTypeNames;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using System.Security.Claims;
+using Microsoft.Extensions.Hosting;
 
 
 namespace PropertyRentalMarketplace.Controllers
@@ -68,7 +69,7 @@ namespace PropertyRentalMarketplace.Controllers
         #region index
         public async Task<IActionResult> Index()
         {
-            var allProperities = (await _propertyRepository.GetAll()).OrderByDescending(p=>p.ListedAt).Take(4).ToList();
+            var allProperities = (await _propertyRepository.GetAll()).Where(p => p.IsListed == true && p.UnListDate > DateTime.Now).OrderByDescending(p=>p.ListedAt).Take(4).ToList();
             var featuredModel = (await _propertyRepository.GetAllFeatured()).Take(8).ToList();
             var topRating = (await _propertyRepository.GetTopRating1()).Take(4).ToList();
             var model = new PropertyPageViewModel
@@ -112,7 +113,6 @@ namespace PropertyRentalMarketplace.Controllers
                 Name = data.Name,
                 Area = data.Area,
                 IsListed = data.IsListed,
-                IsFavourite =data.IsFeatured,
                 ListedAt = data.ListedAt,
                 UnListDate = data.UnListDate,
                 ListingType = data.ListingType,
@@ -131,7 +131,7 @@ namespace PropertyRentalMarketplace.Controllers
                 CurrentUserId = userId,
                 Host = data.Host,
                 ratings=allrev,
-                //isFav = isFav ,
+                IsFavourite = userId != null && await _favouriteRepository1.IsPropertyFavorited(userId, id),
                 imaguser = imgUser?.Image ?? "Capture.PNG",
                 allratings = alldatarat,
                 username = userName?.Name,
@@ -176,7 +176,7 @@ namespace PropertyRentalMarketplace.Controllers
         #endregion
         #region remove from  favourite
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public async Task<IActionResult> RemoveFromFavourite(string userId, int propertyId)
         {
             try
@@ -188,7 +188,7 @@ namespace PropertyRentalMarketplace.Controllers
             {
                 return Json(new { success = false, message = ex.Message });
             }
-          
+
         }
 
         #endregion
@@ -500,6 +500,26 @@ namespace PropertyRentalMarketplace.Controllers
 
             return View(model);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> IsPropertyFavorited(string userId, int propertyId)
+        {
+            if (string.IsNullOrEmpty(userId) || propertyId <= 0)
+            {
+                return Json(new { success = false, isFavorited = false });
+            }
+
+            try
+            {
+                var isFavorited = await _favouriteRepository1.IsPropertyFavorited(userId, propertyId);
+                return Json(new { success = true, isFavorited });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, isFavorited = false, message = ex.Message });
+            }
+        }
+
 
     }
 }
