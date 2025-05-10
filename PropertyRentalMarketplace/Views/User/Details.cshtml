@@ -107,7 +107,7 @@
 
 <div class="container mt-5">
     <div class="d-flex gap-5">
-        <h2 class="mb-3" style="color: #484848;">Well furnished Apartment</h2>
+        <h2 class="mb-3" style="color: #484848;">@Model.Name</h2>
         <i class="fa-heart @(Model.IsFavourite? "fa-solid text-red" : "fa-regular")"
            style="font-size: 30px; margin-left:200px"
            data-property-id="@Model.Property.Id"
@@ -336,7 +336,7 @@
             <div class="card col-md-4 mt-3" style="width: 18rem;">
                 <div class="card-body">
                     <h5 class="card-title">@s.Name</h5>
-                    <h6 class="card-subtitle mb-2 text-body-secondary">Card subtitle</h6>
+                    @* <h6 class="card-subtitle mb-2 text-body-secondary">Card subtitle</h6> *@
                     <p class="card-text">@($"{@s.Distance} meters away")</p>
                     <p class="card-text">
                         <i class="fa-solid fa-star @(s.StarRating >= 1 ? "text-warning" : "")"></i>

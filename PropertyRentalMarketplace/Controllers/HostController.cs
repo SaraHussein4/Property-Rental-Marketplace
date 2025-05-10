@@ -163,6 +163,7 @@ namespace PropertyRentalMarketplace.Controllers
                 property.IsListed = true;
                 property.IsFeatured = isFeatured;
                 property.FeesPerMonth = model.FeesPerMonth;
+                property.ListedAt = DateTime.Now;
                 property.UnListDate = unListDate;
                 property.ListingType = (ListingType)model.ListingType;
                 property.PropertyTypeId = model.PropertyTypeId;
