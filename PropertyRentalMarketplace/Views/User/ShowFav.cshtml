@@ -1,60 +1,49 @@
 ﻿@model List<Favourite>
 @{
     ViewData["Title"] = "ShowFav";
-
     Layout = "_UserLayout";
-
 }
 
-<div class="container py-5 " style="margin:150px;">
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery antiforgery
+@{
+    var token = antiforgery.GetAndStoreTokens(Context).RequestToken;
+}
+<input type="hidden" name="__RequestVerificationToken" value="@token" />
+
+<div class="container py-5" style="margin:150px;">
     <h2 class="text-center mb-5 fw-bold mb-5" style="color:black;">💖 Your Favourite Properties</h2>
 
-    <div class="row g-5 " style="margin-left:20px;">
-
+    <div class="row g-5" style="margin-left:20px;">
         @foreach (var fav in Model)
         {
             <div class="col-md-6 mb-5">
                 <a asp-controller="User" asp-action="Details" asp-route-id="@fav.PropertyId" class="text-decoration-none text-dark">
                     <div class="card border-0 shadow-lg rounded-4 h-100 bg-light position-relative favourite-card" style="width:600px; cursor:pointer;">
-
                         <div class="card-body p-4">
-                            <h5 class="card-title fw-bold  mt-3" style="font-size: 22px;">
+                            <h5 class="card-title fw-bold mt-3" style="font-size: 22px;">
                                 🏡 @fav.Property.Name
                             </h5>
-
                             <p class="card-text text-muted mb-2">
                                 @fav.Property.Address
                             </p>
-
                             <p class="card-text mb-4" style="font-weight: bold; color: black;">
                                 Price: @fav.Property.FeesPerMonth $
                             </p>
-
                         </div>
 
-                        <div class="favourite-badge position-absolute top-0 end-0 bg-gradient px-3 py-1  rounded-bottom-start mb-5"
+                        <div class="favourite-badge position-absolute top-0 end-0 bg-gradient px-3 py-1 rounded-bottom-start mb-5"
                              style="background: linear-gradient(45deg, #ff416c, #ff4b2b); font-weight: bold; color:black">
                             ❤️ Favourite
                         </div>
                     </div>
                 </a>
 
-                <button class="btn btn-outline-danger w-100 fw-semibold mt-2" onclick="removefav(@fav.PropertyId, '@fav.UserId')">
+                <button class="btn btn-outline-danger w-100 fw-semibold mt-2" 
+                        onclick="removeFromFavourites(event, @fav.PropertyId, '@fav.UserId')">
                     ❌ Remove from Favourites
                 </button>
             </div>
         }
-
-
-                    <div class="favourite-badge position-absolute top-0 end-0 bg-gradient px-3 py-1  rounded-bottom-start mb-5" 
-                    style="background: linear-gradient(45deg, #ff416c, #ff4b2b); font-weight: bold; color:black">
-                        ❤️ Favourite
-                    </div>
-
-                </div>
-            </div>
-        }
-
     </div>
 </div>
 
@@ -62,48 +51,72 @@
     .favourite-card {
         transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
-
-        .favourite-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 0 25px rgba(0, 0, 0, 0.1);
-        }
-
+    .favourite-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 0 25px rgba(0, 0, 0, 0.1);
+    }
     .favourite-badge {
         font-size: 14px;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
     }
-
     body {
-        /* background: linear-gradient(to right, #f5f5f5,#f5f5f5); */
-        background-color:white;
+        background-color: white;
     }
 </style>
 
-<form id="antiForgeryForm">
-    @Html.AntiForgeryToken()
-</form>
-
 <script>
-    function removefav(propertyId, userId) {
-        if (confirm("Are you sure you want to remove this item from favourites?")) {
-            fetch(`/User/RemoveFromFavourite?userId=${userId}&propertyId=${propertyId}`, {
+    // This matches the function from your Details page
+    async function removeFromFavourites(event, propertyId, userId) {
+        event.preventDefault();
+        event.stopPropagation();
+        
+        if (!confirm("Are you sure you want to remove this item from favourites?")) {
+            return;
+        }
+
+        try {
+            const response = await fetch('/User/RemoveFromFavourite', {
                 method: 'POST',
                 headers: {
+                    'Content-Type': 'application/json',
                     'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    location.reload();
-                } else {
-                    alert("Failed to remove item.");
-                }
-            })
-            .catch(error => {
-                console.error("Error:", error);
-                alert("An error occurred.");
+                },
+                body: JSON.stringify({
+                    userId: userId,
+                    propertyId: propertyId
+                })
             });
+
+            if (response.ok) {
+                // Update UI immediately
+                const result = await response.json();
+                if (result.success) {
+                    // Remove the card from view
+                    event.target.closest('.col-md-6').remove();
+                    
+                    // Update heart icons on other pages
+                    updateHeartIcons(propertyId, false);
+                }
+            } else {
+                alert("Failed to remove item.");
+            }
+        } catch (error) {
+            console.error("Error:", error);
+            alert("An error occurred.");
         }
+    }
+
+    // Function to update heart icons across all pages
+    function updateHeartIcons(propertyId, isFavorited) {
+        const heartIcons = document.querySelectorAll(`.fa-heart[data-property-id="${propertyId}"]`);
+        heartIcons.forEach(icon => {
+            if (isFavorited) {
+                icon.classList.remove('fa-regular');
+                icon.classList.add('fa-solid', 'text-red');
+            } else {
+                icon.classList.remove('fa-solid', 'text-red');
+                icon.classList.add('fa-regular');
+            }
+        });
     }
 </script>
