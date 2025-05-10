@@ -456,7 +456,34 @@
     }
 </style>
 <script>
-      // Function to check favorite status when page loads
+       function initMap() {
+        // Initialize map
+        console.log(document.getElementById("map"));
+        let defaultCoords = [document.getElementById("map").dataset.latitude, document.getElementById("map").dataset.longitude];
+        map = L.map('map').setView(defaultCoords, 10);
+
+        // Add tile layer (OpenStreetMap)
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        }).addTo(map);
+
+        // Add initial marker
+        marker = L.marker(defaultCoords, { draggable: true }).addTo(map);
+    }
+
+    function updateMarkerPosition(lat, lng, zoomlevel = 5) {
+        marker.setLatLng([lat, lng]);
+        map.setView([lat, lng], zoomlevel);
+        updateCoordinates(lat, lng);
+    }
+
+    function updateCoordinates(lat, lng) {
+        // Update your form fields or display
+        document.getElementById('Latitude').value = lat;
+        document.getElementById('Longitude').value = lng;
+        console.log(`Coordinates: ${lat}, ${lng}`);
+    }
+
     document.addEventListener('DOMContentLoaded', function() {
         // Initialize favorite icons
         const favoriteIcons = document.querySelectorAll('.fa-heart[data-property-id]');
