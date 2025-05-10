@@ -20,6 +20,7 @@ namespace PropertyRentalMarketplace.Controllers
 {
 
     [Authorize(Roles = AppRoles.User)]
+    [Authorize(AuthenticationSchemes = "UserScheme")]
 
     public class UserController : Controller
     {

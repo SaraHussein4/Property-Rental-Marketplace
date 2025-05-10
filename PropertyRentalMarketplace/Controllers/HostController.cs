@@ -20,7 +20,7 @@ using System.Threading;
 namespace PropertyRentalMarketplace.Controllers
 {
     [Authorize(Roles = AppRoles.Host)]
-
+    [Authorize(AuthenticationSchemes = "HostScheme")]
     public class HostController : Controller
     {
         private readonly IPropertyTypeRepository _propertyTypeRepository;
