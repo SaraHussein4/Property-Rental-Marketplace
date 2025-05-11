@@ -92,7 +92,7 @@
     <div class="card border-0 bg-transparent m-3 col-md-8" style="width: 880px; height: 140px;">
         <div class="row g-0">
             <div class="col-md-3">
-                <img src="~/images/@Model.ImagesHost" class="img-fluid rounded-circle ms-4 mt-1" style="width: 170px; height: 150px;" alt="...">
+                <img src="~/images/@Model.ImagesHost" class="img-fluid rounded-circle ms-4 mt-1" style="width: 150px; height: 150px;" alt="...">
             </div>
             <div class="col-md-9 p-2">
                 <div class="card-body">
@@ -109,7 +109,7 @@
     <div class="d-flex gap-5">
         <h2 class="mb-3" style="color: #484848;">@Model.Name</h2>
         <i class="fa-heart @(Model.IsFavourite? "fa-solid text-red" : "fa-regular")"
-           style="font-size: 30px; margin-left:200px"
+           style="font-size: 30px; margin-left:200px; cursor: pointer;"
            data-property-id="@Model.Property.Id"
            data-user-id="@Model.CurrentUserId"
            onclick="toggleFavourite(this)"></i>
@@ -433,9 +433,9 @@
                 <div class="col-md-3 mb-4">
                     <div class="card shadow-sm bg-light p-2 border-0" style="height: auto; width:270px;">
                         <div class="d-flex">
-                            <img src="~/images/@Model.imaguser" class="rounded-circle me-3" style="width: 60px; height: 60px; object-fit: cover;" alt="User Image" />
+                            <img src="~/images/@r.User.Image" class="rounded-circle me-3" style="width: 60px; height: 60px; object-fit: cover;" alt="User Image" />
                             <div>
-                                <h6 class="mb-0">@Model.username</h6>
+                                <h6 class="mb-0">@r.User.Name</h6>
                                 <small class="text-muted">@r.CreatedAt.ToShortDateString()</small>
                             </div>
                         </div>
