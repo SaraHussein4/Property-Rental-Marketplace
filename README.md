@@ -1,16 +1,17 @@
 
----
 
-## 🌟 Overview  
-[![Homelo Demo Preview](https://github.com/SaraHussein4/Property-Rental-Marketplace/blob/main/Demo.gif)](https://youtu.be/s7aAAv5tTeI)
-
-*↑ Click to watch full demo (YouTube)*  
-
----
 
 # 🏠 Property Rental Marketplace
 
 **Property Rental Marketplace** is a web platform that connects property owners (Hosts) with potential clients (Users) who are looking to **buy or rent** properties such as apartments, villas, and more. Built with **ASP.NET MVC**, the application provides a seamless experience for property listing, filtering, booking, and management.
+
+---
+
+## 🌟 Overview  
+
+[![Homelo Demo Preview](https://github.com/SaraHussein4/Property-Rental-Marketplace/blob/main/Demo.gif)](https://youtu.be/s7aAAv5tTeI)
+
+*↑ Click to watch full demo (YouTube)*  
 
 ---
 
